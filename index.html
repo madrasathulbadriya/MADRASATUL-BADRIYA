@@ -59,21 +59,21 @@
       text-align: center;
       color: #ffffff;
       transition: opacity 0.4s ease, visibility 0.4s ease;
+      overflow-y: auto;
     }
     #team-selection-gateway.hidden { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
 
     .gateway-header h1 { font-family: 'Amiri', serif; font-size: 2.2rem; color: #ffffff; margin-bottom: 0.3rem; letter-spacing: 0.5px; }
-    .gateway-header h2 { font-size: 1.1rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 2rem; letter-spacing: 1px; text-transform: uppercase; }
-    .gateway-subtitle { font-size: 1rem; color: rgba(255, 255, 255, 0.85); font-weight: 500; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 1.5px; }
+    .gateway-header h2 { font-size: 1.1rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 1.5rem; letter-spacing: 1px; text-transform: uppercase; }
+    .gateway-subtitle { font-size: 1rem; color: rgba(255, 255, 255, 0.85); font-weight: 500; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1.5px; }
 
-    .teams-gateway-grid { display: flex; gap: 2rem; max-width: 800px; width: 100%; justify-content: center; flex-wrap: wrap; }
+    .teams-gateway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; max-width: 900px; width: 100%; justify-content: center; }
     
     .team-gateway-card {
       background: rgba(255, 255, 255, 0.06);
       border: 2px solid rgba(212, 175, 55, 0.3);
       border-radius: 20px;
-      padding: 2.5rem 2rem;
-      flex: 1; min-width: 280px; max-width: 350px;
+      padding: 2rem 1.5rem;
       cursor: pointer;
       backdrop-filter: blur(10px);
       box-shadow: 0 15px 35px rgba(0,0,0,0.4);
@@ -81,20 +81,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.2rem;
+      gap: 1rem;
     }
     .team-gateway-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.12); box-shadow: 0 20px 40px rgba(13, 92, 58, 0.5); }
-    .team-gateway-card.green-team { border-left: 6px solid #10b981; }
-    .team-gateway-card.blue-team { border-left: 6px solid #3b82f6; }
-
-    .team-gateway-icon { width: 75px; height: 75px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ffffff; }
-    .green-team .team-gateway-icon { background: linear-gradient(135deg, #10b981, #059669); }
-    .blue-team .team-gateway-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-
-    .team-gateway-card h3 { font-size: 1.35rem; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
-    .team-gateway-btn { margin-top: 0.5rem; padding: 0.75rem 1.8rem; border-radius: 30px; font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
-    .green-team .team-gateway-btn { background: #10b981; color: #ffffff; }
-    .blue-team .team-gateway-btn { background: #3b82f6; color: #ffffff; }
+    
+    .team-gateway-icon { width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #ffffff; background: linear-gradient(135deg, #10b981, #059669); }
+    .team-gateway-card h3 { font-size: 1.2rem; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
+    .team-gateway-btn { margin-top: 0.3rem; padding: 0.6rem 1.5rem; border-radius: 30px; font-weight: 700; font-size: 0.88rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; background: #10b981; color: #ffffff; }
 
     /* LIVE ANNOUNCEMENT TICKER BANNER */
     .announcement-ticker {
@@ -623,7 +616,7 @@
 </head>
 <body class="light-mode">
 
-  <!-- TEAM SELECTION GATEWAY -->
+  <!-- TEAM SELECTION GATEWAY WITH 4 TEAMS -->
   <div id="team-selection-gateway">
     <div class="gateway-header">
       <h1>AL MADRASATUL BADRIYA</h1>
@@ -632,15 +625,27 @@
     <div class="gateway-subtitle">Select Your Team</div>
     
     <div class="teams-gateway-grid">
-      <div class="team-gateway-card green-team" onclick="window.selectTeamAndEnter('FIRQATH-E- NAIL')">
+      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- NAIL')">
         <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
         <h3>FIRQATH-E- NAIL</h3>
         <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
       </div>
 
-      <div class="team-gateway-card blue-team" onclick="window.selectTeamAndEnter('FIRQATH-E- SEYHAN')">
+      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- SEYHAN')">
         <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
         <h3>FIRQATH-E- SEYHAN</h3>
+        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+      </div>
+
+      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- FURAATH')">
+        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
+        <h3>FIRQATH-E- FURAATH</h3>
+        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+      </div>
+
+      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E-JAIHOON')">
+        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
+        <h3>FIRQATH-E-JAIHOON</h3>
         <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
       </div>
     </div>
@@ -750,7 +755,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
               <div>
                 <h3><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Team Versus Comparison Portal</h3>
-                <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">രണ്ട് ടീമുകളുടെയും (FIRQATH-E- NAIL vs FIRQATH-E- SEYHAN) മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
+                <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
               </div>
               <button onclick="window.openTeamVersusView()" class="btn-secondary"><i class="fa-solid fa-arrow-right"></i> Open Comparison View</button>
             </div>
@@ -1216,7 +1221,7 @@
         <section id="view-team-versus" class="app-view">
           <div class="glass-card mb-2 no-print">
             <h2><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Team vs Team Head-to-Head Comparison</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് രണ്ട് ടീമുകളിലെയും (FIRQATH-E- NAIL vs FIRQATH-E- SEYHAN) മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് എല്ലാ ടീമുകളിലെയും മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
             <hr class="divider">
             <div style="display:flex; flex-direction:column; gap:1.2rem;">
               <div class="form-group">
@@ -1258,16 +1263,7 @@
               <button onclick="window.print()" class="btn-secondary no-print"><i class="fa-solid fa-print"></i> Print Comparison</button>
             </div>
             <hr class="divider">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;" id="vs-tables-grid">
-              <div style="background: rgba(13, 92, 58, 0.05); padding: 1rem; border-radius: 12px; border: 1.5px solid var(--primary-green);">
-                <h3 style="color: var(--primary-green); text-align: center; margin-bottom: 0.8rem; border-bottom: 2px solid var(--primary-green); padding-bottom: 0.4rem;">FIRQATH-E- NAIL</h3>
-                <div id="team1-participants-list"></div>
-              </div>
-              <div style="background: rgba(212, 175, 55, 0.08); padding: 1rem; border-radius: 12px; border: 1.5px solid var(--accent-gold);">
-                <h3 style="color: #b89628; text-align: center; margin-bottom: 0.8rem; border-bottom: 2px solid var(--accent-gold); padding-bottom: 0.4rem;">FIRQATH-E- SEYHAN</h3>
-                <div id="team2-participants-list"></div>
-              </div>
-            </div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;" id="vs-tables-grid"></div>
           </div>
         </section>
 
@@ -1473,8 +1469,7 @@
       vsSelection: { category: '', gender: '', type: '' }
     };
 
-    // LOCAL STORAGE PERSISTENCE LAYER (Ensures permanent storage & cross-team sharing for programmes & students)
-    const LS_KEY = "BADRIYA_KANA_LOCAL_DB_2540";
+    const LS_KEY = "BADRIYA_KANA_LOCAL_DB_4TEAMS_V2";
     function loadLocalDB() {
       try {
         const raw = localStorage.getItem(LS_KEY);
@@ -1553,52 +1548,42 @@
     }
 
     function triggerLocalSnapshots() {
-      // Students (globally accessible so records remain visible across reloads/sections)
       if (listeners['students']) {
         const docs = (localDB.students || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['students']({ docs });
       }
-      // Programmes (globally shared across groups/teams so adding in one group makes it visible in all groups)
       if (listeners['programmes']) {
         const docs = (localDB.programmes || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['programmes']({ docs });
       }
-      // Assignments
       if (listeners['assignments']) {
         const docs = (localDB.assignments || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['assignments']({ docs });
       }
-      // Practice
       if (listeners['practice']) {
         const docs = (localDB.practice || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['practice']({ docs });
       }
-      // Mixed Groups
       if (listeners['mixed_groups']) {
         const docs = (localDB.mixed_groups || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['mixed_groups']({ docs });
       }
-      // Audit Logs
       if (listeners['audit_logs']) {
         const docs = (localDB.audit_logs || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['audit_logs']({ docs });
       }
-      // Team Settings
       if (listeners['teams_' + state.activeTeam]) {
         const teamData = localDB.teams?.[state.activeTeam] || {};
         listeners['teams_' + state.activeTeam]({ exists: () => Object.keys(teamData).length > 0, data: () => teamData });
       }
-      // Announcement
       if (listeners['announcement']) {
         const annData = localDB.settings?.live_announcement || {};
         listeners['announcement']({ exists: () => Object.keys(annData).length > 0, data: () => annData });
       }
-      // System Settings
       if (listeners['system_settings']) {
         const sysData = localDB.settings?.system_settings || {};
         listeners['system_settings']({ exists: () => Object.keys(sysData).length > 0, data: () => sysData });
       }
-      // System Credentials
       if (listeners['system_credentials']) {
         const credData = localDB.settings?.system_credentials || {};
         listeners['system_credentials']({ exists: () => Object.keys(credData).length > 0, data: () => credData });
@@ -1965,8 +1950,11 @@
 
       registerListener('students', (s) => {
         let fetchedStudents = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        // ISOLATE STUDENTS PER TEAM: Only show students belonging to activeTeam
+        const activeTeamStudents = fetchedStudents.filter(item => (item.team || 'FIRQATH-E- NAIL') === state.activeTeam);
+        
         const uniqueMap = new Map();
-        fetchedStudents.forEach(item => {
+        activeTeamStudents.forEach(item => {
           const key = (item.chestNo || item.rollNo || item.name).trim().toLowerCase();
           if (!uniqueMap.has(key)) uniqueMap.set(key, item);
         });
@@ -2006,7 +1994,9 @@
       });
 
       registerListener('assignments', (s) => {
-        state.assignments = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        // ISOLATE ASSIGNMENTS PER TEAM: Only show assignments belonging to activeTeam
+        let allAssigns = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        state.assignments = allAssigns.filter(item => item.team === state.activeTeam);
         updateDashboardStats();
         renderDashboardStudentStatusTable();
         renderBulkStudentChecklist();
@@ -2153,7 +2143,9 @@
       subtitleEl.textContent = `All Programmes List | Category: ${selectedCategory} | Section: ${gender === 'Male' ? 'Boys Section' : 'Girls Section'}`;
 
       let fullHtml = '';
-      const activeAssignments = state.assignments.filter(a => a.team === state.activeTeam);
+      // Read all assignments globally from localDB/Firestore to extract participants for this team
+      const allAssigns = localDB.assignments || [];
+      const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
       categoryProgrammes.forEach((prog) => {
         const assignedRecords = activeAssignments.filter(a => {
@@ -2161,7 +2153,7 @@
           if (!activeProgNames.has(assignProgName)) return false;
 
           const matchProg = (a.programmeDocId === prog.id) || (assignProgName === prog.name.trim().toLowerCase());
-          const studentObj = state.students.find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
+          const studentObj = (localDB.students || []).find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
           const studentGender = studentObj ? studentObj.gender : a.studentGender;
           const studentCat = studentObj ? studentObj.category : a.studentCategory;
 
@@ -2170,7 +2162,7 @@
 
         let matchedItems = [];
         assignedRecords.forEach(a => {
-          const student = state.students.find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
+          const student = (localDB.students || []).find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
           const cleanRoll = getStudentRollNo(student, a);
           matchedItems.push({
             assignmentId: a.id,
@@ -2610,8 +2602,7 @@
       const container = document.getElementById('vs-results-card');
       const titleEl = document.getElementById('vs-prog-title-out');
       const subtitleEl = document.getElementById('vs-prog-subtitle-out');
-      const t1List = document.getElementById('team1-participants-list');
-      const t2List = document.getElementById('team2-participants-list');
+      const gridContainer = document.getElementById('vs-tables-grid');
 
       if (!container || !progId) {
         if (container) container.style.display = 'none';
@@ -2625,16 +2616,19 @@
       titleEl.textContent = selectedProg.name;
       subtitleEl.textContent = `${cat} Category | ${gender === 'Male' ? 'Boys Section' : 'Girls Section'} | ${type} Item`;
 
+      const allTeams = ['FIRQATH-E- NAIL', 'FIRQATH-E- SEYHAN', 'FIRQATH-E- FURAATH', 'FIRQATH-E-JAIHOON'];
+
       const getTeamList = (teamName) => {
         const activeProgNames = new Set(state.programmes.map(p => p.name.trim().toLowerCase()));
-        const assigned = state.assignments.filter(a => {
+        const allAssigns = localDB.assignments || [];
+        const assigned = allAssigns.filter(a => {
           const assignProgName = (a.programmeName || a.progName || '').trim().toLowerCase();
           return a.team === teamName && activeProgNames.has(assignProgName) &&
             (a.programmeDocId === progId || (assignProgName === selectedProg.name.trim().toLowerCase() && a.studentGender === gender && a.studentCategory === cat));
         });
 
         let items = assigned.map(a => {
-          const student = state.students.find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
+          const student = (localDB.students || []).find(s => s.id === a.studentDocId || s.name.trim().toLowerCase() === a.studentName?.trim().toLowerCase());
           const cleanRoll = getStudentRollNo(student, a);
           return {
             name: a.studentName || student?.name,
@@ -2652,35 +2646,34 @@
         return items;
       };
 
-      const t1Data = getTeamList('FIRQATH-E- NAIL');
-      const t2Data = getTeamList('FIRQATH-E- SEYHAN');
-
-      const createTableHtml = (dataList) => {
-        if (dataList.length === 0) return `<p style="text-align:center; color:#ef4444; padding:0.8rem;">No participants assigned.</p>`;
+      gridContainer.innerHTML = allTeams.map(teamName => {
+        const teamData = getTeamList(teamName);
         return `
-          <table class="data-table" style="width:100%;">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Chest No</th>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${dataList.map((item, idx) => `
-                <tr>
-                  <td><strong>${idx + 1}</strong></td>
-                  <td><strong style="color:var(--primary-green);">${item.rollNo}</strong></td>
-                  <td><strong>${item.name}</strong></td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
+          <div style="background: rgba(13, 92, 58, 0.05); padding: 1rem; border-radius: 12px; border: 1.5px solid var(--primary-green);">
+            <h3 style="color: var(--primary-green); text-align: center; margin-bottom: 0.8rem; border-bottom: 2px solid var(--primary-green); padding-bottom: 0.4rem;">${teamName}</h3>
+            ${teamData.length === 0 ? `<p style="text-align:center; color:#ef4444; padding:0.8rem;">No participants assigned.</p>` : `
+              <table class="data-table" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Chest No</th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${teamData.map((item, idx) => `
+                    <tr>
+                      <td><strong>${idx + 1}</strong></td>
+                      <td><strong style="color:var(--primary-green);">${item.rollNo}</strong></td>
+                      <td><strong>${item.name}</strong></td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            `}
+          </div>
         `;
-      };
-
-      t1List.innerHTML = createTableHtml(t1Data);
-      t2List.innerHTML = createTableHtml(t2Data);
+      }).join('');
     }
 
     window.openStatusManageModal = (studentDocId) => {
@@ -2803,7 +2796,8 @@
       list = getUniqueProgrammes(list);
       list = sortProgrammesByCategory(list);
 
-      const activeAssignments = state.assignments.filter(a => a.team === state.activeTeam);
+      const allAssigns = localDB.assignments || [];
+      const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
       container.innerHTML = list.length ? list.map(p => {
         const assignedCount = activeAssignments.filter(a => a.programmeDocId === p.id || (a.programmeName || a.progName)?.trim().toLowerCase() === p.name.trim().toLowerCase()).length;
@@ -2904,7 +2898,9 @@
 
         list = getUniqueProgrammes(list);
         list = sortProgrammesByCategory(list);
-        const activeAssignments = state.assignments.filter(a => a.team === state.activeTeam);
+        
+        const allAssigns = localDB.assignments || [];
+        const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
         html = `
           <div class="tab-buttons mb-2">
@@ -2972,7 +2968,8 @@
       const p = state.programmes.find(x => x.id === id);
       if (!p) return;
 
-      const activeAssignments = state.assignments.filter(a => a.team === state.activeTeam);
+      const allAssigns = localDB.assignments || [];
+      const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
       const assigned = activeAssignments.filter(a => a.programmeDocId === p.id || (a.programmeName || a.progName)?.trim().toLowerCase() === p.name.trim().toLowerCase());
       const body = document.getElementById('details-prog-body');
       
@@ -2983,7 +2980,7 @@
         <h4>Assigned Participants (${assigned.length})</h4>
         <ul class="activity-list mb-2">
           ${assigned.length ? assigned.map(a => {
-            const student = state.students.find(s => s.id === a.studentDocId || s.name === a.studentName);
+            const student = (localDB.students || []).find(s => s.id === a.studentDocId || s.name === a.studentName);
             const roll = getStudentRollNo(student, a);
             const cls = student?.class ? `Class ${student.class}` : '';
             return `<li>[Chest No: ${roll}] ${cls} - ${a.studentName}</li>`;
@@ -3005,12 +3002,12 @@
         try {
           await robustDeleteDoc('programmes', id);
           
-          const relatedAssignments = state.assignments.filter(a => a.programmeDocId === id || (a.programmeName || a.progName)?.trim().toLowerCase() === prog.name.trim().toLowerCase());
+          const relatedAssignments = (localDB.assignments || []).filter(a => a.programmeDocId === id || (a.programmeName || a.progName)?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const assign of relatedAssignments) {
             await robustDeleteDoc('assignments', assign.id);
           }
 
-          const relatedPractice = state.practice.filter(p => p.programmeName?.trim().toLowerCase() === prog.name.trim().toLowerCase());
+          const relatedPractice = (localDB.practice || []).filter(p => p.programmeName?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const prac of relatedPractice) {
             await robustDeleteDoc('practice', prac.id);
           }
@@ -3334,7 +3331,8 @@
       if (!container) return;
 
       const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-      const activeAssignments = state.assignments.filter(a => a.team === state.activeTeam);
+      const allAssigns = localDB.assignments || [];
+      const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
       if (type === 'students') {
         const sorted = sortByClass(activeStudents);
