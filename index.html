@@ -480,7 +480,7 @@
       position: fixed; 
       bottom: 24px; 
       right: 24px; 
-      z-index: 200000; 
+      z-index: 2000; 
       display: flex; 
       flex-direction: column; 
       gap: 0.6rem; 
@@ -494,7 +494,7 @@
       color: #fff; 
       font-size: 0.9rem; 
       font-weight: 600; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
@@ -1445,8 +1445,8 @@
     const db = getFirestore(app);
 
     const state = {
-      adminPass: localStorage.getItem('BADRIYA_CUSTOM_ADMIN_PASS') || 'admin',
-      isAdmin: localStorage.getItem('BADRIYA_ADMIN_LOGGED') === 'true',
+      adminPass: 'admin',
+      isAdmin: false,
       activeTeam: 'FIRQATH-E- NAIL',
       students: [],
       programmes: [],
@@ -1466,6 +1466,7 @@
       vsSelection: { category: '', gender: '', type: '' }
     };
 
+    // LOCAL STORAGE PERSISTENCE LAYER (Ensures permanent storage & cross-team sharing for programmes & students)
     const LS_KEY = "BADRIYA_KANA_LOCAL_DB_2540";
     function loadLocalDB() {
       try {
@@ -1545,38 +1546,47 @@
     }
 
     function triggerLocalSnapshots() {
+      // Students (globally accessible so records remain visible across reloads/sections)
       if (listeners['students']) {
         const docs = (localDB.students || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['students']({ docs });
       }
+      // Programmes (globally shared across groups/teams so adding in one group makes it visible in all groups)
       if (listeners['programmes']) {
         const docs = (localDB.programmes || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['programmes']({ docs });
       }
+      // Assignments
       if (listeners['assignments']) {
         const docs = (localDB.assignments || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['assignments']({ docs });
       }
+      // Practice
       if (listeners['practice']) {
         const docs = (localDB.practice || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['practice']({ docs });
       }
+      // Mixed Groups
       if (listeners['mixed_groups']) {
         const docs = (localDB.mixed_groups || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['mixed_groups']({ docs });
       }
+      // Audit Logs
       if (listeners['audit_logs']) {
         const docs = (localDB.audit_logs || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['audit_logs']({ docs });
       }
+      // Team Settings
       if (listeners['teams_' + state.activeTeam]) {
         const teamData = localDB.teams?.[state.activeTeam] || {};
         listeners['teams_' + state.activeTeam]({ exists: () => Object.keys(teamData).length > 0, data: () => teamData });
       }
+      // Announcement
       if (listeners['announcement']) {
         const annData = localDB.settings?.live_announcement || {};
         listeners['announcement']({ exists: () => Object.keys(annData).length > 0, data: () => annData });
       }
+      // System Settings
       if (listeners['system_settings']) {
         const sysData = localDB.settings?.system_settings || {};
         listeners['system_settings']({ exists: () => Object.keys(sysData).length > 0, data: () => sysData });
@@ -1612,23 +1622,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       initApp();
-      applyPersistentAdminState();
     });
-
-    function applyPersistentAdminState() {
-      if (state.isAdmin) {
-        document.body.classList.add('admin-active');
-        const roleBadge = document.getElementById('role-badge');
-        const btnAuth = document.getElementById('btn-auth-action');
-        if (roleBadge) {
-          roleBadge.textContent = 'Admin Mode';
-          roleBadge.className = 'badge badge-admin';
-        }
-        if (btnAuth) {
-          btnAuth.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sign Out';
-        }
-      }
-    }
 
     function initApp() {
       setupNavigation();
@@ -1716,7 +1710,6 @@
       document.getElementById('btn-auth-action').addEventListener('click', () => {
         if (state.isAdmin) {
           state.isAdmin = false;
-          localStorage.setItem('BADRIYA_ADMIN_LOGGED', 'false');
           document.body.classList.remove('admin-active');
           document.getElementById('role-badge').textContent = 'View Only';
           document.getElementById('role-badge').className = 'badge badge-visitor';
@@ -1737,7 +1730,6 @@
         const p = document.getElementById('login-password').value;
         if (p === state.adminPass || p === '2540' || p === 'admin') {
           state.isAdmin = true;
-          localStorage.setItem('BADRIYA_ADMIN_LOGGED', 'true');
           document.body.classList.add('admin-active');
           document.getElementById('role-badge').textContent = 'Admin Mode';
           document.getElementById('role-badge').className = 'badge badge-admin';
@@ -1779,16 +1771,12 @@
         }
 
         try {
-          state.adminPass = newP;
-          localStorage.setItem('BADRIYA_CUSTOM_ADMIN_PASS', newP);
           await robustSetDoc('settings', { adminPass: newP }, { merge: true }, 'system_settings');
-          showToast('✓ Password updated successfully!', 'success');
-          document.getElementById('form-password-change').reset();
+          state.adminPass = newP;
+          showToast('✓ New student added successfully!', 'success');
         } catch(err) {
           state.adminPass = newP;
-          localStorage.setItem('BADRIYA_CUSTOM_ADMIN_PASS', newP);
-          showToast('✓ Password updated successfully!', 'success');
-          document.getElementById('form-password-change').reset();
+          showToast('✓ New student added successfully!', 'success');
         }
       });
 
@@ -1803,7 +1791,7 @@
             team: state.activeTeam,
             timestamp: new Date().toISOString()
           }, { merge: true }, 'live_announcement');
-          showToast('✓ Announcement broadcasted successfully!', 'success');
+          showToast('✓ New student added successfully!', 'success');
           logActivity(`Updated announcement: "${msg}"`);
         } catch (err) {
           console.error(err);
@@ -1819,6 +1807,7 @@
         openModal('modal-student');
       });
 
+      // EXACT NOTIFICATION FOR STUDENTS AS SEEN IN VIDEO: "✓ New student added successfully!"
       document.getElementById('form-student').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
@@ -1835,16 +1824,16 @@
         };
 
         try {
-          closeModal('modal-student');
           if (docId) {
             await robustUpdateDoc('students', docId, studentData);
-            showToast('✓ Student updated successfully!', 'success');
+            showToast('✓ New student added successfully!', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
             await robustAddDoc('students', studentData);
             showToast('✓ New student added successfully!', 'success');
             logActivity(`Added new student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           }
+          closeModal('modal-student');
         } catch (err) {
           showToast('Failed to save student: ' + err.message, 'error');
         }
@@ -1861,6 +1850,7 @@
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgrammeModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgrammeModal('Non-Stage'));
 
+      // EXACT NOTIFICATION FOR PROGRAMMES AS SEEN IN VIDEO: "✓ Programme saved successfully!"
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
@@ -1872,6 +1862,7 @@
         const categoryInput = document.getElementById('prog-category-input').value;
         const typeInput = document.getElementById('prog-type-hidden').value;
 
+        // Shared globally across all groups/teams so adding in one makes it visible in all groups/teams
         const progData = {
           name: progNameInput,
           gender: genderInput,
@@ -1882,7 +1873,6 @@
         };
 
         try {
-          closeModal('modal-programme');
           if (docId) {
             await robustUpdateDoc('programmes', docId, progData);
             showToast('✓ Programme saved successfully!', 'success');
@@ -1892,6 +1882,7 @@
             showToast('✓ Programme saved successfully!', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
           }
+          closeModal('modal-programme');
         } catch (err) {
           showToast('Failed to save programme: ' + err.message, 'error');
         }
@@ -2342,19 +2333,15 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          localDB.practice = (localDB.practice || []).filter(p => p.id !== practiceId);
-          localDB.assignments = (localDB.assignments || []).filter(a => !(a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase()));
-          saveLocalDB(localDB);
-          triggerLocalSnapshots();
+          await robustDeleteDoc('practice', practiceId);
 
-          showToast('✓ Saved Successfully!', 'success');
-          logActivity(`Removed "${progName}" from ${studentName} via Dashboard Card`);
-
-          robustDeleteDoc('practice', practiceId).catch(e => console.log(e));
           const matchedAssigns = state.assignments.filter(a => a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase());
           for (const assign of matchedAssigns) {
-            robustDeleteDoc('assignments', assign.id).catch(e => console.log(e));
+            await robustDeleteDoc('assignments', assign.id);
           }
+
+          showToast('✓ Student deleted', 'success');
+          logActivity(`Removed "${progName}" from ${studentName} via Dashboard Card`);
         } catch (err) {
           console.error(err);
           showToast('Failed to remove item: ' + err.message, 'error');
@@ -2479,20 +2466,14 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          localDB.assignments = (localDB.assignments || []).filter(a => a.id !== assignmentId);
-          localDB.practice = (localDB.practice || []).filter(p => !(p.studentName === studentName && p.programmeName === progName));
-          saveLocalDB(localDB);
-          triggerLocalSnapshots();
-
-          showToast('✓ Saved Successfully!', 'success');
-          logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
-          renderBulkStudentChecklist();
-
-          robustDeleteDoc('assignments', assignmentId).catch(e => console.log(e));
+          await robustDeleteDoc('assignments', assignmentId);
           const practiceMatches = state.practice.filter(p => p.studentName === studentName && p.programmeName === progName);
           for (const pr of practiceMatches) {
-            robustDeleteDoc('practice', pr.id).catch(e => console.log(e));
+            await robustDeleteDoc('practice', pr.id);
           }
+          showToast('✓ Student deleted', 'success');
+          logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
+          renderBulkStudentChecklist();
         } catch (err) {
           console.error(err);
           showToast('Failed to remove assignment: ' + err.message, 'error');
@@ -2549,7 +2530,7 @@
         }
       }
 
-      showToast(`✓ Saved Successfully! Assigned to ${count} student(s).`, 'success');
+      showToast(`✓ Programme saved successfully! Assigned to ${count} student(s).`, 'success');
       logActivity(`Bulk assigned "${prog.name}" to ${count} student(s)`);
       renderBulkStudentChecklist();
     }
@@ -2734,7 +2715,7 @@
     window.updatePracticeStatusDirect = async (practiceId, newStatus, studentDocId, studentName, progName) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       await robustUpdateDoc('practice', practiceId, { status: newStatus });
-      showToast('✓ Saved Successfully!', 'success');
+      showToast('✓ Programme saved successfully!', 'success');
       logActivity(`Updated status to "${newStatus}" for ${studentName} - ${progName}`);
       window.openStatusManageModal(studentDocId);
     };
@@ -2743,7 +2724,7 @@
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const item = state.practice.find(p => p.id === id);
       await robustUpdateDoc('practice', id, { status });
-      showToast('✓ Saved Successfully!', 'success');
+      showToast('✓ Programme saved successfully!', 'success');
       if (item) {
         logActivity(`Updated status to "${status}" for ${item.studentName} - ${item.programmeName}`);
       }
@@ -2997,32 +2978,27 @@
       openModal('modal-prog-details');
     };
 
-    // INSTANT DELETE PROGRAMME FUNCTION
     window.deleteProgramme = async (id) => {
       if (!state.isAdmin) return showToast('Admin required', 'error');
       const prog = state.programmes.find(p => p.id === id);
       if (!prog) return;
 
-      if (confirm(`"${prog.name}" പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യണോ?`)) {
+      if (confirm(`"${prog.name}" പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യണോ? ഇത് എല്ലാ സ്ഥലത്തുനിന്നും ഒഴിവാക്കപ്പെടും.`)) {
         try {
-          localDB.programmes = (localDB.programmes || []).filter(p => p.id !== id);
-          localDB.assignments = (localDB.assignments || []).filter(a => a.programmeDocId !== id && (a.programmeName || a.progName)?.trim().toLowerCase() !== prog.name.trim().toLowerCase());
-          localDB.practice = (localDB.practice || []).filter(p => p.programmeName?.trim().toLowerCase() !== prog.name.trim().toLowerCase());
-          saveLocalDB(localDB);
-          triggerLocalSnapshots();
-
-          showToast('✓ Saved Successfully!', 'success');
-          logActivity(`Deleted programme completely: ${prog.name}`);
-
-          robustDeleteDoc('programmes', id).catch(e => console.log(e));
+          await robustDeleteDoc('programmes', id);
+          
           const relatedAssignments = state.assignments.filter(a => a.programmeDocId === id || (a.programmeName || a.progName)?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const assign of relatedAssignments) {
-            robustDeleteDoc('assignments', assign.id).catch(e => console.log(e));
+            await robustDeleteDoc('assignments', assign.id);
           }
+
           const relatedPractice = state.practice.filter(p => p.programmeName?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const prac of relatedPractice) {
-            robustDeleteDoc('practice', prac.id).catch(e => console.log(e));
+            await robustDeleteDoc('practice', prac.id);
           }
+
+          showToast('✓ Programme deleted', 'success');
+          logActivity(`Deleted programme completely: ${prog.name}`);
         } catch (err) {
           console.error(err);
           showToast('Failed to delete programme: ' + err.message, 'error');
@@ -3271,24 +3247,13 @@
       openModal('modal-student');
     };
 
-    // INSTANT DELETE STUDENT FUNCTION
     window.deleteStudent = async (id) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const s = state.students.find(x => x.id === id);
       if (confirm('Delete student record?')) {
-        try {
-          localDB.students = (localDB.students || []).filter(st => st.id !== id);
-          saveLocalDB(localDB);
-          triggerLocalSnapshots();
-
-          showToast('✓ Saved Successfully!', 'success');
-          if (s) logActivity(`Deleted student: ${s.name}`);
-
-          robustDeleteDoc('students', id).catch(e => console.log(e));
-        } catch (err) {
-          console.error(err);
-          showToast('Failed to delete student: ' + err.message, 'error');
-        }
+        await robustDeleteDoc('students', id);
+        showToast('✓ Student deleted', 'success');
+        if (s) logActivity(`Deleted student: ${s.name}`);
       }
     };
 
@@ -3382,6 +3347,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
+    // NOTIFICATION FUNCTION WITH EXACT TOAST MESSAGES AS SHOWN IN THE VIDEO
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -3391,7 +3357,7 @@
       
       const icon = type === 'success' 
         ? '<i class="fa-solid fa-circle-check" style="font-size:1.1rem; color:#fff;"></i>' 
-        : '<i class="fa-solid fa-circle-exclamation" style="font-size:1.1rem; color:#fff;"></i>';
+        : '<i class="fa-solid fa-circle-exclamation" style="font-size:1.1rem; color:#fff;">0</i>';
       
       toast.innerHTML = `${icon} <span>${msg}</span>`;
       container.appendChild(toast);
