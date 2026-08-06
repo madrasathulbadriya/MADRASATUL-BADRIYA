@@ -748,7 +748,7 @@
               <h1 id="dash-madrasa-name">AL MADRASATUL BADRIYA <span>KANA 2540</span></h1>
               <div class="hero-subtitle">Programme Management System</div>
             </div>
-            <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Team Isolated Data</div>
+            <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Group Isolated Data</div>
           </div>
 
           <div class="glass-card mb-2">
@@ -757,11 +757,11 @@
                 <span class="info-label">Active Group Name</span>
                 <span id="dash-team-name" class="highlight-gold">Loading...</span>
               </div>
-              <div class="info-item">
+              <div class="info-item" id="dash-leader-boys-box">
                 <span class="info-label">Boys Leader</span>
                 <span id="dash-boys-leaders" class="info-value">N/A</span>
               </div>
-              <div class="info-item">
+              <div class="info-item" id="dash-leader-girls-box">
                 <span class="info-label">Girls Leader</span>
                 <span id="dash-girls-leaders" class="info-value">N/A</span>
               </div>
@@ -779,39 +779,8 @@
             </div>
           </div>
 
-          <div class="stats-grid">
-            <div class="stat-card" onclick="window.showDashboardDetails('total-students')">
-              <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
-              <div class="stat-info"><p>Total Students</p><h3 id="stat-total-students">0</h3><small style="color:var(--primary-green); font-weight:600;">Click for details ➔</small></div>
-            </div>
-            <div class="stat-card" onclick="window.showDashboardDetails('total-boys')">
-              <div class="stat-icon blue"><i class="fa-solid fa-mars"></i></div>
-              <div class="stat-info"><p>Boys Section</p><h3 id="stat-total-boys">0</h3><small style="color:#2563eb; font-weight:600;">Click for details ➔</small></div>
-            </div>
-            <div class="stat-card" onclick="window.showDashboardDetails('total-girls')">
-              <div class="stat-icon pink"><i class="fa-solid fa-venus"></i></div>
-              <div class="stat-info"><p>Girls Section</p><h3 id="stat-total-girls">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('boys-stage')">
-              <div class="stat-icon blue"><i class="fa-solid fa-microphone"></i></div>
-              <div class="stat-info"><p>👦 Boys Stage Programmes</p><h3 id="stat-boys-stage-progs">0</h3><small style="color:#2563eb; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('girls-stage')">
-              <div class="stat-icon pink"><i class="fa-solid fa-microphone-lines"></i></div>
-              <div class="stat-info"><p>👧 Girls Stage Programmes</p><h3 id="stat-girls-stage-progs">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('boys-non-stage')">
-              <div class="stat-icon indigo"><i class="fa-solid fa-pen-ruler"></i></div>
-              <div class="stat-info"><p>👦 Boys Non-Stage Programmes</p><h3 id="stat-boys-non-stage-progs">0</h3><small style="color:#4f46e5; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('girls-non-stage')">
-              <div class="stat-icon purple"><i class="fa-solid fa-palette"></i></div>
-              <div class="stat-info"><p>👧 Girls Non-Stage Programmes</p><h3 id="stat-girls-non-stage-progs">0</h3><small style="color:#7c3aed; font-weight:600;">Click for details ➔</small></div>
-            </div>
+          <div class="stats-grid" id="dashboard-stats-grid">
+            <!-- Dynamically populated stats grid based on group type -->
           </div>
 
           <div class="dashboard-grid mt-2">
@@ -860,10 +829,8 @@
                 <option value="MID ZONE">MID ZONE</option>
                 <option value="GROUND ZONE">GROUND ZONE</option>
               </select>
-              <select id="dash-practice-gender-filter" class="form-control">
-                <option value="">All Sections (Boys & Girls)</option>
-                <option value="Male">Boys Section</option>
-                <option value="Female">Girls Section</option>
+              <select id="dash-practice-gender-filter" class="form-control" style="display:none;">
+                <option value="">All Sections</option>
               </select>
               <input type="text" id="dash-practice-search-input" class="form-control" placeholder="Filter student name...">
             </div>
@@ -883,10 +850,8 @@
             </div>
             <hr class="divider">
             
-            <div class="tab-buttons mb-2" id="student-section-tabs">
-              <button class="tab-btn active" data-tab="all"><i class="fa-solid fa-users"></i> All Students</button>
-              <button class="tab-btn" data-tab="boys"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</button>
-              <button class="tab-btn" data-tab="girls"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</button>
+            <div class="tab-buttons mb-2" id="student-section-tabs" style="display:none;">
+              <!-- Hidden or isolated per group section -->
             </div>
 
             <div class="filter-bar">
@@ -941,10 +906,8 @@
               <button class="tab-btn" data-type="Non-Stage"><i class="fa-solid fa-pen-ruler"></i> Non-Stage Programmes</button>
             </div>
 
-            <div class="tab-buttons" id="prog-sec-tabs">
-              <button class="tab-btn active" data-sec="All"><i class="fa-solid fa-users"></i> All Sections</button>
-              <button class="tab-btn" data-sec="Male"><i class="fa-solid fa-mars"></i> Boys Section</button>
-              <button class="tab-btn" data-sec="Female"><i class="fa-solid fa-venus"></i> Girls Section</button>
+            <div class="tab-buttons" id="prog-sec-tabs" style="display:none;">
+              <!-- Locked section tabs per group -->
             </div>
 
             <div class="tab-buttons" id="prog-cat-tabs">
@@ -977,8 +940,7 @@
               <div class="form-group" id="group-bulk-gender" style="display:none;">
                 <label style="font-weight:700; color:var(--primary-green);">2. Select Section</label>
                 <div class="selector-grid" id="grid-bulk-gender">
-                  <div class="selector-chip" data-val="Male"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</div>
-                  <div class="selector-chip" data-val="Female"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</div>
+                  <!-- Dynamically set depending on group -->
                 </div>
               </div>
 
@@ -1016,35 +978,11 @@
         <section id="view-category-pdf" class="app-view">
           <div class="glass-card mb-2 no-print">
             <h2><i class="fa-solid fa-file-pdf" style="color:var(--accent-gold);"></i> Category-wise PDF Export Manager</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും കാറ്റഗറി തിരിച്ചുള്ള മുഴുവൻ പരിപാടികളും ആളുകളുടെ പേരുസഹിതം പിഡിഎഫ് ആയി ഡൗൺലോഡ് ചെയ്യാം.</p>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">കാറ്റഗറി തിരിച്ചുള്ള മുഴുവൻ പരിപാടികളും ആളുകളുടെ പേരുസഹിതം പിഡിഎഫ് ആയി ഡൗൺലോഡ് ചെയ്യാം.</p>
             <hr class="divider">
 
-            <div class="form-grid">
-              <div class="glass-card" style="background:rgba(37,99,235,0.05); border: 1.5px solid #2563eb;">
-                <h3><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section PDF Export</h3>
-                <div class="form-group mt-2">
-                  <label style="font-weight:700; color:#2563eb;">Select Category</label>
-                  <select id="cat-pdf-boys-select" class="form-control" style="font-weight:600; border: 1.5px solid #2563eb;">
-                    <option value="HIGH ZONE">HIGH ZONE</option>
-                    <option value="MID ZONE">MID ZONE</option>
-                    <option value="GROUND ZONE">GROUND ZONE</option>
-                  </select>
-                </div>
-                <button id="btn-generate-boys-pdf" class="btn-primary full-width mt-2" style="background:#2563eb;"><i class="fa-solid fa-layer-group"></i> Generate Boys PDF</button>
-              </div>
-
-              <div class="glass-card" style="background:rgba(219,39,119,0.05); border: 1.5px solid #db2777;">
-                <h3><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section PDF Export</h3>
-                <div class="form-group mt-2">
-                  <label style="font-weight:700; color:#db2777;">Select Category</label>
-                  <select id="cat-pdf-girls-select" class="form-control" style="font-weight:600; border: 1.5px solid #db2777;">
-                    <option value="HIGH ZONE">HIGH ZONE</option>
-                    <option value="MID ZONE">MID ZONE</option>
-                    <option value="GROUND ZONE">GROUND ZONE</option>
-                  </select>
-                </div>
-                <button id="btn-generate-girls-pdf" class="btn-primary full-width mt-2" style="background:#db2777;"><i class="fa-solid fa-layer-group"></i> Generate Girls PDF</button>
-              </div>
+            <div class="form-grid" id="pdf-export-grid-box">
+              <!-- Dynamically rendered based on active group -->
             </div>
           </div>
 
@@ -1096,13 +1034,9 @@
                   <label>Active Group Name</label>
                   <input type="text" id="team-name-input" class="form-control" required readonly>
                 </div>
-                <div class="form-group">
-                  <label>Boys Leader</label>
-                  <input type="text" id="team-boys-leaders-input" class="form-control" placeholder="Boys leader name">
-                </div>
-                <div class="form-group">
-                  <label>Girls Leader</label>
-                  <input type="text" id="team-girls-leaders-input" class="form-control" placeholder="Girls leader name">
+                <div class="form-group" id="setting-leader-input-box">
+                  <label id="setting-leader-label">Group Leader</label>
+                  <input type="text" id="team-leader-single-input" class="form-control" placeholder="Leader name">
                 </div>
               </div>
               <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Group Settings</button>
@@ -1239,7 +1173,7 @@
         <section id="view-team-versus" class="app-view">
           <div class="glass-card mb-2 no-print">
             <h2><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Group vs Group Head-to-Head Comparison</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് എല്ലാ ഗ്രൂപ്പുകളിലെയും മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് ഗ്രൂപ്പുകളിലെ മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
             <hr class="divider">
             <div style="display:flex; flex-direction:column; gap:1.2rem;">
               <div class="form-group">
@@ -1250,22 +1184,15 @@
                   <div class="selector-chip" data-val="GROUND ZONE"><i class="fa-solid fa-layer-group"></i> GROUND ZONE</div>
                 </div>
               </div>
-              <div class="form-group" id="group-vs-gender" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">2. Select Section</label>
-                <div class="selector-grid" id="grid-vs-gender">
-                  <div class="selector-chip" data-val="Male"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</div>
-                  <div class="selector-chip" data-val="Female"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</div>
-                </div>
-              </div>
               <div class="form-group" id="group-vs-type" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">3. Select Programme Type</label>
+                <label style="font-weight:700; color:var(--primary-green);">2. Select Programme Type</label>
                 <div class="selector-grid" id="grid-vs-type">
                   <div class="selector-chip" data-val="Stage"><i class="fa-solid fa-microphone" style="color:#d97706;"></i> Stage Item</div>
                   <div class="selector-chip" data-val="Non-Stage"><i class="fa-solid fa-pen-ruler" style="color:#4f46e5;"></i> Non-Stage Item</div>
                 </div>
               </div>
               <div class="form-group" id="group-vs-prog" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">4. Select Programme Name</label>
+                <label style="font-weight:700; color:var(--primary-green);">3. Select Programme Name</label>
                 <select id="vs-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;">
                   <option value="">-- Choose Programme --</option>
                 </select>
@@ -1349,7 +1276,7 @@
             <label>Student Name</label>
             <input type="text" id="student-name-input" class="form-control" required>
           </div>
-          <div class="form-group">
+          <div class="form-group" style="display:none;">
             <label>Gender Section</label>
             <select id="student-gender-input" class="form-control" required>
               <option value="Male">Male (Boy)</option>
@@ -1387,7 +1314,7 @@
           <label>Programme Name</label>
           <input type="text" id="prog-name-input" class="form-control" required placeholder="e.g. Qaseeda">
         </div>
-        <div class="form-group mt-1">
+        <div class="form-group mt-1" style="display:none;">
           <label>Gender Section</label>
           <select id="prog-gender-input" class="form-control" required>
             <option value="Male">Boys</option>
@@ -1473,27 +1400,24 @@
       programmes: [],
       assignments: [],
       practice: [],
-      mixedGroups: [],
       auditLogs: [],
       teamSettings: {},
       announcements: [],
-      selectedStudentTab: 'all',
       selectedProgType: 'Stage',
-      selectedProgSec: 'All',
       selectedProgCat: 'All',
       dashModalFilterCat: 'All',
       activeDashModalType: '',
       bulkSelection: { category: '', gender: '', type: '' },
-      vsSelection: { category: '', gender: '', type: '' }
+      vsSelection: { category: '', type: '' }
     };
 
-    const LS_KEY = "BADRIYA_KANA_LOCAL_DB_4TEAMS_V2";
+    const LS_KEY = "BADRIYA_KANA_LOCAL_DB_4TEAMS_V3";
     function loadLocalDB() {
       try {
         const raw = localStorage.getItem(LS_KEY);
         if (raw) return JSON.parse(raw);
       } catch(e) { console.error("Localstorage read error:", e); }
-      return { students: [], programmes: [], assignments: [], practice: [], mixedGroups: [], auditLogs: [], teams: {}, settings: {} };
+      return { students: [], programmes: [], assignments: [], practice: [], auditLogs: [], teams: {}, settings: {} };
     }
 
     function saveLocalDB(dbData) {
@@ -1503,6 +1427,14 @@
     }
 
     let localDB = loadLocalDB();
+
+    function isGroupBoys(groupName) {
+      return groupName === 'FIRQATH-E- FURAATH' || groupName === 'FIRQATH-E-JAIHOON';
+    }
+
+    function getActiveGroupGender(groupName) {
+      return isGroupBoys(groupName) ? 'Male' : 'Female';
+    }
 
     async function robustAddDoc(collName, data) {
       const id = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -1582,10 +1514,6 @@
         const docs = (localDB.practice || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['practice']({ docs });
       }
-      if (listeners['mixed_groups']) {
-        const docs = (localDB.mixed_groups || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
-        listeners['mixed_groups']({ docs });
-      }
       if (listeners['audit_logs']) {
         const docs = (localDB.audit_logs || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['audit_logs']({ docs });
@@ -1598,17 +1526,11 @@
         const annData = localDB.settings?.live_announcement || {};
         listeners['announcement']({ exists: () => Object.keys(annData).length > 0, data: () => annData });
       }
-      if (listeners['system_settings']) {
-        const sysData = localDB.settings?.system_settings || {};
-        listeners['system_settings']({ exists: () => Object.keys(sysData).length > 0, data: () => sysData });
-      }
       if (listeners['system_credentials']) {
         const credData = localDB.settings?.system_credentials || {};
         listeners['system_credentials']({ exists: () => Object.keys(credData).length > 0, data: () => credData });
       }
     }
-
-    let activeSnapshotUnsubscribers = [];
 
     async function logActivity(actionMessage) {
       try {
@@ -1660,9 +1582,105 @@
       state.activeTeam = teamName;
       document.getElementById('topbar-team-name').textContent = teamName;
       document.getElementById('team-selection-gateway').classList.add('hidden');
+      
+      adjustUIForGroupType();
       showToast(`Welcome to ${teamName}!`, 'success');
       setupRealtimeListeners();
     };
+
+    function adjustUIForGroupType() {
+      const isBoys = isGroupBoys(state.activeTeam);
+      
+      // Update Dashboard Leader Labels
+      const boysBox = document.getElementById('dash-leader-boys-box');
+      const girlsBox = document.getElementById('dash-leader-girls-box');
+      const settingInputBox = document.getElementById('setting-leader-input-box');
+      const settingLabel = document.getElementById('setting-leader-label');
+
+      if (isBoys) {
+        if(boysBox) boysBox.style.display = 'flex';
+        if(girlsBox) girlsBox.style.display = 'none';
+        if(settingLabel) settingLabel.textContent = 'Boys Group Leader';
+      } else {
+        if(boysBox) boysBox.style.display = 'none';
+        if(girlsBox) girlsBox.style.display = 'flex';
+        if(settingLabel) settingLabel.textContent = 'Girls Group Leader';
+      }
+
+      // Update Dashboard Stats Cards dynamically
+      const statsGrid = document.getElementById('dashboard-stats-grid');
+      if (statsGrid) {
+        if (isBoys) {
+          statsGrid.innerHTML = `
+            <div class="stat-card" onclick="window.showDashboardDetails('total-students')">
+              <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
+              <div class="stat-info"><p>Total Boys Students</p><h3 id="stat-total-students">0</h3><small style="color:var(--primary-green); font-weight:600;">Click for details ➔</small></div>
+            </div>
+            <div class="stat-card" onclick="window.showDashboardDetails('boys-stage')">
+              <div class="stat-icon blue"><i class="fa-solid fa-microphone"></i></div>
+              <div class="stat-info"><p>👦 Boys Stage Programmes</p><h3 id="stat-boys-stage-progs">0</h3><small style="color:#2563eb; font-weight:600;">Click for details ➔</small></div>
+            </div>
+            <div class="stat-card" onclick="window.showDashboardDetails('boys-non-stage')">
+              <div class="stat-icon indigo"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div class="stat-info"><p>👦 Boys Non-Stage Programmes</p><h3 id="stat-boys-non-stage-progs">0</h3><small style="color:#4f46e5; font-weight:600;">Click for details ➔</small></div>
+            </div>
+          `;
+        } else {
+          statsGrid.innerHTML = `
+            <div class="stat-card" onclick="window.showDashboardDetails('total-students')">
+              <div class="stat-icon pink"><i class="fa-solid fa-users"></i></div>
+              <div class="stat-info"><p>Total Girls Students</p><h3 id="stat-total-students">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
+            </div>
+            <div class="stat-card" onclick="window.showDashboardDetails('girls-stage')">
+              <div class="stat-icon pink"><i class="fa-solid fa-microphone-lines"></i></div>
+              <div class="stat-info"><p>👧 Girls Stage Programmes</p><h3 id="stat-girls-stage-progs">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
+            </div>
+            <div class="stat-card" onclick="window.showDashboardDetails('girls-non-stage')">
+              <div class="stat-icon purple"><i class="fa-solid fa-palette"></i></div>
+              <div class="stat-info"><p>👧 Girls Non-Stage Programmes</p><h3 id="stat-girls-non-stage-progs">0</h3><small style="color:#7c3aed; font-weight:600;">Click for details ➔</small></div>
+            </div>
+          `;
+        }
+      }
+
+      // Update PDF Export Box dynamically
+      const pdfExportBox = document.getElementById('pdf-export-grid-box');
+      if (pdfExportBox) {
+        if (isBoys) {
+          pdfExportBox.innerHTML = `
+            <div class="glass-card" style="background:rgba(37,99,235,0.05); border: 1.5px solid #2563eb; grid-column: 1 / -1;">
+              <h3><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section PDF Export</h3>
+              <div class="form-group mt-2">
+                <label style="font-weight:700; color:#2563eb;">Select Category</label>
+                <select id="cat-pdf-boys-select" class="form-control" style="font-weight:600; border: 1.5px solid #2563eb;">
+                  <option value="HIGH ZONE">HIGH ZONE</option>
+                  <option value="MID ZONE">MID ZONE</option>
+                  <option value="GROUND ZONE">GROUND ZONE</option>
+                </select>
+              </div>
+              <button id="btn-generate-boys-pdf" class="btn-primary full-width mt-2" style="background:#2563eb;"><i class="fa-solid fa-layer-group"></i> Generate Boys PDF</button>
+            </div>
+          `;
+          document.getElementById('btn-generate-boys-pdf').addEventListener('click', () => generateGenderWisePDF('Male'));
+        } else {
+          pdfExportBox.innerHTML = `
+            <div class="glass-card" style="background:rgba(219,39,119,0.05); border: 1.5px solid #db2777; grid-column: 1 / -1;">
+              <h3><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section PDF Export</h3>
+              <div class="form-group mt-2">
+                <label style="font-weight:700; color:#db2777;">Select Category</label>
+                <select id="cat-pdf-girls-select" class="form-control" style="font-weight:600; border: 1.5px solid #db2777;">
+                  <option value="HIGH ZONE">HIGH ZONE</option>
+                  <option value="MID ZONE">MID ZONE</option>
+                  <option value="GROUND ZONE">GROUND ZONE</option>
+                </select>
+              </div>
+              <button id="btn-generate-girls-pdf" class="btn-primary full-width mt-2" style="background:#db2777;"><i class="fa-solid fa-layer-group"></i> Generate Girls PDF</button>
+            </div>
+          `;
+          document.getElementById('btn-generate-girls-pdf').addEventListener('click', () => generateGenderWisePDF('Female'));
+        }
+      }
+    }
 
     window.openTeamVersusView = () => {
       document.querySelector('.nav-item[data-view="team-versus"]').click();
@@ -1763,16 +1781,12 @@
       document.getElementById('form-team-settings').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
-        const data = {
-          boysLeader: document.getElementById('team-boys-leaders-input').value,
-          girlsLeader: document.getElementById('team-girls-leaders-input').value,
-          boysLeaders: document.getElementById('team-boys-leaders-input').value,
-          girlsLeaders: document.getElementById('team-girls-leaders-input').value
-        };
+        const val = document.getElementById('team-leader-single-input').value;
+        const data = isGroupBoys(state.activeTeam) ? { boysLeader: val, boysLeaders: val } : { girlsLeader: val, girlsLeaders: val };
         try {
           await robustSetDoc('teams', data, { merge: true }, state.activeTeam);
           showToast('✓ Group settings updated successfully.', 'success');
-          logActivity(`Updated group leadership settings for ${state.activeTeam}`);
+          logActivity(`Updated group leader for ${state.activeTeam}`);
         } catch (err) {
           showToast('Error saving settings: ' + err.message, 'error');
         }
@@ -1834,11 +1848,12 @@
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
 
         const docId = document.getElementById('student-doc-id').value;
+        const fixedGender = getActiveGroupGender(state.activeTeam);
         const studentData = {
           chestNo: document.getElementById('student-roll-input').value,
           rollNo: document.getElementById('student-roll-input').value,
           name: document.getElementById('student-name-input').value,
-          gender: document.getElementById('student-gender-input').value,
+          gender: fixedGender,
           class: document.getElementById('student-class-input').value,
           category: document.getElementById('student-category-input').value,
           team: state.activeTeam
@@ -1847,7 +1862,7 @@
         try {
           if (docId) {
             await robustUpdateDoc('students', docId, studentData);
-            showToast('✓ New student added successfully!', 'success');
+            showToast('✓ Student updated successfully!', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
             await robustAddDoc('students', studentData);
@@ -1865,9 +1880,6 @@
       document.getElementById('btn-print-parent-slip').addEventListener('click', () => window.print());
       document.getElementById('btn-whatsapp-parent-slip').addEventListener('click', shareWhatsAppSlip);
 
-      document.getElementById('btn-generate-boys-pdf').addEventListener('click', () => generateGenderWisePDF('Male'));
-      document.getElementById('btn-generate-girls-pdf').addEventListener('click', () => generateGenderWisePDF('Female'));
-
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgrammeModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgrammeModal('Non-Stage'));
 
@@ -1878,13 +1890,13 @@
         const docId = document.getElementById('prog-doc-id').value;
         const maxVal = document.getElementById('prog-max-input').value;
         const progNameInput = document.getElementById('prog-name-input').value.trim();
-        const genderInput = document.getElementById('prog-gender-input').value;
+        const fixedGender = getActiveGroupGender(state.activeTeam);
         const categoryInput = document.getElementById('prog-category-input').value;
         const typeInput = document.getElementById('prog-type-hidden').value;
 
         const progData = {
           name: progNameInput,
-          gender: genderInput,
+          gender: fixedGender,
           category: categoryInput,
           type: typeInput,
           maxParticipants: maxVal ? parseInt(maxVal, 10) : null,
@@ -1909,7 +1921,6 @@
 
       setupCardSelectors();
       setupVsCardSelectors();
-      setupStudentSectionTabs();
       setupProgrammeTypeTabs();
 
       document.getElementById('bulk-item-name-select').addEventListener('change', renderBulkStudentChecklist);
@@ -1922,7 +1933,6 @@
 
       document.getElementById('dash-practice-class-filter').addEventListener('change', renderDashboardStudentStatusTable);
       document.getElementById('dash-practice-category-filter').addEventListener('change', renderDashboardStudentStatusTable);
-      document.getElementById('dash-practice-gender-filter').addEventListener('change', renderDashboardStudentStatusTable);
       document.getElementById('dash-practice-search-input').addEventListener('input', renderDashboardStudentStatusTable);
 
       document.getElementById('report-type-select').addEventListener('change', renderReportOutput);
@@ -1937,18 +1947,23 @@
       document.getElementById('team-name-input').value = state.activeTeam;
 
       registerListener('teams_' + state.activeTeam, (s) => {
+        const isBoys = isGroupBoys(state.activeTeam);
         if (s.exists()) {
           state.teamSettings = s.data();
+          const leaderName = isBoys ? (state.teamSettings.boysLeader || state.teamSettings.boysLeaders || 'N/A') : (state.teamSettings.girlsLeader || state.teamSettings.girlsLeaders || 'N/A');
+          
           document.getElementById('dash-team-name').textContent = state.activeTeam;
-          document.getElementById('dash-boys-leaders').textContent = state.teamSettings.boysLeader || state.teamSettings.boysLeaders || 'N/A';
-          document.getElementById('dash-girls-leaders').textContent = state.teamSettings.girlsLeader || state.teamSettings.girlsLeaders || 'N/A';
-
-          document.getElementById('team-boys-leaders-input').value = state.teamSettings.boysLeader || state.teamSettings.boysLeaders || '';
-          document.getElementById('team-girls-leaders-input').value = state.teamSettings.girlsLeader || state.teamSettings.girlsLeaders || '';
+          if(isBoys) {
+            document.getElementById('dash-boys-leaders').textContent = leaderName;
+          } else {
+            document.getElementById('dash-girls-leaders').textContent = leaderName;
+          }
+          document.getElementById('team-leader-single-input').value = leaderName !== 'N/A' ? leaderName : '';
         } else {
           document.getElementById('dash-team-name').textContent = state.activeTeam;
-          document.getElementById('dash-boys-leaders').textContent = 'N/A';
-          document.getElementById('dash-girls-leaders').textContent = 'N/A';
+          if(isBoys) document.getElementById('dash-boys-leaders').textContent = 'N/A';
+          else document.getElementById('dash-girls-leaders').textContent = 'N/A';
+          document.getElementById('team-leader-single-input').value = '';
         }
       });
 
@@ -1968,8 +1983,14 @@
 
       registerListener('students', (s) => {
         let fetchedStudents = s.docs.map(d => ({ id: d.id, ...d.data() }));
-        // ISOLATE STUDENTS PER TEAM: Only show students belonging to activeTeam
-        const activeTeamStudents = fetchedStudents.filter(item => (item.team || 'FIRQATH-E- NAIL') === state.activeTeam);
+        const activeGender = getActiveGroupGender(state.activeTeam);
+        
+        // ISOLATE STUDENTS PER TEAM AND GENDER: Only show students belonging to activeTeam and matching active gender
+        const activeTeamStudents = fetchedStudents.filter(item => {
+          const teamMatch = (item.team || '') === state.activeTeam;
+          const genderMatch = (item.gender || activeGender) === activeGender;
+          return teamMatch && genderMatch;
+        });
         
         const uniqueMap = new Map();
         activeTeamStudents.forEach(item => {
@@ -1990,19 +2011,20 @@
         renderChestNumbersA4();
       });
 
-      registerListener('mixed_groups', (s) => {
-        state.mixedGroups = s.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.team === state.activeTeam);
-        updateDashboardStats();
-      });
-
       registerListener('programmes', (s) => {
         let rawProgs = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        const activeGender = getActiveGroupGender(state.activeTeam);
+
+        // Share programmes among same gender groups (Boys groups share boys progs, Girls groups share girls progs)
+        const relevantProgs = rawProgs.filter(p => (p.gender || activeGender) === activeGender);
+
         const uniqueProgMap = new Map();
-        rawProgs.forEach(item => {
+        relevantProgs.forEach(item => {
           const key = `${(item.name || '').trim().toLowerCase()}_${item.gender}_${item.category}_${item.type}`;
           if (!uniqueProgMap.has(key)) uniqueProgMap.set(key, item);
         });
         state.programmes = Array.from(uniqueProgMap.values());
+        
         renderProgrammeCards();
         updateDashboardStats();
         updateBulkProgrammeOptions();
@@ -2012,7 +2034,6 @@
       });
 
       registerListener('assignments', (s) => {
-        // ISOLATE ASSIGNMENTS PER TEAM: Only show assignments belonging to activeTeam
         let allAssigns = s.docs.map(d => ({ id: d.id, ...d.data() }));
         state.assignments = allAssigns.filter(item => item.team === state.activeTeam);
         updateDashboardStats();
@@ -2068,14 +2089,21 @@
     function updateDashboardStats() {
       const activeStudents = state.students.filter(s => s.team === state.activeTeam);
       document.getElementById('stat-total-students').textContent = activeStudents.length;
-      document.getElementById('stat-total-boys').textContent = activeStudents.filter(s => s.gender === 'Male').length;
-      document.getElementById('stat-total-girls').textContent = activeStudents.filter(s => s.gender === 'Female').length;
       
+      const isBoys = isGroupBoys(state.activeTeam);
       const uniqueProgs = getUniqueProgrammes(state.programmes);
-      document.getElementById('stat-boys-stage-progs').textContent = uniqueProgs.filter(p => p.type === 'Stage' && p.gender === 'Male').length;
-      document.getElementById('stat-girls-stage-progs').textContent = uniqueProgs.filter(p => p.type === 'Stage' && p.gender === 'Female').length;
-      document.getElementById('stat-boys-non-stage-progs').textContent = uniqueProgs.filter(p => p.type === 'Non-Stage' && p.gender === 'Male').length;
-      document.getElementById('stat-girls-non-stage-progs').textContent = uniqueProgs.filter(p => p.type === 'Non-Stage' && p.gender === 'Female').length;
+
+      if(isBoys) {
+        const stageEl = document.getElementById('stat-boys-stage-progs');
+        const nonStageEl = document.getElementById('stat-boys-non-stage-progs');
+        if(stageEl) stageEl.textContent = uniqueProgs.filter(p => p.type === 'Stage' && p.gender === 'Male').length;
+        if(nonStageEl) nonStageEl.textContent = uniqueProgs.filter(p => p.type === 'Non-Stage' && p.gender === 'Male').length;
+      } else {
+        const stageEl = document.getElementById('stat-girls-stage-progs');
+        const nonStageEl = document.getElementById('stat-girls-non-stage-progs');
+        if(stageEl) stageEl.textContent = uniqueProgs.filter(p => p.type === 'Stage' && p.gender === 'Female').length;
+        if(nonStageEl) nonStageEl.textContent = uniqueProgs.filter(p => p.type === 'Non-Stage' && p.gender === 'Female').length;
+      }
 
       const activeProgNames = new Set(state.programmes.map(p => p.name.trim().toLowerCase()));
       const validPractice = state.practice.filter(p => activeProgNames.has((p.programmeName || '').trim().toLowerCase()));
@@ -2096,9 +2124,6 @@
 
     function sortByClass(studentList) {
       return [...studentList].sort((a, b) => {
-        if (a.gender !== b.gender) {
-          return a.gender === 'Male' ? -1 : 1;
-        }
         const clsA = parseInt(a.class || 0, 10);
         const clsB = parseInt(b.class || 0, 10);
         if (clsA !== clsB) return clsA - clsB;
@@ -2136,7 +2161,8 @@
 
     function generateGenderWisePDF(gender) {
       const selectId = gender === 'Male' ? 'cat-pdf-boys-select' : 'cat-pdf-girls-select';
-      const selectedCategory = document.getElementById(selectId).value;
+      const selectEl = document.getElementById(selectId);
+      const selectedCategory = selectEl ? selectEl.value : 'HIGH ZONE';
 
       const card = document.getElementById('category-pdf-preview-card');
       const outputArea = document.getElementById('category-pdf-output-area');
@@ -2161,7 +2187,6 @@
       subtitleEl.textContent = `All Programmes List | Category: ${selectedCategory} | Section: ${gender === 'Male' ? 'Boys Section' : 'Girls Section'}`;
 
       let fullHtml = '';
-      // Read all assignments globally from localDB/Firestore to extract participants for this group
       const allAssigns = localDB.assignments || [];
       const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
@@ -2269,7 +2294,6 @@
 
       const filterClass = document.getElementById('dash-practice-class-filter')?.value || '';
       const filterCat = document.getElementById('dash-practice-category-filter')?.value || '';
-      const filterGender = document.getElementById('dash-practice-gender-filter')?.value || '';
       const filterSearch = document.getElementById('dash-practice-search-input')?.value.toLowerCase() || '';
 
       const activeStudents = state.students.filter(s => s.team === state.activeTeam);
@@ -2278,9 +2302,8 @@
       let studentList = activeStudents.filter(s => {
         const matchClass = !filterClass || s.class.toString() === filterClass;
         const matchCat = !filterCat || s.category === filterCat;
-        const matchGender = !filterGender || s.gender === filterGender;
         const matchSearch = !filterSearch || s.name.toLowerCase().includes(filterSearch);
-        return matchClass && matchCat && matchGender && matchSearch;
+        return matchClass && matchCat && matchSearch;
       });
 
       studentList = sortByClass(studentList);
@@ -2378,6 +2401,16 @@
     };
 
     function setupCardSelectors() {
+      const activeGender = getActiveGroupGender(state.activeTeam);
+      state.bulkSelection.gender = activeGender;
+
+      const genderGrid = document.getElementById('grid-bulk-gender');
+      if (genderGrid) {
+        genderGrid.innerHTML = isGroupBoys(state.activeTeam) ? 
+          `<div class="selector-chip selected" data-val="Male"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</div>` :
+          `<div class="selector-chip selected" data-val="Female"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</div>`;
+      }
+
       const bindGroup = (gridId, stateField, nextGroupId) => {
         const chips = document.querySelectorAll(`#${gridId} .selector-chip`);
         chips.forEach(chip => {
@@ -2396,22 +2429,27 @@
       };
 
       bindGroup('grid-bulk-cat', 'category', 'group-bulk-gender');
+      const genderGroupEl = document.getElementById('group-bulk-gender');
+      if(genderGroupEl) genderGroupEl.style.display = 'block';
+
       bindGroup('grid-bulk-gender', 'gender', 'group-bulk-type');
       bindGroup('grid-bulk-type', 'type', 'group-bulk-prog');
     }
 
     function updateBulkProgrammeOptions() {
       const cat = state.bulkSelection.category;
-      const gender = state.bulkSelection.gender;
+      const gender = getActiveGroupGender(state.activeTeam);
       const type = state.bulkSelection.type;
       const nameSelect = document.getElementById('bulk-item-name-select');
       const container = document.getElementById('bulk-students-container');
+
+      state.bulkSelection.gender = gender;
 
       if (!nameSelect) return;
       nameSelect.value = "";
       if (container) container.style.display = 'none';
 
-      if (!cat || !gender || !type) {
+      if (!cat || !type) {
         nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>';
         return;
       }
@@ -2427,7 +2465,7 @@
 
     function renderBulkStudentChecklist() {
       const cat = state.bulkSelection.category;
-      const gender = state.bulkSelection.gender;
+      const gender = getActiveGroupGender(state.activeTeam);
       const type = state.bulkSelection.type;
       const progId = document.getElementById('bulk-item-name-select').value;
 
@@ -2581,15 +2619,14 @@
         });
       };
 
-      bindGroup('grid-bulk-cat', 'category', 'group-bulk-gender');
-      bindGroup('grid-bulk-gender', 'gender', 'group-bulk-type');
-      bindGroup('grid-bulk-type', 'type', 'group-bulk-prog');
+      bindGroup('grid-vs-cat', 'category', 'group-vs-type');
+      bindGroup('grid-vs-type', 'type', 'group-vs-prog');
     }
 
     function updateVsProgrammeOptions() {
       const cat = state.vsSelection.category;
-      const gender = state.vsSelection.gender;
       const type = state.vsSelection.type;
+      const gender = getActiveGroupGender(state.activeTeam);
       const nameSelect = document.getElementById('vs-item-name-select');
       const container = document.getElementById('vs-results-card');
 
@@ -2597,7 +2634,7 @@
       nameSelect.value = "";
       if (container) container.style.display = 'none';
 
-      if (!cat || !gender || !type) {
+      if (!cat || !type) {
         nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>';
         return;
       }
@@ -2613,8 +2650,8 @@
 
     function renderVersusComparisonOutput() {
       const cat = state.vsSelection.category;
-      const gender = state.vsSelection.gender;
       const type = state.vsSelection.type;
+      const gender = getActiveGroupGender(state.activeTeam);
       const progId = document.getElementById('vs-item-name-select')?.value;
 
       const container = document.getElementById('vs-results-card');
@@ -2634,7 +2671,9 @@
       titleEl.textContent = selectedProg.name;
       subtitleEl.textContent = `${cat} Category | ${gender === 'Male' ? 'Boys Section' : 'Girls Section'} | ${type} Item`;
 
-      const allTeams = ['FIRQATH-E- NAIL', 'FIRQATH-E- SEYHAN', 'FIRQATH-E- FURAATH', 'FIRQATH-E-JAIHOON'];
+      const girlTeams = ['FIRQATH-E- NAIL', 'FIRQATH-E- SEYHAN'];
+      const boyTeams = ['FIRQATH-E- FURAATH', 'FIRQATH-E-JAIHOON'];
+      const targetTeams = gender === 'Female' ? girlTeams : boyTeams;
 
       const getTeamList = (teamName) => {
         const activeProgNames = new Set(state.programmes.map(p => p.name.trim().toLowerCase()));
@@ -2664,7 +2703,7 @@
         return items;
       };
 
-      gridContainer.innerHTML = allTeams.map(teamName => {
+      gridContainer.innerHTML = targetTeams.map(teamName => {
         const teamData = getTeamList(teamName);
         return `
           <div style="background: rgba(13, 92, 58, 0.05); padding: 1rem; border-radius: 12px; border: 1.5px solid var(--primary-green);">
@@ -2759,18 +2798,6 @@
       }
     };
 
-    function setupStudentSectionTabs() {
-      const btns = document.querySelectorAll('#student-section-tabs .tab-btn');
-      btns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          btns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          state.selectedStudentTab = btn.getAttribute('data-tab');
-          renderStudentsTable();
-        });
-      });
-    }
-
     function setupProgrammeTypeTabs() {
       const typeBtns = document.querySelectorAll('#programme-type-tabs .tab-btn');
       typeBtns.forEach(btn => {
@@ -2778,16 +2805,6 @@
           typeBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           state.selectedProgType = btn.getAttribute('data-type');
-          renderProgrammeCards();
-        });
-      });
-
-      const secBtns = document.querySelectorAll('#prog-sec-tabs .tab-btn');
-      secBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          secBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          state.selectedProgSec = btn.getAttribute('data-sec');
           renderProgrammeCards();
         });
       });
@@ -2807,8 +2824,8 @@
       const container = document.getElementById('programmes-list-container');
       if (!container) return;
 
-      let list = state.programmes.filter(p => p.type === state.selectedProgType);
-      if (state.selectedProgSec !== 'All') list = list.filter(p => p.gender === state.selectedProgSec);
+      const activeGender = getActiveGroupGender(state.activeTeam);
+      let list = state.programmes.filter(p => p.type === state.selectedProgType && p.gender === activeGender);
       if (state.selectedProgCat !== 'All') list = list.filter(p => p.category === state.selectedProgCat);
 
       list = getUniqueProgrammes(list);
@@ -2853,15 +2870,14 @@
       let html = '';
 
       const activeStudents = state.students.filter(s => s.team === state.activeTeam);
+      const isBoys = isGroupBoys(state.activeTeam);
 
       if (type === 'total-students' || type === 'total-boys' || type === 'total-girls') {
         let list = [...activeStudents];
-        if (type === 'total-boys') list = list.filter(s => s.gender === 'Male');
-        if (type === 'total-girls') list = list.filter(s => s.gender === 'Female');
         if (state.dashModalFilterCat !== 'All') list = list.filter(s => s.category === state.dashModalFilterCat);
 
         list = sortByClass(list);
-        titleEl.textContent = type === 'total-boys' ? 'Boys Section Directory' : (type === 'total-girls' ? 'Girls Section Directory' : 'All Students Directory');
+        titleEl.textContent = isBoys ? 'Boys Group Students Directory' : 'Girls Group Students Directory';
 
         html = `
           <div class="tab-buttons mb-2">
@@ -2900,16 +2916,10 @@
           </table>
         `;
       } else {
-        let gender = 'Male';
-        let progType = 'Stage';
-        
-        if (type === 'girls-stage') { gender = 'Female'; progType = 'Stage'; }
-        if (type === 'boys-stage') { gender = 'Male'; progType = 'Stage'; }
-        if (type === 'girls-non-stage') { gender = 'Female'; progType = 'Non-Stage'; }
-        if (type === 'boys-non-stage') { gender = 'Male'; progType = 'Non-Stage'; }
+        const gender = isBoys ? 'Male' : 'Female';
+        const progType = type.includes('stage') && !type.includes('non') ? 'Stage' : 'Non-Stage';
 
-        const genderLabel = gender === 'Male' ? 'Boys' : 'Girls';
-        titleEl.textContent = `${genderLabel} ${progType} Programmes List`;
+        titleEl.textContent = `${isBoys ? 'Boys' : 'Girls'} ${progType} Programmes List`;
 
         let list = state.programmes.filter(p => p.gender === gender && p.type === progType);
         if (state.dashModalFilterCat !== 'All') list = list.filter(p => p.category === state.dashModalFilterCat);
@@ -3054,12 +3064,7 @@
         const matchSearch = s.name.toLowerCase().includes(search) || rollStr.toLowerCase().includes(search);
         const matchClass = !classFilter || s.class.toString() === classFilter;
         const matchCategory = !category || s.category === category;
-        
-        let matchTab = true;
-        if (state.selectedStudentTab === 'boys') matchTab = s.gender === 'Male';
-        if (state.selectedStudentTab === 'girls') matchTab = s.gender === 'Female';
-
-        return matchSearch && matchClass && matchCategory && matchTab;
+        return matchSearch && matchClass && matchCategory;
       });
 
       filtered = sortByClass(filtered);
@@ -3273,7 +3278,6 @@
       document.getElementById('student-doc-id').value = s.id;
       document.getElementById('student-roll-input').value = getStudentRollNo(s, null);
       document.getElementById('student-name-input').value = s.name;
-      document.getElementById('student-gender-input').value = s.gender;
       document.getElementById('student-class-input').value = s.class;
       document.getElementById('student-category-input').value = s.category;
       document.getElementById('modal-student-title').textContent = 'Edit Student Record';
@@ -3381,7 +3385,6 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // NOTIFICATION FUNCTION WITH EXACT TOAST MESSAGES AS SHOWN IN THE VIDEO
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
       if (!container) return;
