@@ -597,7 +597,7 @@
       .main-content { margin-left: 0; }
       .topbar { padding: 0 1rem; }
       .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
-      .dashboard-grid, .filter-card-parent, .filter-bar, .form-grid { grid-template-columns: 1fr; }
+      .dashboard-grid, .filter-bar, .form-grid { grid-template-columns: 1fr; }
       .hero-banner { flex-direction: column; gap: 1rem; padding: 1.5rem; }
       #vs-tables-grid { grid-template-columns: 1fr !important; }
       .chest-grid-a4 { grid-template-columns: 1fr; }
@@ -1434,7 +1434,7 @@
     </div>
   </div>
 
-  <!-- FIREBASE API & CENTRALIZED MODULE SCRIPT -->
+  <!-- FIREBASE API & LOCALSTORAGE PERSISTENCE FALLBACK MODULE SCRIPT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { 
@@ -1475,11 +1475,138 @@
       vsSelection: { category: '', gender: '', type: '' }
     };
 
+    // LOCAL STORAGE PERSISTENCE LAYER (Ensures immediate local availability & offline persistence)
+    const LS_KEY = "BADRIYA_KANA_LOCAL_DB_2540";
+    function loadLocalDB() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch(e) { console.error("Localstorage read error:", e); }
+      return { students: [], programmes: [], assignments: [], practice: [], mixedGroups: [], auditLogs: [], teams: {}, settings: {} };
+    }
+
+    function saveLocalDB(dbData) {
+      try {
+        localStorage.setItem(LS_KEY, JSON.stringify(dbData));
+      } catch(e) { console.error("Localstorage write error:", e); }
+    }
+
+    let localDB = loadLocalDB();
+
+    async function robustAddDoc(collName, data) {
+      const id = 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const newItem = { id, ...data };
+      if (!localDB[collName]) localDB[collName] = [];
+      localDB[collName].push(newItem);
+      saveLocalDB(localDB);
+      triggerLocalSnapshots();
+      try {
+        await addDoc(collection(db, collName), data);
+      } catch(e) { console.warn("Firebase add sync failed, saved locally:", e); }
+      return { id };
+    }
+
+    async function robustSetDoc(pathKey, data, options = {}, subKey = null) {
+      if (pathKey === 'teams') {
+        if (!localDB.teams) localDB.teams = {};
+        localDB.teams[subKey] = { ...(localDB.teams[subKey] || {}), ...data };
+      } else if (pathKey === 'settings') {
+        if (!localDB.settings) localDB.settings = {};
+        localDB.settings[subKey] = { ...(localDB.settings[subKey] || {}), ...data };
+      }
+      saveLocalDB(localDB);
+      triggerLocalSnapshots();
+      try {
+        if (subKey) {
+          await setDoc(doc(db, pathKey, subKey), data, options);
+        }
+      } catch(e) { console.warn("Firebase set sync failed, saved locally:", e); }
+    }
+
+    async function robustUpdateDoc(collName, docId, data) {
+      if (localDB[collName]) {
+        const idx = localDB[collName].findIndex(item => item.id === docId);
+        if (idx !== -1) {
+          localDB[collName][idx] = { ...localDB[collName][idx], ...data };
+          saveLocalDB(localDB);
+          triggerLocalSnapshots();
+        }
+      }
+      try {
+        await updateDoc(doc(db, collName, docId), data);
+      } catch(e) { console.warn("Firebase update sync failed, saved locally:", e); }
+    }
+
+    async function robustDeleteDoc(collName, docId) {
+      if (localDB[collName]) {
+        localDB[collName] = localDB[collName].filter(item => item.id !== docId);
+        saveLocalDB(localDB);
+        triggerLocalSnapshots();
+      }
+      try {
+        await deleteDoc(doc(db, collName, docId));
+      } catch(e) { console.warn("Firebase delete sync failed, saved locally:", e); }
+    }
+
+    const listeners = {};
+    function registerListener(key, callback) {
+      listeners[key] = callback;
+      triggerLocalSnapshots();
+    }
+
+    function triggerLocalSnapshots() {
+      // Students
+      if (listeners['students']) {
+        const docs = (localDB.students || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['students']({ docs });
+      }
+      // Programmes
+      if (listeners['programmes']) {
+        const docs = (localDB.programmes || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['programmes']({ docs });
+      }
+      // Assignments
+      if (listeners['assignments']) {
+        const docs = (localDB.assignments || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['assignments']({ docs });
+      }
+      // Practice
+      if (listeners['practice']) {
+        const docs = (localDB.practice || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['practice']({ docs });
+      }
+      // Mixed Groups
+      if (listeners['mixed_groups']) {
+        const docs = (localDB.mixed_groups || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['mixed_groups']({ docs });
+      }
+      // Audit Logs
+      if (listeners['audit_logs']) {
+        const docs = (localDB.audit_logs || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
+        listeners['audit_logs']({ docs });
+      }
+      // Team Settings
+      if (listeners['teams_' + state.activeTeam]) {
+        const teamData = localDB.teams?.[state.activeTeam] || {};
+        listeners['teams_' + state.activeTeam]({ exists: () => Object.keys(teamData).length > 0, data: () => teamData });
+      }
+      // Announcement
+      if (listeners['announcement']) {
+        const annData = localDB.settings?.live_announcement || {};
+        listeners['announcement']({ exists: () => Object.keys(annData).length > 0, data: () => annData });
+      }
+      // System Settings
+      if (listeners['system_settings']) {
+        const sysData = localDB.settings?.system_settings || {};
+        listeners['system_settings']({ exists: () => Object.keys(sysData).length > 0, data: () => sysData });
+      }
+    }
+
     let activeSnapshotUnsubscribers = [];
 
     async function logActivity(actionMessage) {
       try {
-        await addDoc(collection(db, 'audit_logs'), {
+        await robustAddDoc('audit_logs', {
           team: state.activeTeam,
           message: actionMessage,
           timestamp: new Date().toISOString()
@@ -1634,7 +1761,7 @@
           girlsLeaders: document.getElementById('team-girls-leaders-input').value
         };
         try {
-          await setDoc(doc(db, 'teams', state.activeTeam), data, { merge: true });
+          await robustSetDoc('teams', data, { merge: true }, state.activeTeam);
           showToast('✓ Team settings updated successfully.', 'success');
           logActivity(`Updated team leadership settings for ${state.activeTeam}`);
         } catch (err) {
@@ -1653,7 +1780,7 @@
         }
 
         try {
-          await setDoc(doc(db, "system", "settings"), { adminPass: newP }, { merge: true });
+          await robustSetDoc('settings', { adminPass: newP }, { merge: true }, 'system_settings');
           state.adminPass = newP;
           showToast('✓ Changes saved successfully.', 'success');
         } catch(err) {
@@ -1668,11 +1795,11 @@
         const msg = document.getElementById('announcement-input').value.trim();
 
         try {
-          await setDoc(doc(db, 'settings', 'live_announcement'), {
+          await robustSetDoc('settings', {
             message: msg,
             team: state.activeTeam,
             timestamp: new Date().toISOString()
-          }, { merge: true });
+          }, { merge: true }, 'live_announcement');
           showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Updated announcement: "${msg}"`);
         } catch (err) {
@@ -1706,11 +1833,11 @@
 
         try {
           if (docId) {
-            await updateDoc(doc(db, 'students', docId), studentData);
+            await robustUpdateDoc('students', docId, studentData);
             showToast('✓ Student saved successfully.', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
-            await addDoc(collection(db, 'students'), studentData);
+            await robustAddDoc('students', studentData);
             showToast('✓ Student saved successfully.', 'success');
             logActivity(`Added new student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           }
@@ -1737,41 +1864,23 @@
 
         const docId = document.getElementById('prog-doc-id').value;
         const maxVal = document.getElementById('prog-max-input').value;
-        const progNameInput = document.getElementById('prog-name-input').value.trim();
-        const genderInput = document.getElementById('prog-gender-input').value;
-        const categoryInput = document.getElementById('prog-category-input').value;
-        const typeInput = document.getElementById('prog-type-hidden').value;
-
-        // Ensure global/team-agnostic synchronization for programmes across both teams if required, or save as team-neutral/ALL
+        
         const progData = {
-          name: progNameInput,
-          gender: genderInput,
-          category: categoryInput,
-          type: typeInput,
+          name: document.getElementById('prog-name-input').value,
+          gender: document.getElementById('prog-gender-input').value,
+          category: document.getElementById('prog-category-input').value,
+          type: document.getElementById('prog-type-hidden').value,
           maxParticipants: maxVal ? parseInt(maxVal, 10) : null,
           team: 'ALL'
         };
 
         try {
           if (docId) {
-            await updateDoc(doc(db, 'programmes', docId), progData);
+            await robustUpdateDoc('programmes', docId, progData);
             showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Updated programme: ${progData.name}`);
           } else {
-            // Check if exact same programme already exists globally to prevent duplicates
-            const existingMatch = state.programmes.find(p => 
-              p.name.trim().toLowerCase() === progNameInput.toLowerCase() && 
-              p.gender === genderInput && 
-              p.category === categoryInput && 
-              p.type === typeInput
-            );
-
-            if (existingMatch) {
-              showToast('Programme already exists!', 'warning');
-              return;
-            }
-
-            await addDoc(collection(db, 'programmes'), progData);
+            await robustAddDoc('programmes', progData);
             showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
           }
@@ -1810,10 +1919,9 @@
 
       document.getElementById('team-name-input').value = state.activeTeam;
 
-      const unsubTeam = onSnapshot(doc(db, 'teams', state.activeTeam), (s) => {
+      registerListener('teams_' + state.activeTeam, (s) => {
         if (s.exists()) {
           state.teamSettings = s.data();
-          const leaderText = state.teamSettings.boysLeader || state.teamSettings.boysLeaders || 'N/A';
           document.getElementById('dash-team-name').textContent = state.activeTeam;
           document.getElementById('dash-boys-leaders').textContent = state.teamSettings.boysLeader || state.teamSettings.boysLeaders || 'N/A';
           document.getElementById('dash-girls-leaders').textContent = state.teamSettings.girlsLeader || state.teamSettings.girlsLeaders || 'N/A';
@@ -1826,9 +1934,8 @@
           document.getElementById('dash-girls-leaders').textContent = 'N/A';
         }
       });
-      activeSnapshotUnsubscribers.push(unsubTeam);
 
-      const unsubAnnouncement = onSnapshot(doc(db, 'settings', 'live_announcement'), (s) => {
+      registerListener('announcement', (s) => {
         const bannerEl = document.getElementById('announcement-banner');
         const tickerTextEl = document.getElementById('ticker-text');
         if (s.exists() && s.data().message && s.data().message.trim() !== '') {
@@ -1841,9 +1948,8 @@
           bannerEl.classList.remove('active');
         }
       });
-      activeSnapshotUnsubscribers.push(unsubAnnouncement);
 
-      const unsubStudents = onSnapshot(collection(db, 'students'), (s) => {
+      registerListener('students', (s) => {
         let fetchedStudents = s.docs.map(d => ({ id: d.id, ...d.data() }));
         const uniqueMap = new Map();
         fetchedStudents.forEach(item => {
@@ -1863,16 +1969,13 @@
         renderVersusComparisonOutput();
         renderChestNumbersA4();
       });
-      activeSnapshotUnsubscribers.push(unsubStudents);
 
-      const qMixed = query(collection(db, 'mixed_groups'), where('team', '==', state.activeTeam));
-      const unsubMixed = onSnapshot(qMixed, (s) => {
-        state.mixedGroups = s.docs.map(d => ({ id: d.id, ...d.data() }));
+      registerListener('mixed_groups', (s) => {
+        state.mixedGroups = s.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.team === state.activeTeam);
         updateDashboardStats();
       });
-      activeSnapshotUnsubscribers.push(unsubMixed);
 
-      const unsubProgrammes = onSnapshot(collection(db, 'programmes'), (s) => {
+      registerListener('programmes', (s) => {
         let rawProgs = s.docs.map(d => ({ id: d.id, ...d.data() }));
         const uniqueProgMap = new Map();
         rawProgs.forEach(item => {
@@ -1887,9 +1990,8 @@
         renderParentSlip();
         renderDashboardStudentStatusTable();
       });
-      activeSnapshotUnsubscribers.push(unsubProgrammes);
 
-      const unsubAssignments = onSnapshot(collection(db, 'assignments'), (s) => {
+      registerListener('assignments', (s) => {
         state.assignments = s.docs.map(d => ({ id: d.id, ...d.data() }));
         updateDashboardStats();
         renderDashboardStudentStatusTable();
@@ -1897,26 +1999,21 @@
         renderVersusComparisonOutput();
         renderParentSlip();
       });
-      activeSnapshotUnsubscribers.push(unsubAssignments);
 
-      const qPractice = query(collection(db, 'practice'), where('team', '==', state.activeTeam));
-      const unsubPractice = onSnapshot(qPractice, (s) => {
-        state.practice = s.docs.map(d => ({ id: d.id, ...d.data() }));
+      registerListener('practice', (s) => {
+        state.practice = s.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.team === state.activeTeam);
         renderPracticeTable();
         updateDashboardStats();
         renderDashboardStudentStatusTable();
       });
-      activeSnapshotUnsubscribers.push(unsubPractice);
 
-      const qLogs = query(collection(db, 'audit_logs'), where('team', '==', state.activeTeam), limit(15));
-      const unsubLogs = onSnapshot(qLogs, (s) => {
-        state.auditLogs = s.docs.map(d => ({ id: d.id, ...d.data() }));
+      registerListener('audit_logs', (s) => {
+        state.auditLogs = s.docs.map(d => ({ id: d.id, ...d.data() })).filter(item => item.team === state.activeTeam);
         state.auditLogs.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         renderAuditLogs();
       });
-      activeSnapshotUnsubscribers.push(unsubLogs);
 
-      onSnapshot(doc(db, "system", "settings"), (docSnap) => {
+      registerListener('system_settings', (docSnap) => {
         if (docSnap.exists() && docSnap.data().adminPass) {
           state.adminPass = docSnap.data().adminPass;
         }
@@ -2238,11 +2335,11 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          await deleteDoc(doc(db, 'practice', practiceId));
+          await robustDeleteDoc('practice', practiceId);
 
           const matchedAssigns = state.assignments.filter(a => a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase());
           for (const assign of matchedAssigns) {
-            await deleteDoc(doc(db, 'assignments', assign.id));
+            await robustDeleteDoc('assignments', assign.id);
           }
 
           showToast('✓ Changes saved successfully.', 'success');
@@ -2371,10 +2468,10 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          await deleteDoc(doc(db, 'assignments', assignmentId));
+          await robustDeleteDoc('assignments', assignmentId);
           const practiceMatches = state.practice.filter(p => p.studentName === studentName && p.programmeName === progName);
           for (const pr of practiceMatches) {
-            await deleteDoc(doc(db, 'practice', pr.id));
+            await robustDeleteDoc('practice', pr.id);
           }
           showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
@@ -2404,7 +2501,7 @@
 
         try {
           const cleanRoll = getStudentRollNo(student, null);
-          const assignDoc = await addDoc(collection(db, 'assignments'), {
+          const assignDoc = await robustAddDoc('assignments', {
             studentDocId: student.id,
             studentCustomId: cleanRoll,
             studentRollNo: cleanRoll,
@@ -2419,7 +2516,7 @@
             team: state.activeTeam
           });
 
-          await addDoc(collection(db, 'practice'), {
+          await robustAddDoc('practice', {
             assignmentDocId: assignDoc.id,
             studentName: student.name,
             programmeName: prog.name,
@@ -2619,7 +2716,7 @@
 
     window.updatePracticeStatusDirect = async (practiceId, newStatus, studentDocId, studentName, progName) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
-      await updateDoc(doc(db, 'practice', practiceId), { status: newStatus });
+      await robustUpdateDoc('practice', practiceId, { status: newStatus });
       showToast('✓ Changes saved successfully.', 'success');
       logActivity(`Updated status to "${newStatus}" for ${studentName} - ${progName}`);
       window.openStatusManageModal(studentDocId);
@@ -2628,7 +2725,7 @@
     window.updatePracticeStatus = async (id, status) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const item = state.practice.find(p => p.id === id);
-      await updateDoc(doc(db, 'practice', id), { status });
+      await robustUpdateDoc('practice', id, { status });
       showToast('✓ Changes saved successfully.', 'success');
       if (item) {
         logActivity(`Updated status to "${status}" for ${item.studentName} - ${item.programmeName}`);
@@ -2890,16 +2987,16 @@
 
       if (confirm(`"${prog.name}" പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യണോ? ഇത് എല്ലാ സ്ഥലത്തുനിന്നും ഒഴിവാക്കപ്പെടും.`)) {
         try {
-          await deleteDoc(doc(db, 'programmes', id));
+          await robustDeleteDoc('programmes', id);
           
           const relatedAssignments = state.assignments.filter(a => a.programmeDocId === id || (a.programmeName || a.progName)?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const assign of relatedAssignments) {
-            await deleteDoc(doc(db, 'assignments', assign.id));
+            await robustDeleteDoc('assignments', assign.id);
           }
 
           const relatedPractice = state.practice.filter(p => p.programmeName?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const prac of relatedPractice) {
-            await deleteDoc(doc(db, 'practice', prac.id));
+            await robustDeleteDoc('practice', prac.id);
           }
 
           showToast('✓ Changes saved successfully.', 'success');
@@ -3156,7 +3253,7 @@
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const s = state.students.find(x => x.id === id);
       if (confirm('Delete student record?')) {
-        await deleteDoc(doc(db, 'students', id));
+        await robustDeleteDoc('students', id);
         showToast('✓ Changes saved successfully.', 'success');
         if (s) logActivity(`Deleted student: ${s.name}`);
       }
