@@ -1438,7 +1438,8 @@
       projectId: "madrasatul-badriya",
       storageBucket: "madrasatul-badriya.firebasestorage.app",
       messagingSenderId: "116617898354",
-      appId: "1:116617898354:web:8f690c74d274bdc08a55eb"
+      appId: "1:116617898354:web:8f690c74d274bdc08a55eb",
+      measurementId: "G-F0ZPDZQ8P4"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -2054,7 +2055,7 @@
       const activeProgNames = new Set(state.programmes.map(p => p.name.trim().toLowerCase()));
       const validPractice = state.practice.filter(p => activeProgNames.has((p.programmeName || '').trim().toLowerCase()));
 
-      const ready = validPractice.filter(p => p.status === 'Stage Ready').length;
+      const ready = validPractice.fileters?.(p => p.status === 'Stage Ready').length || validPractice.filter(p => p.status === 'Stage Ready').length;
       const completed = validPractice.filter(p => p.status === 'Completed').length;
       const pending = validPractice.filter(p => p.status === 'Learning' || !p.status).length;
       const total = validPractice.length || 1;
@@ -2553,9 +2554,9 @@
         });
       };
 
-      bindGroup('grid-vs-cat', 'category', 'group-vs-gender');
-      bindGroup('grid-vs-gender', 'gender', 'group-vs-type');
-      bindGroup('grid-vs-type', 'type', 'group-vs-prog');
+      bindGroup('grid-bulk-cat', 'category', 'group-bulk-gender');
+      bindGroup('grid-bulk-gender', 'gender', 'group-bulk-type');
+      bindGroup('grid-bulk-type', 'type', 'group-bulk-prog');
     }
 
     function updateVsProgrammeOptions() {
@@ -3324,7 +3325,7 @@
           const cleanRoll = getStudentRollNo(s, null);
           return `<tr><td>${cleanRoll}</td><td>Class ${s.class} - ${s.name}</td><td>${s.gender === 'Male' ? 'Boys' : 'Girls'}</td><td>${s.category}</td><td>Class ${s.class}</td></tr>`;
         }).join('')}</tbody></table>`;
-      } else if (type === 'programme') {
+      } else.if (type === 'programme') {
         container.innerHTML = `<table class="data-table"><thead><tr><th>Student</th><th>Programme</th></tr></thead><tbody>${activeAssignments.map(a => `<tr><td>${a.studentName}</td><td>${a.programmeName || a.progName}</td></tr>`).join('')}</tbody></table>`;
       } else {
         container.innerHTML = `<table class="data-table"><thead><tr><th>Student</th><th>Programme</th><th>Status</th></tr></thead><tbody>${state.practice.map(p => `<tr><td>${p.studentName}</td><td>${p.programmeName}</td><td>${p.status}</td></tr>`).join('')}</tbody></table>`;
@@ -3352,6 +3353,7 @@
       const container = document.getElementById('toast-container');
       if (!container) return;
       
+      const measurementId = "G-F0ZPDZQ8P4";
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
       
