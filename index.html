@@ -1768,7 +1768,7 @@
         }
       });
 
-      // FIXED PASSWORD CHANGE HANDLER
+      // PASSWORD CHANGE HANDLER
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'error');
@@ -2345,15 +2345,19 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          await robustDeleteDoc('practice', practiceId);
-
-          const matchedAssigns = state.assignments.filter(a => a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase());
-          for (const assign of matchedAssigns) {
-            await robustDeleteDoc('assignments', assign.id);
-          }
+          localDB.practice = (localDB.practice || []).filter(p => p.id !== practiceId);
+          localDB.assignments = (localDB.assignments || []).filter(a => !(a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase()));
+          saveLocalDB(localDB);
+          triggerLocalSnapshots();
 
           showToast('✓ Saved Successfully!', 'success');
           logActivity(`Removed "${progName}" from ${studentName} via Dashboard Card`);
+
+          robustDeleteDoc('practice', practiceId).catch(e => console.log(e));
+          const matchedAssigns = state.assignments.filter(a => a.studentName === studentName && (a.programmeName || a.progName)?.trim().toLowerCase() === progName.trim().toLowerCase());
+          for (const assign of matchedAssigns) {
+            robustDeleteDoc('assignments', assign.id).catch(e => console.log(e));
+          }
         } catch (err) {
           console.error(err);
           showToast('Failed to remove item: ' + err.message, 'error');
@@ -2478,14 +2482,20 @@
 
       if (confirm(`Remove "${progName}" for ${studentName}?`)) {
         try {
-          await robustDeleteDoc('assignments', assignmentId);
-          const practiceMatches = state.practice.filter(p => p.studentName === studentName && p.programmeName === progName);
-          for (const pr of practiceMatches) {
-            await robustDeleteDoc('practice', pr.id);
-          }
+          localDB.assignments = (localDB.assignments || []).filter(a => a.id !== assignmentId);
+          localDB.practice = (localDB.practice || []).filter(p => !(p.studentName === studentName && p.programmeName === progName));
+          saveLocalDB(localDB);
+          triggerLocalSnapshots();
+
           showToast('✓ Saved Successfully!', 'success');
           logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
           renderBulkStudentChecklist();
+
+          robustDeleteDoc('assignments', assignmentId).catch(e => console.log(e));
+          const practiceMatches = state.practice.filter(p => p.studentName === studentName && p.programmeName === progName);
+          for (const pr of practiceMatches) {
+            robustDeleteDoc('practice', pr.id).catch(e => console.log(e));
+          }
         } catch (err) {
           console.error(err);
           showToast('Failed to remove assignment: ' + err.message, 'error');
