@@ -475,12 +475,12 @@
     .spinner { width: 52px; height: 52px; border: 5px solid rgba(255,255,255,0.15); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1.2rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* IMPROVED MODERN TOAST NOTIFICATION STYLES */
+    /* MODERN TOAST NOTIFICATION STYLES */
     .toast-container { 
       position: fixed; 
       bottom: 24px; 
       right: 24px; 
-      z-index: 2000; 
+      z-index: 200000; 
       display: flex; 
       flex-direction: column; 
       gap: 0.6rem; 
@@ -494,25 +494,16 @@
       color: #fff; 
       font-size: 0.9rem; 
       font-weight: 600; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
       animation: slideInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       max-width: 380px;
     }
-    .toast.success { 
-      background: #10b981; 
-      color: #ffffff;
-    } 
-    .toast.error { 
-      background: #ef4444; 
-      color: #ffffff;
-    } 
-    .toast.warning { 
-      background: #f59e0b; 
-      color: #072e1d; 
-    }
+    .toast.success { background: #10b981; color: #ffffff; } 
+    .toast.error { background: #ef4444; color: #ffffff; } 
+    .toast.warning { background: #f59e0b; color: #072e1d; }
     @keyframes slideInUp {
       from { opacity: 0; transform: translateY(20px) scale(0.95); }
       to { opacity: 1; transform: translateY(0) scale(1); }
@@ -1475,7 +1466,6 @@
       vsSelection: { category: '', gender: '', type: '' }
     };
 
-    // LOCAL STORAGE PERSISTENCE LAYER
     const LS_KEY = "BADRIYA_KANA_LOCAL_DB_2540";
     function loadLocalDB() {
       try {
@@ -1778,7 +1768,7 @@
         }
       });
 
-      // FULLY WORKING PASSWORD CHANGE HANDLER
+      // FIXED PASSWORD CHANGE HANDLER
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'error');
