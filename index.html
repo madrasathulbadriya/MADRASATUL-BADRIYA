@@ -987,7 +987,7 @@
     </div>
   </div>
 
-  <!-- FIREBASE API MODULE WITH REALTIME SYNC & LOCAL FALLBACK -->
+  <!-- FIREBASE API MODULE WITH UNIQUE FILTERING & PERSISTENCE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { 
@@ -1005,30 +1005,6 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-
-    // MIGRATED TEST DATA WITH NEW ZONES
-    const initialTestStudents = [
-      { chestNo: "101", name: "MUHAMMAD SHAMIL", gender: "Male", class: "5", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "102", name: "MUHAMMAD SINAN", gender: "Male", class: "6", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "103", name: "ABDULLA YASEEN", gender: "Male", class: "8", category: "MID ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "104", name: "FATIMA FIDA", gender: "Female", class: "4", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "105", name: "AYISHA RIDA", gender: "Female", class: "7", category: "MID ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "106", name: "MUHAMMAD RIZWAN", gender: "Male", class: "10", category: "HIGH ZONE", team: "FIRQATH-E- NAIL" },
-      { chestNo: "201", name: "AHAMMED RAFI", gender: "Male", class: "5", category: "GROUND ZONE", team: "FIRQATH-E- SEYHAN" },
-      { chestNo: "202", name: "MUHAMMAD FADIL", gender: "Male", class: "7", category: "MID ZONE", team: "FIRQATH-E- SEYHAN" },
-      { chestNo: "203", name: "FATIMA ZAHRA", gender: "Female", class: "9", category: "MID ZONE", team: "FIRQATH-E- SEYHAN" },
-      { chestNo: "204", name: "KHADIJA NIHA", gender: "Female", class: "10", category: "HIGH ZONE", team: "FIRQATH-E- SEYHAN" }
-    ];
-
-    const initialTestProgrammes = [
-      { name: "QURAN RECITATION", gender: "Male", category: "GROUND ZONE", type: "Stage" },
-      { name: "MALAYALAM SPEECH", gender: "Male", category: "GROUND ZONE", type: "Stage" },
-      { name: "ISLAMIC SONG", gender: "Female", category: "GROUND ZONE", type: "Stage" },
-      { name: "QASEEDA", gender: "Male", category: "MID ZONE", type: "Stage" },
-      { name: "ARABIC SPEECH", gender: "Female", category: "MID ZONE", type: "Stage" },
-      { name: "ESSAY WRITING", gender: "Male", category: "HIGH ZONE", type: "Non-Stage" },
-      { name: "CALLIGRAPHY", gender: "Female", category: "HIGH ZONE", type: "Non-Stage" }
-    ];
 
     const state = {
       activeTeam: 'FIRQATH-E- NAIL',
@@ -1113,24 +1089,31 @@
         }
       });
 
+      // STUDENTS LISTENER WITH UNIQUE DEDUPLICATION
       onSnapshot(collection(db, 'students'), (s) => {
-        if (s.empty) {
-          initialTestStudents.forEach(st => addDoc(collection(db, 'students'), st));
-        } else {
-          state.students = s.docs.map(d => ({ id: d.id, ...d.data() }));
-          populateStudentSlipDropdown();
-          renderApp();
-        }
+        const rawDocs = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        // Remove duplicate records based on chestNo or name
+        const uniqueMap = new Map();
+        rawDocs.forEach(item => {
+          const key = (item.chestNo || item.name).trim().toLowerCase();
+          if (!uniqueMap.has(key)) uniqueMap.set(key, item);
+        });
+        state.students = Array.from(uniqueMap.values());
+        populateStudentSlipDropdown();
+        renderApp();
       });
 
+      // PROGRAMMES LISTENER WITH UNIQUE DEDUPLICATION
       onSnapshot(collection(db, 'programmes'), (s) => {
-        if (s.empty) {
-          initialTestProgrammes.forEach(pr => addDoc(collection(db, 'programmes'), pr));
-        } else {
-          state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
-          renderApp();
-          updateBulkProgrammeOptions();
-        }
+        const rawProgs = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        const uniqueProgMap = new Map();
+        rawProgs.forEach(item => {
+          const key = `${(item.name || '').trim().toLowerCase()}_${item.gender}_${item.category}_${item.type}`;
+          if (!uniqueProgMap.has(key)) uniqueProgMap.set(key, item);
+        });
+        state.programmes = Array.from(uniqueProgMap.values());
+        renderApp();
+        updateBulkProgrammeOptions();
       });
 
       onSnapshot(collection(db, 'assignments'), (s) => {
@@ -1213,19 +1196,6 @@
         const docId = document.getElementById('student-doc-id').value;
         const chestInput = document.getElementById('student-chest-input').value.trim();
         const nameInput = document.getElementById('student-name-input').value.trim();
-
-        const isDuplicateChest = state.students.some(s => s.id !== docId && s.chestNo === chestInput);
-        const isDuplicateName = state.students.some(s => s.id !== docId && s.name.toLowerCase() === nameInput.toLowerCase());
-
-        if (isDuplicateChest) {
-          showToast(`Chest No: ${chestInput} is already added!`, 'warning');
-          return;
-        }
-
-        if (isDuplicateName) {
-          showToast(`Student Name: "${nameInput}" is already added!`, 'warning');
-          return;
-        }
 
         const studentObj = {
           chestNo: chestInput,
