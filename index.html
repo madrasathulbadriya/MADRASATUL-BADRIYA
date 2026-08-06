@@ -1768,7 +1768,6 @@
         }
       });
 
-      // PASSWORD CHANGE HANDLER
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'error');
@@ -1836,14 +1835,13 @@
         };
 
         try {
+          closeModal('modal-student');
           if (docId) {
             await robustUpdateDoc('students', docId, studentData);
-            closeModal('modal-student');
             showToast('✓ Student updated successfully!', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
             await robustAddDoc('students', studentData);
-            closeModal('modal-student');
             showToast('✓ New student added successfully!', 'success');
             logActivity(`Added new student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           }
@@ -1884,14 +1882,13 @@
         };
 
         try {
+          closeModal('modal-programme');
           if (docId) {
             await robustUpdateDoc('programmes', docId, progData);
-            closeModal('modal-programme');
             showToast('✓ Programme saved successfully!', 'success');
             logActivity(`Updated programme: ${progData.name}`);
           } else {
             await robustAddDoc('programmes', progData);
-            closeModal('modal-programme');
             showToast('✓ Programme saved successfully!', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
           }
