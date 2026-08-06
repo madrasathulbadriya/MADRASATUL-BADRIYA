@@ -1100,20 +1100,23 @@
             </form>
           </div>
 
-          <div class="glass-card admin-only">
-            <h2>Change Admin Password</h2>
-            <form id="form-password-change" class="mt-2">
-              <div class="form-grid">
+          <!-- ADMIN CREDENTIALS MANAGER (USERNAME & PASSWORD) -->
+          <div class="glass-card mb-2 admin-only" id="admin-credentials-card">
+            <h3><i class="fa-solid fa-user-shield" style="color:var(--accent-gold);"></i> Change Username & Password</h3>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.3rem;">Update your admin login credentials below.</p>
+            <hr class="divider">
+            <form id="form-credentials-change">
+              <div class="form-grid mb-2">
                 <div class="form-group">
-                  <label>Old Password</label>
-                  <input type="password" id="old-pass-val" class="form-control" required placeholder="Current Password">
+                  <label>New Username</label>
+                  <input type="text" id="new-username-val" class="form-control" required placeholder="New Username">
                 </div>
                 <div class="form-group">
                   <label>New Password</label>
-                  <input type="password" id="new-pass-val" class="form-control" required placeholder="New Password">
+                  <input type="password" id="new-password-val" class="form-control" required placeholder="New Password">
                 </div>
               </div>
-              <button type="submit" class="btn-secondary mt-2"><i class="fa-solid fa-key"></i> Update Password</button>
+              <button type="submit" class="btn-secondary"><i class="fa-solid fa-key"></i> Update Credentials</button>
             </form>
           </div>
 
@@ -1305,8 +1308,10 @@
       </div>
       <form id="form-login">
         <div class="form-group">
-          <label>Admin Password</label>
-          <input type="password" id="login-password" class="form-control" required placeholder="Default: admin or 2540">
+          <label>Username</label>
+          <input type="text" id="login-username" class="form-control mb-2" required placeholder="Username">
+          <label>Password</label>
+          <input type="password" id="login-password" class="form-control" required placeholder="Password">
         </div>
         <button type="submit" class="btn-primary full-width mt-2">Sign In</button>
       </form>
@@ -1446,7 +1451,8 @@
     const db = getFirestore(app);
 
     const state = {
-      adminPass: 'admin',
+      adminUser: 'Hakeem123',
+      adminPass: 'Hakeem313',
       isAdmin: false,
       activeTeam: 'FIRQATH-E- NAIL',
       students: [],
@@ -1592,6 +1598,11 @@
         const sysData = localDB.settings?.system_settings || {};
         listeners['system_settings']({ exists: () => Object.keys(sysData).length > 0, data: () => sysData });
       }
+      // System Credentials
+      if (listeners['system_credentials']) {
+        const credData = localDB.settings?.system_credentials || {};
+        listeners['system_credentials']({ exists: () => Object.keys(credData).length > 0, data: () => credData });
+      }
     }
 
     let activeSnapshotUnsubscribers = [];
@@ -1718,6 +1729,8 @@
           showToast('Signed out successfully', 'success');
           logActivity("Admin signed out");
         } else {
+          document.getElementById('login-username').value = '';
+          document.getElementById('login-password').value = '';
           openModal('modal-auth');
         }
       });
@@ -1728,8 +1741,9 @@
 
       document.getElementById('form-login').addEventListener('submit', (e) => {
         e.preventDefault();
-        const p = document.getElementById('login-password').value;
-        if (p === state.adminPass || p === '2540' || p === 'admin') {
+        const u = document.getElementById('login-username').value.trim();
+        const p = document.getElementById('login-password').value.trim();
+        if (u === state.adminUser && p === state.adminPass) {
           state.isAdmin = true;
           document.body.classList.add('admin-active');
           document.getElementById('role-badge').textContent = 'Admin Mode';
@@ -1739,7 +1753,7 @@
           showToast('Admin mode granted', 'success');
           logActivity("Admin logged in successfully");
         } else {
-          showToast('Invalid admin credentials', 'error');
+          showToast('Invalid username or password', 'error');
         }
       });
 
@@ -1761,23 +1775,27 @@
         }
       });
 
-      document.getElementById('form-password-change').addEventListener('submit', async (e) => {
+      // CREDENTIALS CHANGE (USERNAME & PASSWORD)
+      document.getElementById('form-credentials-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'error');
-        const oldP = document.getElementById('old-pass-val').value;
-        const newP = document.getElementById('new-pass-val').value;
+        const newU = document.getElementById('new-username-val').value.trim();
+        const newP = document.getElementById('new-password-val').value.trim();
 
-        if (oldP !== state.adminPass && oldP !== '2540' && oldP !== 'admin') {
-          return showToast('Old password incorrect', 'error');
-        }
+        if(!newU || !newP) return showToast('Please enter both username and password', 'warning');
 
         try {
-          await robustSetDoc('settings', { adminPass: newP }, { merge: true }, 'system_settings');
+          await robustSetDoc('settings', { adminUser: newU, adminPass: newP }, { merge: true }, 'system_credentials');
+          state.adminUser = newU;
           state.adminPass = newP;
-          showToast('✓ New student added successfully!', 'success');
+          document.getElementById('form-credentials-change').reset();
+          showToast('✓ Credentials updated successfully!', 'success');
+          logActivity("Admin credentials (username & password) updated");
         } catch(err) {
+          state.adminUser = newU;
           state.adminPass = newP;
-          showToast('✓ New student added successfully!', 'success');
+          document.getElementById('form-credentials-change').reset();
+          showToast('✓ Credentials updated successfully!', 'success');
         }
       });
 
@@ -1792,7 +1810,7 @@
             team: state.activeTeam,
             timestamp: new Date().toISOString()
           }, { merge: true }, 'live_announcement');
-          showToast('✓ New student added successfully!', 'success');
+          showToast('✓ Announcement broadcasted successfully!', 'success');
           logActivity(`Updated announcement: "${msg}"`);
         } catch (err) {
           console.error(err);
@@ -1808,7 +1826,6 @@
         openModal('modal-student');
       });
 
-      // EXACT NOTIFICATION FOR STUDENTS AS SEEN IN VIDEO: "✓ New student added successfully!"
       document.getElementById('form-student').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
@@ -1851,7 +1868,6 @@
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgrammeModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgrammeModal('Non-Stage'));
 
-      // EXACT NOTIFICATION FOR PROGRAMMES AS SEEN IN VIDEO: "✓ Programme saved successfully!"
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
@@ -1863,7 +1879,6 @@
         const categoryInput = document.getElementById('prog-category-input').value;
         const typeInput = document.getElementById('prog-type-hidden').value;
 
-        // Shared globally across all groups/teams so adding in one makes it visible in all groups/teams
         const progData = {
           name: progNameInput,
           gender: genderInput,
@@ -2012,9 +2027,11 @@
         renderAuditLogs();
       });
 
-      registerListener('system_settings', (docSnap) => {
-        if (docSnap.exists() && docSnap.data().adminPass) {
-          state.adminPass = docSnap.data().adminPass;
+      registerListener('system_credentials', (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.adminUser) state.adminUser = data.adminUser;
+          if (data.adminPass) state.adminPass = data.adminPass;
         }
       });
     }
