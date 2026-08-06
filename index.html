@@ -297,6 +297,35 @@
     
     .icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; }
 
+    /* STEP-BY-STEP SELECTOR CHIP STYLES */
+    .selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.65rem; margin-top: 0.4rem; }
+    .selector-chip {
+      background: rgba(0, 0, 0, 0.03);
+      border: 1.5px solid var(--glass-border-light);
+      border-radius: 12px;
+      padding: 0.75rem 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+    body.dark-mode .selector-chip { background: rgba(255, 255, 255, 0.03); }
+    .selector-chip:hover { border-color: var(--accent-gold); transform: translateY(-2px); }
+    .selector-chip.selected {
+      background: rgba(13, 92, 58, 0.12);
+      border-color: var(--primary-green);
+      color: var(--primary-green);
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(13, 92, 58, 0.15);
+    }
+    body.dark-mode .selector-chip.selected { background: rgba(212, 175, 55, 0.18); border-color: var(--accent-gold); }
+
     .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; min-width: 650px; }
     .data-table th, .data-table td { padding: 0.75rem 0.85rem; border-bottom: 1px solid rgba(0, 0, 0, 0.06); white-space: nowrap; }
@@ -386,7 +415,6 @@
     .toast { padding: 0.9rem 1.3rem; border-radius: 8px; background: #10b981; color: #fff; font-size: 0.9rem; font-weight: 500; }
     .toast.warning { background: #f59e0b; color: #000; }
 
-    /* ADMIN ONLY VISIBILITY CLASS */
     .admin-only { display: none !important; }
     body.admin-active .admin-only { display: inline-flex !important; }
     body.admin-active div.admin-only, body.admin-active form.admin-only { display: block !important; }
@@ -404,7 +432,6 @@
       .chest-grid-a4 { grid-template-columns: 1fr; }
     }
 
-    /* PRINT RULES FOR EXACT A4 FIT */
     @media print {
       body, html { background: #fff !important; color: #000 !important; }
       .sidebar, .topbar, .btn-primary, .btn-secondary, .btn-whatsapp, .btn-danger, .icon-btn, .filter-card-parent, .no-print { display: none !important; }
@@ -646,21 +673,54 @@
           <div id="programmes-list-container" class="cards-grid"></div>
         </section>
 
-        <!-- BULK ASSIGNMENT VIEW -->
+        <!-- BULK ASSIGNMENT VIEW (WITH STEP-BY-STEP CHIP SELECTORS) -->
         <section id="view-item-bulk-assign" class="app-view">
           <div class="glass-card mb-2">
             <h2><i class="fa-solid fa-list-check" style="color:var(--accent-gold);"></i> Bulk Programme Assignment</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">പ്രോഗ്രാം തിരഞ്ഞെടുത്ത ശേഷം കുട്ടികൾക്ക് അസൈൻ ചെയ്യാം.</p>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">സെലക്ഷൻ ക്രമം: Category ➔ Section ➔ Type ➔ Programme ➔ Select Students</p>
             <hr class="divider">
-            <div class="form-group">
-              <label style="font-weight:700; color:var(--primary-green);">Select Programme</label>
-              <select id="bulk-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;"></select>
+
+            <div style="display:flex; flex-direction:column; gap:1.2rem;">
+              <div class="form-group">
+                <label style="font-weight:700; color:var(--primary-green);">1. Select Category</label>
+                <div class="selector-grid" id="grid-bulk-cat">
+                  <div class="selector-chip" data-val="HIGH ZONE"><i class="fa-solid fa-layer-group"></i> HIGH ZONE</div>
+                  <div class="selector-chip" data-val="MID ZONE"><i class="fa-solid fa-layer-group"></i> MID ZONE</div>
+                  <div class="selector-chip" data-val="GROUND ZONE"><i class="fa-solid fa-layer-group"></i> GROUND ZONE</div>
+                </div>
+              </div>
+
+              <div class="form-group" id="group-bulk-gender" style="display:none;">
+                <label style="font-weight:700; color:var(--primary-green);">2. Select Section</label>
+                <div class="selector-grid" id="grid-bulk-gender">
+                  <div class="selector-chip" data-val="Male"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</div>
+                  <div class="selector-chip" data-val="Female"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</div>
+                </div>
+              </div>
+
+              <div class="form-group" id="group-bulk-type" style="display:none;">
+                <label style="font-weight:700; color:var(--primary-green);">3. Select Programme Type</label>
+                <div class="selector-grid" id="grid-bulk-type">
+                  <div class="selector-chip" data-val="Stage"><i class="fa-solid fa-microphone" style="color:#d97706;"></i> Stage Item</div>
+                  <div class="selector-chip" data-val="Non-Stage"><i class="fa-solid fa-pen-ruler" style="color:#4f46e5;"></i> Non-Stage Item</div>
+                </div>
+              </div>
+
+              <div class="form-group" id="group-bulk-prog" style="display:none;">
+                <label style="font-weight:700; color:var(--primary-green);">4. Select Programme Name</label>
+                <select id="bulk-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;">
+                  <option value="">-- Choose Programme --</option>
+                </select>
+              </div>
             </div>
           </div>
 
           <div id="bulk-students-container" class="glass-card" style="display:none;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-              <h3 id="bulk-selected-item-title" style="color:var(--primary-green);">Select Students</h3>
+              <div>
+                <h3 id="bulk-selected-item-title" style="color:var(--primary-green);">Select Students</h3>
+                <p id="bulk-selected-item-subtitle" style="font-size:0.82rem; color:var(--accent-gold); font-weight:600;"></p>
+              </div>
               <button id="btn-save-item-bulk" class="btn-primary admin-only"><i class="fa-solid fa-circle-check"></i> Save Assignments</button>
             </div>
             <hr class="divider">
@@ -902,13 +962,15 @@
       programmes: [],
       teamSettings: {},
       adminPass: 'admin',
-      isAdmin: false
+      isAdmin: false,
+      bulkSelection: { category: '', gender: '', type: '' }
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       setupNavigation();
       setupSidebarToggle();
       setupEventListeners();
+      setupCardSelectors();
       setupFirestore();
     });
 
@@ -981,10 +1043,10 @@
         renderApp();
       });
 
-      // GLOBAL PROGRAMMES LISTENER (SHARED ACROSS ALL TEAMS)
       onSnapshot(collection(db, 'programmes'), (s) => {
         state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
         renderApp();
+        updateBulkProgrammeOptions();
       });
 
       onSnapshot(doc(db, "system", "settings"), (docSnap) => {
@@ -1093,7 +1155,6 @@
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgModal('Non-Stage'));
 
-      // GLOBAL PROGRAMME SAVING (SHARED ACROSS ALL TEAMS)
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'warning');
@@ -1110,10 +1171,102 @@
         else await addDoc(collection(db, 'programmes'), progObj);
 
         closeModal('modal-programme');
-        showToast('Programme Saved (Shared Across All Groups)');
+        showToast('Programme Saved');
       });
 
+      document.getElementById('bulk-item-name-select').addEventListener('change', renderBulkStudentChecklist);
+
       document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal').id)));
+    }
+
+    // STEP-BY-STEP BULK ASSIGNMENT CHIP SELECTOR LOGIC
+    function setupCardSelectors() {
+      const bindGroup = (gridId, stateField, nextGroupId) => {
+        const chips = document.querySelectorAll(`#${gridId} .selector-chip`);
+        chips.forEach(chip => {
+          chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
+            state.bulkSelection[stateField] = chip.getAttribute('data-val');
+
+            if (nextGroupId) {
+              const nextEl = document.getElementById(nextGroupId);
+              if (nextEl) nextEl.style.display = 'block';
+            }
+            updateBulkProgrammeOptions();
+          });
+        });
+      };
+
+      bindGroup('grid-bulk-cat', 'category', 'group-bulk-gender');
+      bindGroup('grid-bulk-gender', 'gender', 'group-bulk-type');
+      bindGroup('grid-bulk-type', 'type', 'group-bulk-prog');
+    }
+
+    function updateBulkProgrammeOptions() {
+      const cat = state.bulkSelection.category;
+      const gender = state.bulkSelection.gender;
+      const type = state.bulkSelection.type;
+      const nameSelect = document.getElementById('bulk-item-name-select');
+      const container = document.getElementById('bulk-students-container');
+
+      if (!nameSelect) return;
+      nameSelect.value = "";
+      if (container) container.style.display = 'none';
+
+      if (!cat || !gender || !type) {
+        nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>';
+        return;
+      }
+
+      const filteredProgs = state.programmes.filter(p => p.category === cat && p.gender === gender && p.type === type);
+
+      nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>' + filteredProgs.map(p => `
+        <option value="${p.id}">${p.name}</option>
+      `).join('');
+    }
+
+    function renderBulkStudentChecklist() {
+      const cat = state.bulkSelection.category;
+      const gender = state.bulkSelection.gender;
+      const progId = document.getElementById('bulk-item-name-select').value;
+
+      const container = document.getElementById('bulk-students-container');
+      const checklistEl = document.getElementById('bulk-students-checklist');
+      const titleEl = document.getElementById('bulk-selected-item-title');
+      const subtitleEl = document.getElementById('bulk-selected-item-subtitle');
+
+      if (!container || !checklistEl) return;
+      if (!progId) {
+        container.style.display = 'none';
+        return;
+      }
+
+      const selectedProg = state.programmes.find(p => p.id === progId);
+      if (!selectedProg) return;
+
+      container.style.display = 'block';
+      titleEl.textContent = `Assign Item: "${selectedProg.name}"`;
+      subtitleEl.textContent = `${cat} | ${gender === 'Male' ? 'Boys Section' : 'Girls Section'} | ${selectedProg.type} Item`;
+
+      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
+      let targetStudents = activeStudents.filter(s => s.category === cat && s.gender === gender);
+
+      if (targetStudents.length === 0) {
+        checklistEl.innerHTML = '<p class="text-center" style="padding:1rem;">No students found matching this Category & Section in active team.</p>';
+        return;
+      }
+
+      checklistEl.innerHTML = targetStudents.map(s => `
+        <div style="display:flex; align-items:center; justify-content:space-between; padding: 0.6rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
+          <div style="display:flex; align-items:center; gap:0.8rem; flex:1;">
+            <input type="checkbox" value="${s.id}" class="bulk-std-cb" id="bulk-std-${s.id}" style="width:18px; height:18px; cursor:pointer;">
+            <label for="bulk-std-${s.id}" style="cursor:pointer; font-size:0.92rem;">
+              <strong>[Chest No: ${s.chestNo || '-'}]</strong> Class ${s.class} - ${s.name} 
+            </label>
+          </div>
+        </div>
+      `).join('');
     }
 
     function openProgModal(type) {
@@ -1188,7 +1341,6 @@
       `).join('');
     }
 
-    // RENDER PROGRAMMES FOR ALL GROUPS WITH CLEAR BOYS / GIRLS BADGES
     function renderProgrammeCards() {
       const container = document.getElementById('programmes-list-container');
       if (!container) return;
@@ -1251,14 +1403,8 @@
         title.textContent = 'Students List';
         html = `<table class="data-table"><thead><tr><th>Chest No</th><th>Name</th><th>Class</th><th>Category</th></tr></thead><tbody>${list.map(s => `<tr><td>${s.chestNo || '-'}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.category}</td></tr>`).join('')}</tbody></table>`;
       } else {
-        let list = state.programmes;
-        if (type === 'boys-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Male');
-        if (type === 'girls-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Female');
-        if (type === 'boys-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Male');
-        if (type === 'girls-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Female');
-
         title.textContent = 'Programmes List';
-        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${list.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
+        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${state.programmes.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
       }
 
       content.innerHTML = html;
