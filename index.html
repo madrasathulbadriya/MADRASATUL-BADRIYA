@@ -597,7 +597,7 @@
       .main-content { margin-left: 0; }
       .topbar { padding: 0 1rem; }
       .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
-      .dashboard-grid, .filter-bar, .form-grid { grid-template-columns: 1fr; }
+      .dashboard-grid, .filter-card-parent, .filter-bar, .form-grid { grid-template-columns: 1fr; }
       .hero-banner { flex-direction: column; gap: 1rem; padding: 1.5rem; }
       #vs-tables-grid { grid-template-columns: 1fr !important; }
       .chest-grid-a4 { grid-template-columns: 1fr; }
@@ -1737,12 +1737,17 @@
 
         const docId = document.getElementById('prog-doc-id').value;
         const maxVal = document.getElementById('prog-max-input').value;
-        
+        const progNameInput = document.getElementById('prog-name-input').value.trim();
+        const genderInput = document.getElementById('prog-gender-input').value;
+        const categoryInput = document.getElementById('prog-category-input').value;
+        const typeInput = document.getElementById('prog-type-hidden').value;
+
+        // Ensure global/team-agnostic synchronization for programmes across both teams if required, or save as team-neutral/ALL
         const progData = {
-          name: document.getElementById('prog-name-input').value,
-          gender: document.getElementById('prog-gender-input').value,
-          category: document.getElementById('prog-category-input').value,
-          type: document.getElementById('prog-type-hidden').value,
+          name: progNameInput,
+          gender: genderInput,
+          category: categoryInput,
+          type: typeInput,
           maxParticipants: maxVal ? parseInt(maxVal, 10) : null,
           team: 'ALL'
         };
@@ -1753,6 +1758,19 @@
             showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Updated programme: ${progData.name}`);
           } else {
+            // Check if exact same programme already exists globally to prevent duplicates
+            const existingMatch = state.programmes.find(p => 
+              p.name.trim().toLowerCase() === progNameInput.toLowerCase() && 
+              p.gender === genderInput && 
+              p.category === categoryInput && 
+              p.type === typeInput
+            );
+
+            if (existingMatch) {
+              showToast('Programme already exists!', 'warning');
+              return;
+            }
+
             await addDoc(collection(db, 'programmes'), progData);
             showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
@@ -2991,7 +3009,17 @@
       });
 
       filteredStudents = sortByClass(filteredStudents);
-      hiddenInput.value = '';
+      
+      const currentSelectedId = hiddenInput.value;
+      let targetIdToSelect = currentSelectedId;
+
+      if (!targetIdToSelect && filteredStudents.length > 0) {
+        targetIdToSelect = filteredStudents[0].id;
+      } else if (targetIdToSelect && !filteredStudents.some(s => s.id === targetIdToSelect)) {
+        targetIdToSelect = filteredStudents.length > 0 ? filteredStudents[0].id : '';
+      }
+
+      hiddenInput.value = targetIdToSelect;
 
       if (filteredStudents.length === 0) {
         grid.innerHTML = '<p style="grid-column:1/-1; color:#ef4444; font-size:0.85rem;">No matching students found.</p>';
@@ -3001,8 +3029,9 @@
 
       grid.innerHTML = filteredStudents.map(s => {
         const roll = getStudentRollNo(s, null);
+        const isActive = s.id === targetIdToSelect ? 'active' : '';
         return `
-          <div class="student-app-card" onclick="window.selectStudentForSlip('${s.id}')" id="slip-std-card-${s.id}">
+          <div class="student-app-card ${isActive}" onclick="window.selectStudentForSlip('${s.id}')" id="slip-std-card-${s.id}">
             <div class="student-avatar-icon"><i class="fa-solid fa-user"></i></div>
             <div class="student-card-info">
               <h4>${s.name}</h4>
@@ -3223,7 +3252,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // IMPROVED SAVE TOAST NOTIFICATION FUNCTION
+    // IMPROVED SAVE TOAST NOTIFICATION FUNCTION WITH PERSISTENT VISUAL CUE
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -3241,7 +3270,7 @@
       setTimeout(() => {
         toast.style.animation = 'slideOutDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards';
         setTimeout(() => toast.remove(), 350);
-      }, 3000);
+      }, 4000);
     }
   </script>
 </body>
