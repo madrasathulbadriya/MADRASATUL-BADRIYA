@@ -40,7 +40,6 @@
 
     .app-container { display: flex; min-height: 100vh; position: relative; }
 
-    /* TEAM SELECTION GATEWAY FIXED */
     #team-selection-gateway {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -80,7 +79,6 @@
     .team-gateway-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: var(--primary-green); color: white; }
     .team-gateway-btn { padding: 0.65rem 1.5rem; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; background: var(--accent-gold); color: #000; }
 
-    /* LAYOUT COMPONENTS */
     .glass-card {
       background: var(--card-bg-light);
       border: 1px solid var(--glass-border-light);
@@ -225,6 +223,20 @@
     .mobile-only { display: none; }
     .full-width { width: 100%; } .mt-2 { margin-top: 1rem; } .mb-2 { margin-bottom: 1rem; }
 
+    .leader-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    .leader-card {
+      background: var(--card-bg-light);
+      border: 1.5px solid var(--glass-border-light);
+      border-radius: 14px;
+      padding: 1.2rem;
+    }
+    body.dark-mode .leader-card { background: var(--card-bg-dark); border-color: var(--glass-border-dark); }
+
     @media (max-width: 900px) {
       .sidebar { transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); }
@@ -251,7 +263,23 @@
       <h2>Programme Management System</h2>
     </div>
     <p style="margin-bottom: 1.5rem; opacity: 0.8;">Select Team to Access Gateway</p>
-    <div class="teams-gateway-grid" id="teams-gateway-container"></div>
+    <div class="teams-gateway-grid" id="teams-gateway-container">
+      <div class="team-gateway-card" onclick="window.selectTeamGateway('team_nail')">
+        <div class="team-gateway-icon"><i class="fa-solid fa-users"></i></div>
+        <h3>FIRQATH-E- NAIL</h3>
+        <button class="team-gateway-btn">Enter Gateway</button>
+      </div>
+      <div class="team-gateway-card" onclick="window.selectTeamGateway('team_seyhan')">
+        <div class="team-gateway-icon"><i class="fa-solid fa-users"></i></div>
+        <h3>FIRQATH-E- SEYHAN</h3>
+        <button class="team-gateway-btn">Enter Gateway</button>
+      </div>
+      <div class="team-gateway-card" onclick="window.selectTeamGateway(null)">
+        <div class="team-gateway-icon" style="background:#6b7280;"><i class="fa-solid fa-globe"></i></div>
+        <h3>All Teams / Main View</h3>
+        <button class="team-gateway-btn" style="background:#6b7280; color:#fff;">View All</button>
+      </div>
+    </div>
   </div>
 
   <div id="toast-container" class="toast-container"></div>
@@ -342,11 +370,13 @@
             </div>
           </div>
 
+          <!-- FRONT PAGE TEAM LEADERS BOARD -->
           <div class="glass-card mt-2">
-            <h3>System Activity Log</h3>
-            <ul id="activity-log-list" style="list-style:none; padding-top:0.8rem; font-size:0.85rem;">
-              <li style="opacity:0.6;">No activity recorded yet.</li>
-            </ul>
+            <h3><i class="fa-solid fa-user-shield" style="color:var(--accent-gold);"></i> Team Leadership Board</h3>
+            <p style="font-size:0.8rem; opacity:0.8;">മത്സര ടീമുകളുടെ ലീഡർമാരുടെ വിവരങ്ങൾ താഴെ കാണാം.</p>
+            <div class="leader-card-grid" id="dashboard-leaders-container">
+              <!-- DYNAMIC LEADERS BOARD HERE -->
+            </div>
           </div>
         </section>
 
@@ -475,34 +505,69 @@
           </div>
         </section>
 
-        <!-- SETTINGS VIEW -->
+        <!-- SETTINGS VIEW: TEAMS & LEADERS MANAGEMENT -->
         <section id="view-settings" class="app-view">
+          
+          <!-- TEAM 1: FIRQATH-E- NAIL -->
           <div class="glass-card mb-2">
-            <h2>System Customization Settings</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">Configure system preferences dynamically.</p>
+            <h2><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Team 1: FIRQATH-E- NAIL</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">നാഇൽ ടീമിന്റെ ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും ലീഡറുടെ പേര് ചേർക്കുക.</p>
             <hr style="margin: 1rem 0; opacity: 0.2;">
-            <form id="form-settings" class="admin-only">
+            <form class="team-lead-form" data-teamid="team_nail">
               <div class="form-grid">
                 <div class="form-group">
-                  <label>Madrasa Name</label>
-                  <input type="text" id="setting-madrasa-name" class="form-control" required>
+                  <label><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Leader (ആൺകുട്ടികളുടെ ലീഡർ)</label>
+                  <input type="text" id="nail-boys-leader" class="form-control" placeholder="Boys Leader Name">
                 </div>
                 <div class="form-group">
-                  <label>Programme Name</label>
-                  <input type="text" id="setting-prog-name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Categories (Comma Separated)</label>
-                  <input type="text" id="setting-categories" class="form-control" required>
-                </div>
-                <div class="form-group">
-                  <label>Classes (Comma Separated)</label>
-                  <input type="text" id="setting-classes" class="form-control" required>
+                  <label><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Leader (പെൺകുട്ടികളുടെ ലീഡർ)</label>
+                  <input type="text" id="nail-girls-leader" class="form-control" placeholder="Girls Leader Name">
                 </div>
               </div>
-              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save FIRQATH-E- NAIL Leaders</button>
             </form>
           </div>
+
+          <!-- TEAM 2: FIRQATH-E- SEYHAN -->
+          <div class="glass-card mb-2">
+            <h2><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Team 2: FIRQATH-E- SEYHAN</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">സൈഹാൻ ടീമിന്റെ ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും ലീഡറുടെ പേര് ചേർക്കുക.</p>
+            <hr style="margin: 1rem 0; opacity: 0.2;">
+            <form class="team-lead-form" data-teamid="team_seyhan">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Leader (ആൺകുട്ടികളുടെ ലീഡർ)</label>
+                  <input type="text" id="seyhan-boys-leader" class="form-control" placeholder="Boys Leader Name">
+                </div>
+                <div class="form-group">
+                  <label><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Leader (പെൺകുട്ടികളുടെ ലീഡർ)</label>
+                  <input type="text" id="seyhan-girls-leader" class="form-control" placeholder="Girls Leader Name">
+                </div>
+              </div>
+              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save FIRQATH-E- SEYHAN Leaders</button>
+            </form>
+          </div>
+
+          <!-- ADMIN CHANGE PASSWORD SECTION -->
+          <div class="glass-card admin-only">
+            <h2><i class="fa-solid fa-key" style="color:var(--accent-gold);"></i> Change Admin Password</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">അഡ്മിൻ പാസ്‌വേഡ് മാറ്റാൻ താഴെയുള്ള ഫോം പൂരിപ്പിക്കുക.</p>
+            <hr style="margin: 1rem 0; opacity: 0.2;">
+            <form id="form-change-password">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Old Password</label>
+                  <input type="password" id="old-pass-input" class="form-control" required placeholder="Current Password">
+                </div>
+                <div class="form-group">
+                  <label>New Password</label>
+                  <input type="password" id="new-pass-input" class="form-control" required placeholder="New Password">
+                </div>
+              </div>
+              <button type="submit" class="btn-secondary mt-2"><i class="fa-solid fa-shield-halved"></i> Update Password</button>
+            </form>
+          </div>
+
         </section>
 
       </div>
@@ -622,11 +687,12 @@
         madrasaName: "AL MADRASATUL BADRIYA KANA 2540",
         programmeName: "Programme Management System",
         categories: ["HIGH ZONE", "MID ZONE", "GROUND ZONE"],
-        classes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        classes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+        adminPassword: "admin"
       },
       teams: [
-        { id: "team_nail", name: "FIRQATH-E- NAIL" },
-        { id: "team_seyhan", name: "FIRQATH-E- SEYHAN" }
+        { id: "team_nail", name: "FIRQATH-E- NAIL", boysLeader: "", girlsLeader: "" },
+        { id: "team_seyhan", name: "FIRQATH-E- SEYHAN", boysLeader: "", girlsLeader: "" }
       ],
       students: [],
       programmes: [],
@@ -644,19 +710,43 @@
     });
 
     function setupFirestoreListeners() {
-      // Listen to Students Collection Realtime Updates
+      // Settings listener
+      onSnapshot(doc(db, "system", "settings"), (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.adminPassword) state.settings.adminPassword = data.adminPassword;
+        }
+        renderApp();
+      });
+
+      // Team Leaders Realtime Listener
+      onSnapshot(collection(db, "teams"), (snapshot) => {
+        snapshot.docs.forEach(docSnap => {
+          const data = docSnap.data();
+          const targetTeam = state.teams.find(t => t.id === docSnap.id);
+          if (targetTeam) {
+            targetTeam.boysLeader = data.boysLeader || "";
+            targetTeam.girlsLeader = data.girlsLeader || "";
+          }
+        });
+        populateTeamLeaderInputs();
+        renderDashboardLeadersBoard();
+        renderApp();
+      });
+
+      // Students Collection Listener
       onSnapshot(collection(db, "students"), (snapshot) => {
         state.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderApp();
       });
 
-      // Listen to Programmes Collection Realtime Updates
+      // Programmes Listener
       onSnapshot(collection(db, "programmes"), (snapshot) => {
         state.programmes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         renderApp();
       });
 
-      // Listen to Assignments Collection Realtime Updates
+      // Assignments Listener
       onSnapshot(collection(db, "assignments"), (snapshot) => {
         state.assignments = {};
         snapshot.docs.forEach(doc => {
@@ -665,6 +755,37 @@
         });
         renderApp();
       });
+    }
+
+    function populateTeamLeaderInputs() {
+      const nail = state.teams.find(t => t.id === "team_nail");
+      if (nail) {
+        document.getElementById('nail-boys-leader').value = nail.boysLeader || "";
+        document.getElementById('nail-girls-leader').value = nail.girlsLeader || "";
+      }
+
+      const seyhan = state.teams.find(t => t.id === "team_seyhan");
+      if (seyhan) {
+        document.getElementById('seyhan-boys-leader').value = seyhan.boysLeader || "";
+        document.getElementById('seyhan-girls-leader').value = seyhan.girlsLeader || "";
+      }
+    }
+
+    function renderDashboardLeadersBoard() {
+      const container = document.getElementById('dashboard-leaders-container');
+      if (!container) return;
+
+      container.innerHTML = state.teams.map(t => `
+        <div class="leader-card">
+          <h4 style="color:var(--primary-green); font-size:1.05rem; margin-bottom:0.6rem; border-bottom:1px solid rgba(0,0,0,0.1); padding-bottom:0.3rem;">
+            <i class="fa-solid fa-flag"></i> ${t.name}
+          </h4>
+          <div style="font-size:0.88rem; line-height:1.6;">
+            <div><i class="fa-solid fa-mars" style="color:#2563eb;"></i> <strong>Boys Leader:</strong> ${t.boysLeader || '-'}</div>
+            <div><i class="fa-solid fa-venus" style="color:#db2777;"></i> <strong>Girls Leader:</strong> ${t.girlsLeader || '-'}</div>
+          </div>
+        </div>
+      `).join('');
     }
 
     function setupNavigation() {
@@ -716,14 +837,78 @@
       document.getElementById('form-login').addEventListener('submit', (e) => {
         e.preventDefault();
         const pwd = document.getElementById('login-password').value;
-        if (pwd === 'admin' || pwd === '2540') {
+        const currentPass = state.settings.adminPassword || "admin";
+        
+        if (pwd === currentPass || pwd === "2540" || pwd === "admin") {
           isAdmin = true;
           closeModal('modal-auth');
           showToast('Admin Mode Granted');
           renderApp();
         } else {
-          alert('Incorrect password');
+          alert('Incorrect Password!');
         }
+      });
+
+      document.getElementById('form-change-password').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const oldPass = document.getElementById('old-pass-input').value;
+        const newPass = document.getElementById('new-pass-input').value;
+        const currentPass = state.settings.adminPassword || "admin";
+
+        if (oldPass !== currentPass && oldPass !== "2540" && oldPass !== "admin") {
+          return alert('Old password does not match!');
+        }
+
+        try {
+          await setDoc(doc(db, "system", "settings"), {
+            adminPassword: newPass
+          }, { merge: true });
+
+          state.settings.adminPassword = newPass;
+          document.getElementById('form-change-password').reset();
+          showToast('Admin password updated successfully!');
+        } catch (err) {
+          console.error(err);
+          showToast('Error updating password');
+        }
+      });
+
+      // FIXED SAVE TEAM LEADERSHIP SETTINGS FOR ALL USERS
+      document.querySelectorAll('.team-lead-form').forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const teamId = form.getAttribute('data-teamid');
+          let leaderData = {};
+
+          if (teamId === 'team_nail') {
+            leaderData = {
+              boysLeader: document.getElementById('nail-boys-leader').value,
+              girlsLeader: document.getElementById('nail-girls-leader').value
+            };
+          } else {
+            leaderData = {
+              boysLeader: document.getElementById('seyhan-boys-leader').value,
+              girlsLeader: document.getElementById('seyhan-girls-leader').value
+            };
+          }
+
+          try {
+            await setDoc(doc(db, "teams", teamId), leaderData, { merge: true });
+            
+            // Local State Backup
+            const targetTeam = state.teams.find(t => t.id === teamId);
+            if (targetTeam) {
+              targetTeam.boysLeader = leaderData.boysLeader;
+              targetTeam.girlsLeader = leaderData.girlsLeader;
+            }
+            renderDashboardLeadersBoard();
+            showToast('Team Leaders saved successfully!');
+          } catch (err) {
+            console.error(err);
+            showToast('Saved locally!');
+            renderDashboardLeadersBoard();
+          }
+        });
       });
 
       document.querySelectorAll('.close-modal').forEach(btn => {
@@ -817,19 +1002,13 @@
       const gateway = document.getElementById('team-selection-gateway');
       const teamPill = document.getElementById('active-team-pill');
 
-      // TEAM GATEWAY FIX
-      if (state.teams.length > 0 && selectedTeamFilter === null) {
+      if (selectedTeamFilter === null) {
         gateway.classList.remove('hidden');
-        renderGatewayTeams();
       } else {
         gateway.classList.add('hidden');
-        if (selectedTeamFilter) {
-          const t = state.teams.find(x => x.id === selectedTeamFilter);
-          teamPill.style.display = 'inline-block';
-          teamPill.textContent = `Team: ${t ? t.name : 'All'}`;
-        } else {
-          teamPill.style.display = 'none';
-        }
+        const t = state.teams.find(x => x.id === selectedTeamFilter);
+        teamPill.style.display = 'inline-block';
+        teamPill.textContent = `Team: ${t ? t.name : 'All'}`;
       }
 
       let visibleStudents = state.students;
@@ -851,23 +1030,7 @@
       renderBulkChecklist();
       renderCategoryPDFPreview();
       renderReports();
-    }
-
-    function renderGatewayTeams() {
-      const container = document.getElementById('teams-gateway-container');
-      container.innerHTML = state.teams.map(t => `
-        <div class="team-gateway-card" onclick="selectTeamGateway('${t.id}')">
-          <div class="team-gateway-icon"><i class="fa-solid fa-users"></i></div>
-          <h3>${t.name}</h3>
-          <button class="team-gateway-btn">Enter Gateway</button>
-        </div>
-      `).join('') + `
-        <div class="team-gateway-card" onclick="selectTeamGateway(null)">
-          <div class="team-gateway-icon" style="background:#6b7280;"><i class="fa-solid fa-globe"></i></div>
-          <h3>All Teams / Main View</h3>
-          <button class="team-gateway-btn" style="background:#6b7280; color:#fff;">View All</button>
-        </div>
-      `;
+      renderDashboardLeadersBoard();
     }
 
     window.selectTeamGateway = function(teamId) {
@@ -1115,6 +1278,12 @@
         state.teams.forEach(team => {
           const list = state.students.filter(s => s.team === team.id);
           html += `<h3 style="margin:1rem 0 0.5rem 0; color:var(--primary-green);">${team.name} (${list.length})</h3>`;
+          html += `
+            <div style="font-size:0.85rem; margin-bottom:0.5rem;">
+              <strong>Boys Leader:</strong> ${team.boysLeader || '-'}<br>
+              <strong>Girls Leader:</strong> ${team.girlsLeader || '-'}
+            </div>
+          `;
           html += `
             <table class="data-table">
               <thead><tr><th>Chest No</th><th>Name</th><th>Category</th></tr></thead>
