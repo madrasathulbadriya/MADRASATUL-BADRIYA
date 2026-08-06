@@ -305,10 +305,15 @@
     .badge { padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin: 2px; }
     .badge-visitor { background: #6b7280; color: white; }
     .badge-admin { background: var(--accent-gold); color: #072e1d; }
+    .badge-boys { background: #2563eb; color: white; }
+    .badge-girls { background: #db2777; color: white; }
 
     .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+    .programme-card { border-left: 4px solid var(--accent-gold); cursor: pointer; }
+    .programme-card.boys-card { border-left-color: #2563eb; }
+    .programme-card.girls-card { border-left-color: #db2777; }
 
-    /* CHEST NUMBER A4 GRID (6 CARDS PER A4 SHEET) */
+    /* CHEST NUMBER A4 GRID */
     .chest-grid-a4 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -380,6 +385,11 @@
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 0.6rem; }
     .toast { padding: 0.9rem 1.3rem; border-radius: 8px; background: #10b981; color: #fff; font-size: 0.9rem; font-weight: 500; }
     .toast.warning { background: #f59e0b; color: #000; }
+
+    /* ADMIN ONLY VISIBILITY CLASS */
+    .admin-only { display: none !important; }
+    body.admin-active .admin-only { display: inline-flex !important; }
+    body.admin-active div.admin-only, body.admin-active form.admin-only { display: block !important; }
 
     .full-width { width: 100%; } .mt-2 { margin-top: 1rem; } .mb-2 { margin-bottom: 1rem; } .flex-gap { display: flex; gap: 1rem; }
 
@@ -565,7 +575,7 @@
           </div>
         </section>
 
-        <!-- CHEST NUMBER A4 PRINT VIEW (6 CARDS PER SHEET) -->
+        <!-- CHEST NUMBER A4 PRINT VIEW -->
         <section id="view-chest-numbers" class="app-view">
           <div class="glass-card mb-2 no-print">
             <div class="action-header">
@@ -585,7 +595,7 @@
           <div class="glass-card mb-2">
             <div class="action-header">
               <h2><i class="fa-solid fa-user-graduate" style="color:var(--accent-gold);"></i> Student Directory & Management</h2>
-              <button id="btn-add-student" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Student</button>
+              <button id="btn-add-student" class="btn-primary admin-only"><i class="fa-solid fa-plus"></i> Add Student</button>
             </div>
             <hr class="divider">
             <div class="filter-bar">
@@ -613,7 +623,7 @@
                     <th>Class</th>
                     <th>Category</th>
                     <th>Team</th>
-                    <th>Actions</th>
+                    <th class="admin-only">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="tbody-students"></tbody>
@@ -627,7 +637,7 @@
           <div class="glass-card mb-2">
             <div class="action-header mb-2">
               <h2><i class="fa-solid fa-microphone" style="color:var(--accent-gold);"></i> Programmes Management</h2>
-              <div class="flex-gap">
+              <div class="flex-gap admin-only">
                 <button id="btn-add-stage-prog" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Stage Programme</button>
                 <button id="btn-add-non-stage-prog" class="btn-secondary" style="background:#4f46e5; color:white;"><i class="fa-solid fa-plus"></i> Add Non-Stage Programme</button>
               </div>
@@ -651,7 +661,7 @@
           <div id="bulk-students-container" class="glass-card" style="display:none;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
               <h3 id="bulk-selected-item-title" style="color:var(--primary-green);">Select Students</h3>
-              <button id="btn-save-item-bulk" class="btn-primary"><i class="fa-solid fa-circle-check"></i> Save Assignments</button>
+              <button id="btn-save-item-bulk" class="btn-primary admin-only"><i class="fa-solid fa-circle-check"></i> Save Assignments</button>
             </div>
             <hr class="divider">
             <div id="bulk-students-checklist" style="max-height: 420px; overflow-y: auto;"></div>
@@ -723,7 +733,7 @@
             <h2><i class="fa-solid fa-gear" style="color:var(--accent-gold);"></i> Team Leadership Settings</h2>
             <p style="font-size:0.85rem; opacity:0.8;">ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും ലീഡർമാരുടെ വിവരങ്ങൾ അപ്ഡേറ്റ് ചെയ്യുക.</p>
             <hr class="divider">
-            <form id="form-team-settings">
+            <form id="form-team-settings" class="admin-only">
               <div class="form-grid">
                 <div class="form-group">
                   <label>Active Team Name</label>
@@ -742,7 +752,7 @@
             </form>
           </div>
 
-          <div class="glass-card">
+          <div class="glass-card admin-only">
             <h2>Change Admin Password</h2>
             <form id="form-password-change" class="mt-2">
               <div class="form-grid">
@@ -971,6 +981,7 @@
         renderApp();
       });
 
+      // GLOBAL PROGRAMMES LISTENER (SHARED ACROSS ALL TEAMS)
       onSnapshot(collection(db, 'programmes'), (s) => {
         state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
         renderApp();
@@ -987,6 +998,7 @@
       document.getElementById('btn-auth-action').addEventListener('click', () => {
         if (state.isAdmin) {
           state.isAdmin = false;
+          document.body.classList.remove('admin-active');
           showToast('Signed Out');
           renderApp();
         } else openModal('modal-auth');
@@ -997,6 +1009,7 @@
         const p = document.getElementById('login-password').value;
         if (p === state.adminPass || p === '2540' || p === 'admin') {
           state.isAdmin = true;
+          document.body.classList.add('admin-active');
           closeModal('modal-auth');
           showToast('Admin Access Granted');
           renderApp();
@@ -1005,6 +1018,7 @@
 
       document.getElementById('form-team-settings').addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!state.isAdmin) return showToast('Admin access required', 'warning');
         const data = {
           boysLeader: document.getElementById('team-boys-leader-input').value,
           girlsLeader: document.getElementById('team-girls-leader-input').value
@@ -1015,6 +1029,7 @@
 
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!state.isAdmin) return showToast('Admin access required', 'warning');
         const oldP = document.getElementById('old-pass-val').value;
         const newP = document.getElementById('new-pass-val').value;
 
@@ -1028,19 +1043,20 @@
       });
 
       document.getElementById('btn-add-student').addEventListener('click', () => {
+        if (!state.isAdmin) return showToast('Admin access required', 'warning');
         document.getElementById('form-student').reset();
         document.getElementById('student-doc-id').value = '';
         openModal('modal-student');
       });
 
-      // DUPLICATION PREVENTING STUDENT FORM SUBMISSION
       document.getElementById('form-student').addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!state.isAdmin) return showToast('Admin access required', 'warning');
+
         const docId = document.getElementById('student-doc-id').value;
         const chestInput = document.getElementById('student-chest-input').value.trim();
         const nameInput = document.getElementById('student-name-input').value.trim();
 
-        // Check if Chest No or Student Name already exists (excluding the current editing document)
         const isDuplicateChest = state.students.some(s => s.id !== docId && s.chestNo === chestInput);
         const isDuplicateName = state.students.some(s => s.id !== docId && s.name.toLowerCase() === nameInput.toLowerCase());
 
@@ -1077,11 +1093,14 @@
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgModal('Non-Stage'));
 
+      // GLOBAL PROGRAMME SAVING (SHARED ACROSS ALL TEAMS)
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!state.isAdmin) return showToast('Admin access required', 'warning');
+
         const docId = document.getElementById('prog-doc-id').value;
         const progObj = {
-          name: document.getElementById('prog-name-input').value,
+          name: document.getElementById('prog-name-input').value.trim(),
           gender: document.getElementById('prog-gender-input').value,
           category: document.getElementById('prog-category-input').value,
           type: document.getElementById('prog-type-hidden').value
@@ -1091,13 +1110,14 @@
         else await addDoc(collection(db, 'programmes'), progObj);
 
         closeModal('modal-programme');
-        showToast('Programme Saved');
+        showToast('Programme Saved (Shared Across All Groups)');
       });
 
       document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal').id)));
     }
 
     function openProgModal(type) {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
       document.getElementById('form-programme').reset();
       document.getElementById('prog-doc-id').value = '';
       document.getElementById('prog-type-hidden').value = type;
@@ -1160,7 +1180,7 @@
           <td>Class ${s.class}</td>
           <td><span class="badge badge-visitor">${s.category}</span></td>
           <td>${s.team}</td>
-          <td>
+          <td class="admin-only">
             <button class="icon-btn" onclick="window.editStudent('${s.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
             <button class="icon-btn" onclick="window.deleteStudent('${s.id}')"><i class="fa-solid fa-trash" style="color:#ef4444;"></i></button>
           </td>
@@ -1168,16 +1188,25 @@
       `).join('');
     }
 
+    // RENDER PROGRAMMES FOR ALL GROUPS WITH CLEAR BOYS / GIRLS BADGES
     function renderProgrammeCards() {
       const container = document.getElementById('programmes-list-container');
       if (!container) return;
 
+      if (state.programmes.length === 0) {
+        container.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No programmes added yet.</p>';
+        return;
+      }
+
       container.innerHTML = state.programmes.map(p => `
-        <div class="glass-card programme-card">
+        <div class="glass-card programme-card ${p.gender === 'Male' ? 'boys-card' : 'girls-card'}">
           <h3>${p.name}</h3>
-          <p style="margin-top:0.3rem;"><span class="badge badge-admin">${p.gender === 'Male' ? 'Boys' : 'Girls'}</span> <span class="badge badge-visitor">${p.category}</span></p>
+          <p style="margin-top:0.3rem;">
+            <span class="badge ${p.gender === 'Male' ? 'badge-boys' : 'badge-girls'}">${p.gender === 'Male' ? '👦 Boys Section' : '👧 Girls Section'}</span> 
+            <span class="badge badge-visitor">${p.category}</span>
+          </p>
           <p style="font-size:0.85rem; margin-top:0.5rem;">Type: <strong>${p.type}</strong></p>
-          <div style="margin-top:0.8rem; text-align:right;">
+          <div class="admin-only" style="margin-top:0.8rem; text-align:right;">
             <button class="btn-danger" onclick="window.deleteProgramme('${p.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
           </div>
         </div>
@@ -1185,6 +1214,7 @@
     }
 
     window.editStudent = (id) => {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
       const s = state.students.find(x => x.id === id);
       if (!s) return;
       document.getElementById('student-doc-id').value = s.id;
@@ -1197,10 +1227,12 @@
     };
 
     window.deleteStudent = async (id) => {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
       if (confirm('Delete student?')) await deleteDoc(doc(db, 'students', id));
     };
 
     window.deleteProgramme = async (id) => {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
       if (confirm('Delete programme?')) await deleteDoc(doc(db, 'programmes', id));
     };
 
@@ -1219,8 +1251,14 @@
         title.textContent = 'Students List';
         html = `<table class="data-table"><thead><tr><th>Chest No</th><th>Name</th><th>Class</th><th>Category</th></tr></thead><tbody>${list.map(s => `<tr><td>${s.chestNo || '-'}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.category}</td></tr>`).join('')}</tbody></table>`;
       } else {
+        let list = state.programmes;
+        if (type === 'boys-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Male');
+        if (type === 'girls-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Female');
+        if (type === 'boys-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Male');
+        if (type === 'girls-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Female');
+
         title.textContent = 'Programmes List';
-        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${state.programmes.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender}</td></tr>`).join('')}</tbody></table>`;
+        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${list.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
       }
 
       content.innerHTML = html;
