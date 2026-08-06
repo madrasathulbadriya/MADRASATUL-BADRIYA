@@ -475,9 +475,52 @@
     .spinner { width: 52px; height: 52px; border: 5px solid rgba(255,255,255,0.15); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 1.2rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 0.6rem; }
-    .toast { padding: 0.9rem 1.3rem; border-radius: 8px; background: #222; color: #fff; font-size: 0.9rem; font-weight: 500; }
-    .toast.success { background: #10b981; } .toast.error { background: #ef4444; } .toast.warning { background: #f59e0b; color: #000; }
+    /* IMPROVED MODERN TOAST NOTIFICATION STYLES */
+    .toast-container { 
+      position: fixed; 
+      bottom: 24px; 
+      right: 24px; 
+      z-index: 2000; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 0.6rem; 
+      pointer-events: none;
+    }
+    .toast { 
+      pointer-events: auto;
+      padding: 0.9rem 1.3rem; 
+      border-radius: 10px; 
+      background: #10b981; 
+      color: #fff; 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      animation: slideInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      max-width: 380px;
+    }
+    .toast.success { 
+      background: #10b981; 
+      color: #ffffff;
+    } 
+    .toast.error { 
+      background: #ef4444; 
+      color: #ffffff;
+    } 
+    .toast.warning { 
+      background: #f59e0b; 
+      color: #072e1d; 
+    }
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes slideOutDown {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(20px) scale(0.95); }
+    }
 
     .parent-slip-card { border: 2px dashed var(--accent-gold); padding: 1.5rem; border-radius: 12px; background: white; color: #111; margin-top: 1rem; }
     .slip-header { text-align: center; border-bottom: 2px solid #0d5c3a; padding-bottom: 0.8rem; margin-bottom: 1rem; }
@@ -1592,30 +1635,30 @@
         };
         try {
           await setDoc(doc(db, 'teams', state.activeTeam), data, { merge: true });
-          showToast('Team settings saved', 'success');
+          showToast('✓ Team settings updated successfully.', 'success');
           logActivity(`Updated team leadership settings for ${state.activeTeam}`);
         } catch (err) {
-          showToast('Error saving settings', 'error');
+          showToast('Error saving settings: ' + err.message, 'error');
         }
       });
 
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!state.isAdmin) return showToast('Admin access required', 'warning');
+        if (!state.isAdmin) return showToast('Admin access required', 'error');
         const oldP = document.getElementById('old-pass-val').value;
         const newP = document.getElementById('new-pass-val').value;
 
         if (oldP !== state.adminPass && oldP !== '2540' && oldP !== 'admin') {
-          return alert('Old password incorrect');
+          return showToast('Old password incorrect', 'error');
         }
 
         try {
           await setDoc(doc(db, "system", "settings"), { adminPass: newP }, { merge: true });
           state.adminPass = newP;
-          showToast('Admin Password Changed!', 'success');
+          showToast('✓ Changes saved successfully.', 'success');
         } catch(err) {
           state.adminPass = newP;
-          showToast('Admin Password Changed Locally!', 'success');
+          showToast('✓ Changes saved successfully.', 'success');
         }
       });
 
@@ -1630,11 +1673,11 @@
             team: state.activeTeam,
             timestamp: new Date().toISOString()
           }, { merge: true });
-          showToast('Live announcement updated successfully!', 'success');
+          showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Updated announcement: "${msg}"`);
         } catch (err) {
           console.error(err);
-          showToast('Failed to update announcement', 'error');
+          showToast('Failed to update announcement: ' + err.message, 'error');
         }
       });
 
@@ -1664,16 +1707,16 @@
         try {
           if (docId) {
             await updateDoc(doc(db, 'students', docId), studentData);
-            showToast('Student record updated', 'success');
+            showToast('✓ Student saved successfully.', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
             await addDoc(collection(db, 'students'), studentData);
-            showToast(`New student added successfully!`, 'success');
+            showToast('✓ Student saved successfully.', 'success');
             logActivity(`Added new student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           }
           closeModal('modal-student');
         } catch (err) {
-          showToast('Failed to save student', 'error');
+          showToast('Failed to save student: ' + err.message, 'error');
         }
       });
 
@@ -1707,16 +1750,16 @@
         try {
           if (docId) {
             await updateDoc(doc(db, 'programmes', docId), progData);
-            showToast('Programme updated', 'success');
+            showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Updated programme: ${progData.name}`);
           } else {
             await addDoc(collection(db, 'programmes'), progData);
-            showToast('Programme saved successfully!', 'success');
+            showToast('✓ Programme saved successfully.', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
           }
           closeModal('modal-programme');
         } catch (err) {
-          showToast('Failed to save programme', 'error');
+          showToast('Failed to save programme: ' + err.message, 'error');
         }
       });
 
@@ -2184,11 +2227,11 @@
             await deleteDoc(doc(db, 'assignments', assign.id));
           }
 
-          showToast(`Removed ${progName} for ${studentName}`, 'success');
+          showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Removed "${progName}" from ${studentName} via Dashboard Card`);
         } catch (err) {
           console.error(err);
-          showToast('Failed to remove item', 'error');
+          showToast('Failed to remove item: ' + err.message, 'error');
         }
       }
     };
@@ -2315,12 +2358,12 @@
           for (const pr of practiceMatches) {
             await deleteDoc(doc(db, 'practice', pr.id));
           }
-          showToast(`Removed ${progName} for ${studentName}`, 'success');
+          showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
           renderBulkStudentChecklist();
         } catch (err) {
           console.error(err);
-          showToast('Failed to remove assignment', 'error');
+          showToast('Failed to remove assignment: ' + err.message, 'error');
         }
       }
     };
@@ -2374,7 +2417,7 @@
         }
       }
 
-      showToast(`Assigned ${prog.name} to ${count} student(s) successfully!`, 'success');
+      showToast(`✓ Changes saved successfully. Assigned to ${count} student(s).`, 'success');
       logActivity(`Bulk assigned "${prog.name}" to ${count} student(s)`);
       renderBulkStudentChecklist();
     }
@@ -2559,7 +2602,7 @@
     window.updatePracticeStatusDirect = async (practiceId, newStatus, studentDocId, studentName, progName) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       await updateDoc(doc(db, 'practice', practiceId), { status: newStatus });
-      showToast('Practice status updated', 'success');
+      showToast('✓ Changes saved successfully.', 'success');
       logActivity(`Updated status to "${newStatus}" for ${studentName} - ${progName}`);
       window.openStatusManageModal(studentDocId);
     };
@@ -2568,7 +2611,7 @@
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const item = state.practice.find(p => p.id === id);
       await updateDoc(doc(db, 'practice', id), { status });
-      showToast('Practice status updated', 'success');
+      showToast('✓ Changes saved successfully.', 'success');
       if (item) {
         logActivity(`Updated status to "${status}" for ${item.studentName} - ${item.programmeName}`);
       }
@@ -2841,11 +2884,11 @@
             await deleteDoc(doc(db, 'practice', prac.id));
           }
 
-          showToast('പ്രോഗ്രാമും അതിലെ ഡാറ്റയും പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്തു', 'success');
+          showToast('✓ Changes saved successfully.', 'success');
           logActivity(`Deleted programme completely: ${prog.name}`);
         } catch (err) {
           console.error(err);
-          showToast('Failed to delete programme', 'error');
+          showToast('Failed to delete programme: ' + err.message, 'error');
         }
       }
     };
@@ -3085,7 +3128,7 @@
       const s = state.students.find(x => x.id === id);
       if (confirm('Delete student record?')) {
         await deleteDoc(doc(db, 'students', id));
-        showToast('Student deleted', 'success');
+        showToast('✓ Changes saved successfully.', 'success');
         if (s) logActivity(`Deleted student: ${s.name}`);
       }
     };
@@ -3180,13 +3223,25 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
+    // IMPROVED SAVE TOAST NOTIFICATION FUNCTION
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
+      if (!container) return;
+      
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
-      toast.textContent = `✅ ${msg}`;
+      
+      const icon = type === 'success' 
+        ? '<i class="fa-solid fa-circle-check" style="font-size:1.1rem; color:#fff;"></i>' 
+        : '<i class="fa-solid fa-circle-exclamation" style="font-size:1.1rem; color:#fff;"></i>';
+      
+      toast.innerHTML = `${icon} <span>${msg}</span>`;
       container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3200);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideOutDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards';
+        setTimeout(() => toast.remove(), 350);
+      }, 3000);
     }
   </script>
 </body>
