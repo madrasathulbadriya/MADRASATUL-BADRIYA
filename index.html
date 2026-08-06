@@ -1778,7 +1778,7 @@
         }
       });
 
-      // FIXED PASSWORD CHANGE FORM HANDLER
+      // FULLY WORKING PASSWORD CHANGE HANDLER
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'error');
@@ -3008,7 +3008,6 @@
 
       if (confirm(`"${prog.name}" പൂർണ്ണമായി ഡിലീറ്റ് ചെയ്യണോ?`)) {
         try {
-          // Immediately update local UI state & cache for instant responsiveness
           localDB.programmes = (localDB.programmes || []).filter(p => p.id !== id);
           localDB.assignments = (localDB.assignments || []).filter(a => a.programmeDocId !== id && (a.programmeName || a.progName)?.trim().toLowerCase() !== prog.name.trim().toLowerCase());
           localDB.practice = (localDB.practice || []).filter(p => p.programmeName?.trim().toLowerCase() !== prog.name.trim().toLowerCase());
@@ -3018,7 +3017,6 @@
           showToast('✓ Saved Successfully!', 'success');
           logActivity(`Deleted programme completely: ${prog.name}`);
 
-          // Background sync to Firebase
           robustDeleteDoc('programmes', id).catch(e => console.log(e));
           const relatedAssignments = state.assignments.filter(a => a.programmeDocId === id || (a.programmeName || a.progName)?.trim().toLowerCase() === prog.name.trim().toLowerCase());
           for (const assign of relatedAssignments) {
