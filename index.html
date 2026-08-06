@@ -399,6 +399,10 @@
       font-weight: 600;
     }
 
+    /* PROGRAMME SLIP CARD STYLES */
+    .parent-slip-card { border: 2px dashed var(--accent-gold); padding: 1.5rem; border-radius: 12px; background: white; color: #111; margin-top: 1rem; }
+    .slip-header { text-align: center; border-bottom: 2px solid #0d5c3a; padding-bottom: 0.8rem; margin-bottom: 1rem; }
+
     .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
     .modal.active { display: flex; }
     .modal-content { width: 100%; max-width: 520px; background: var(--bg-light); border: 1px solid var(--glass-border-light); max-height: 90vh; overflow-y: auto; border-radius: 16px; padding: 1.5rem; }
@@ -501,6 +505,7 @@
         <a href="#" class="nav-item active" data-view="dashboard"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
         <a href="#" class="nav-item" data-view="students"><i class="fa-solid fa-user-graduate"></i> <span>Students</span></a>
         <a href="#" class="nav-item" data-view="programmes"><i class="fa-solid fa-microphone"></i> <span>Programmes</span></a>
+        <a href="#" class="nav-item" data-view="student-slip"><i class="fa-solid fa-receipt"></i> <span>Programme Slip</span></a>
         <a href="#" class="nav-item" data-view="chest-numbers"><i class="fa-solid fa-id-badge"></i> <span>Chest Numbers (A4)</span></a>
         <a href="#" class="nav-item" data-view="item-bulk-assign"><i class="fa-solid fa-list-check"></i> <span>Bulk Assignment</span></a>
         <a href="#" class="nav-item" data-view="category-pdf"><i class="fa-solid fa-file-pdf"></i> <span>PDF Export</span></a>
@@ -602,6 +607,53 @@
           </div>
         </section>
 
+        <!-- STUDENT PROGRAMME SLIP VIEW -->
+        <section id="view-student-slip" class="app-view">
+          <div class="glass-card mb-2 no-print">
+            <h2><i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Individual Student Programme Participation Slip</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">കുട്ടികളുടെ വിവരങ്ങൾ തിരഞ്ഞെടുത്ത ശേഷം പരിപാടികളുടെ ലിസ്റ്റ് സ്ലിപ്പായി പ്രിന്റ് ചെയ്യാം / വാട്ട്‌സാപ്പിൽ അയക്കാം.</p>
+            <hr class="divider">
+            <div class="form-group">
+              <label style="font-weight:700; color:var(--primary-green);">Select Student Name</label>
+              <select id="slip-student-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;"></select>
+            </div>
+          </div>
+
+          <div id="student-slip-preview-container" class="glass-card" style="display:none;">
+            <div id="printable-slip-area" class="parent-slip-card">
+              <div class="slip-header">
+                <h2 style="color:#0d5c3a; font-family:'Amiri', serif; font-size:1.8rem;">AL MADRASATUL BADRIYA - KANA 2540</h2>
+                <p style="font-weight:600; font-size:0.9rem; color:#d4af37;">PROGRAMME PARTICIPATION SLIP</p>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; font-size:0.95rem;">
+                <div><strong>Student Name:</strong> <span id="slip-out-name" style="color:#0d5c3a; font-weight:700;">-</span></div>
+                <div><strong>Chest No:</strong> <span id="slip-out-chest" style="font-weight:700;">-</span></div>
+                <div><strong>Class:</strong> <span id="slip-out-class">-</span></div>
+                <div><strong>Category:</strong> <span id="slip-out-category">-</span></div>
+                <div><strong>Team:</strong> <span id="slip-out-team" style="color:#d4af37; font-weight:700;">-</span></div>
+                <div><strong>Gender Section:</strong> <span id="slip-out-gender">-</span></div>
+              </div>
+              <h4 style="border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-bottom:0.5rem; color:#0d5c3a;">Assigned Programmes List:</h4>
+              <table class="data-table" style="width:100%; margin-bottom:1rem;">
+                <thead>
+                  <tr style="background:#f4f7f5; color:#0d5c3a;">
+                    <th>#</th>
+                    <th>Programme Item Name</th>
+                    <th>Category / Type</th>
+                  </tr>
+                </thead>
+                <tbody id="slip-out-table-body">
+                  <tr><td colspan="3" class="text-center">Select a student above.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex-gap mt-2 no-print">
+              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Slip / Save PDF</button>
+              <button id="btn-share-whatsapp-slip" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Send to WhatsApp</button>
+            </div>
+          </div>
+        </section>
+
         <!-- CHEST NUMBER A4 PRINT VIEW -->
         <section id="view-chest-numbers" class="app-view">
           <div class="glass-card mb-2 no-print">
@@ -673,7 +725,7 @@
           <div id="programmes-list-container" class="cards-grid"></div>
         </section>
 
-        <!-- BULK ASSIGNMENT VIEW (WITH STEP-BY-STEP CHIP SELECTORS) -->
+        <!-- BULK ASSIGNMENT VIEW -->
         <section id="view-item-bulk-assign" class="app-view">
           <div class="glass-card mb-2">
             <h2><i class="fa-solid fa-list-check" style="color:var(--accent-gold);"></i> Bulk Programme Assignment</h2>
@@ -708,9 +760,7 @@
 
               <div class="form-group" id="group-bulk-prog" style="display:none;">
                 <label style="font-weight:700; color:var(--primary-green);">4. Select Programme Name</label>
-                <select id="bulk-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;">
-                  <option value="">-- Choose Programme --</option>
-                </select>
+                <select id="bulk-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;"></select>
               </div>
             </div>
           </div>
@@ -937,7 +987,7 @@
     </div>
   </div>
 
-  <!-- FIREBASE API MODULE -->
+  <!-- FIREBASE API MODULE WITH REALTIME SYNC & LOCAL FALLBACK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { 
@@ -956,10 +1006,35 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // MIGRATED TEST DATA WITH NEW ZONES
+    const initialTestStudents = [
+      { chestNo: "101", name: "MUHAMMAD SHAMIL", gender: "Male", class: "5", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "102", name: "MUHAMMAD SINAN", gender: "Male", class: "6", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "103", name: "ABDULLA YASEEN", gender: "Male", class: "8", category: "MID ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "104", name: "FATIMA FIDA", gender: "Female", class: "4", category: "GROUND ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "105", name: "AYISHA RIDA", gender: "Female", class: "7", category: "MID ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "106", name: "MUHAMMAD RIZWAN", gender: "Male", class: "10", category: "HIGH ZONE", team: "FIRQATH-E- NAIL" },
+      { chestNo: "201", name: "AHAMMED RAFI", gender: "Male", class: "5", category: "GROUND ZONE", team: "FIRQATH-E- SEYHAN" },
+      { chestNo: "202", name: "MUHAMMAD FADIL", gender: "Male", class: "7", category: "MID ZONE", team: "FIRQATH-E- SEYHAN" },
+      { chestNo: "203", name: "FATIMA ZAHRA", gender: "Female", class: "9", category: "MID ZONE", team: "FIRQATH-E- SEYHAN" },
+      { chestNo: "204", name: "KHADIJA NIHA", gender: "Female", class: "10", category: "HIGH ZONE", team: "FIRQATH-E- SEYHAN" }
+    ];
+
+    const initialTestProgrammes = [
+      { name: "QURAN RECITATION", gender: "Male", category: "GROUND ZONE", type: "Stage" },
+      { name: "MALAYALAM SPEECH", gender: "Male", category: "GROUND ZONE", type: "Stage" },
+      { name: "ISLAMIC SONG", gender: "Female", category: "GROUND ZONE", type: "Stage" },
+      { name: "QASEEDA", gender: "Male", category: "MID ZONE", type: "Stage" },
+      { name: "ARABIC SPEECH", gender: "Female", category: "MID ZONE", type: "Stage" },
+      { name: "ESSAY WRITING", gender: "Male", category: "HIGH ZONE", type: "Non-Stage" },
+      { name: "CALLIGRAPHY", gender: "Female", category: "HIGH ZONE", type: "Non-Stage" }
+    ];
+
     const state = {
       activeTeam: 'FIRQATH-E- NAIL',
       students: [],
       programmes: [],
+      assignments: [],
       teamSettings: {},
       adminPass: 'admin',
       isAdmin: false,
@@ -1039,14 +1114,28 @@
       });
 
       onSnapshot(collection(db, 'students'), (s) => {
-        state.students = s.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderApp();
+        if (s.empty) {
+          initialTestStudents.forEach(st => addDoc(collection(db, 'students'), st));
+        } else {
+          state.students = s.docs.map(d => ({ id: d.id, ...d.data() }));
+          populateStudentSlipDropdown();
+          renderApp();
+        }
       });
 
       onSnapshot(collection(db, 'programmes'), (s) => {
-        state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
-        renderApp();
-        updateBulkProgrammeOptions();
+        if (s.empty) {
+          initialTestProgrammes.forEach(pr => addDoc(collection(db, 'programmes'), pr));
+        } else {
+          state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
+          renderApp();
+          updateBulkProgrammeOptions();
+        }
+      });
+
+      onSnapshot(collection(db, 'assignments'), (s) => {
+        state.assignments = s.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderStudentSlip();
       });
 
       onSnapshot(doc(db, "system", "settings"), (docSnap) => {
@@ -1061,6 +1150,9 @@
         if (state.isAdmin) {
           state.isAdmin = false;
           document.body.classList.remove('admin-active');
+          document.getElementById('role-badge').textContent = "View Only";
+          document.getElementById('role-badge').className = "badge badge-visitor";
+          document.getElementById('btn-auth-action').innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Admin Login`;
           showToast('Signed Out');
           renderApp();
         } else openModal('modal-auth');
@@ -1072,6 +1164,9 @@
         if (p === state.adminPass || p === '2540' || p === 'admin') {
           state.isAdmin = true;
           document.body.classList.add('admin-active');
+          document.getElementById('role-badge').textContent = "Admin Mode";
+          document.getElementById('role-badge').className = "badge badge-admin";
+          document.getElementById('btn-auth-action').innerHTML = `<i class="fa-solid fa-right-from-bracket"></i> Log Out`;
           closeModal('modal-auth');
           showToast('Admin Access Granted');
           renderApp();
@@ -1175,11 +1270,78 @@
       });
 
       document.getElementById('bulk-item-name-select').addEventListener('change', renderBulkStudentChecklist);
+      document.getElementById('slip-student-select').addEventListener('change', renderStudentSlip);
+      document.getElementById('btn-share-whatsapp-slip').addEventListener('click', shareWhatsAppSlip);
 
       document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal').id)));
     }
 
-    // STEP-BY-STEP BULK ASSIGNMENT CHIP SELECTOR LOGIC
+    function populateStudentSlipDropdown() {
+      const select = document.getElementById('slip-student-select');
+      if (!select) return;
+      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
+      select.innerHTML = '<option value="">-- Select Student --</option>' + activeStudents.map(s => `
+        <option value="${s.id}">${s.name} (Chest: ${s.chestNo || '-'}, Class ${s.class})</option>
+      `).join('');
+    }
+
+    function renderStudentSlip() {
+      const studentId = document.getElementById('slip-student-select')?.value;
+      const container = document.getElementById('student-slip-preview-container');
+      if (!container) return;
+
+      if (!studentId) {
+        container.style.display = 'none';
+        return;
+      }
+
+      const s = state.students.find(x => x.id === studentId);
+      if (!s) return;
+
+      container.style.display = 'block';
+      document.getElementById('slip-out-name').textContent = s.name;
+      document.getElementById('slip-out-chest').textContent = s.chestNo || '-';
+      document.getElementById('slip-out-class').textContent = `Class ${s.class}`;
+      document.getElementById('slip-out-category').textContent = s.category;
+      document.getElementById('slip-out-team').textContent = s.team;
+      document.getElementById('slip-out-gender').textContent = s.gender === 'Male' ? 'Boys Section' : 'Girls Section';
+
+      const studentAssignments = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
+      const tbody = document.getElementById('slip-out-table-body');
+
+      if (studentAssignments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center">No programmes assigned yet.</td></tr>';
+      } else {
+        tbody.innerHTML = studentAssignments.map((a, idx) => `
+          <tr>
+            <td>${idx + 1}</td>
+            <td><strong>${a.progName}</strong></td>
+            <td>${a.progType || 'Stage'}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    function shareWhatsAppSlip() {
+      const studentId = document.getElementById('slip-student-select')?.value;
+      const s = state.students.find(x => x.id === studentId);
+      if (!s) return showToast('Select a student first', 'warning');
+
+      const studentAssignments = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
+      let progsText = studentAssignments.map((a, i) => `${i+1}. *${a.progName}*`).join('\n') || 'No programmes assigned.';
+
+      const text = `*AL MADRASATUL BADRIYA - KANA 2540*\n` +
+                   `*Programme Participation Slip*\n\n` +
+                   `👤 *Name:* ${s.name}\n` +
+                   `🆔 *Chest No:* ${s.chestNo || '-'}\n` +
+                   `📚 *Class:* ${s.class}\n` +
+                   `🏷️ *Category:* ${s.category}\n` +
+                   `🚩 *Team:* ${s.team}\n\n` +
+                   `*Assigned Programmes List:*\n${progsText}\n`;
+
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
     function setupCardSelectors() {
       const bindGroup = (gridId, stateField, nextGroupId) => {
         const chips = document.querySelectorAll(`#${gridId} .selector-chip`);
@@ -1403,8 +1565,14 @@
         title.textContent = 'Students List';
         html = `<table class="data-table"><thead><tr><th>Chest No</th><th>Name</th><th>Class</th><th>Category</th></tr></thead><tbody>${list.map(s => `<tr><td>${s.chestNo || '-'}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.category}</td></tr>`).join('')}</tbody></table>`;
       } else {
+        let list = state.programmes;
+        if (type === 'boys-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Male');
+        if (type === 'girls-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Female');
+        if (type === 'boys-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Male');
+        if (type === 'girls-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Female');
+
         title.textContent = 'Programmes List';
-        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${state.programmes.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
+        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${list.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
       }
 
       content.innerHTML = html;
