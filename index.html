@@ -47,417 +47,126 @@
     .app-container { display: flex; min-height: 100vh; position: relative; }
 
     #team-selection-gateway {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #052214 0%, #0d5c3a 50%, #061a10 100%);
-      z-index: 99999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-      text-align: center;
-      color: #ffffff;
-      transition: opacity 0.4s ease, visibility 0.4s ease;
+      z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 1.5rem; text-align: center; color: #ffffff;
     }
     #team-selection-gateway.hidden { opacity: 0; visibility: hidden; pointer-events: none; display: none !important; }
 
-    .gateway-header h1 { font-family: 'Amiri', serif; font-size: 2.2rem; color: #ffffff; margin-bottom: 0.3rem; letter-spacing: 0.5px; }
-    .gateway-header h2 { font-size: 1.1rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 2rem; letter-spacing: 1px; text-transform: uppercase; }
-    .gateway-subtitle { font-size: 1rem; color: rgba(255, 255, 255, 0.85); font-weight: 500; margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 1.5px; }
+    .gateway-header h1 { font-family: 'Amiri', serif; font-size: 2.2rem; color: #ffffff; margin-bottom: 0.3rem; }
+    .gateway-header h2 { font-size: 1.1rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 2rem; text-transform: uppercase; }
+    .gateway-subtitle { font-size: 1rem; color: rgba(255, 255, 255, 0.85); font-weight: 500; margin-bottom: 2rem; text-transform: uppercase; }
 
     .teams-gateway-grid { display: flex; gap: 2rem; max-width: 800px; width: 100%; justify-content: center; flex-wrap: wrap; }
-    
     .team-gateway-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      border-radius: 20px;
-      padding: 2.5rem 2rem;
-      flex: 1; min-width: 280px; max-width: 350px;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
+      background: rgba(255, 255, 255, 0.06); border: 2px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px; padding: 2.5rem 2rem; flex: 1; min-width: 280px; max-width: 350px;
+      cursor: pointer; backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
     }
-    .team-gateway-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.12); box-shadow: 0 20px 40px rgba(13, 92, 58, 0.5); }
-    .team-gateway-card.green-team { border-left: 6px solid #10b981; }
-    .team-gateway-card.blue-team { border-left: 6px solid #3b82f6; }
+    .team-gateway-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.12); }
+    .team-gateway-icon { width: 75px; height: 75px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: var(--primary-green); color: white; }
+    .team-gateway-btn { padding: 0.75rem 1.8rem; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; background: var(--accent-gold); color: #000; }
 
-    .team-gateway-icon { width: 75px; height: 75px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ffffff; }
-    .green-team .team-gateway-icon { background: linear-gradient(135deg, #10b981, #059669); }
-    .blue-team .team-gateway-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-
-    .team-gateway-card h3 { font-size: 1.35rem; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; }
-    .team-gateway-btn { margin-top: 0.5rem; padding: 0.75rem 1.8rem; border-radius: 30px; font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
-    .green-team .team-gateway-btn { background: #10b981; color: #ffffff; }
-    .blue-team .team-gateway-btn { background: #3b82f6; color: #ffffff; }
-
-    .glass-card {
-      background: var(--card-bg-light);
-      border: 1px solid var(--glass-border-light);
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: var(--shadow-light);
-    }
-    body.dark-mode .glass-card {
-      background: var(--card-bg-dark);
-      border-color: var(--glass-border-dark);
-      box-shadow: var(--shadow-dark);
-    }
+    .glass-card { background: var(--card-bg-light); border: 1px solid var(--glass-border-light); border-radius: 16px; padding: 1.5rem; box-shadow: var(--shadow-light); }
+    body.dark-mode .glass-card { background: var(--card-bg-dark); border-color: var(--glass-border-dark); }
 
     .sidebar {
-      width: 290px;
-      background: linear-gradient(180deg, #052214 0%, #0d5c3a 100%);
-      color: #ffffff;
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; bottom: 0; left: 0;
-      z-index: 100;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 290px; background: linear-gradient(180deg, #052214 0%, #0d5c3a 100%);
+      color: #ffffff; display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
     }
-
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(3px);
-      z-index: 99;
-    }
+    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); z-index: 99; }
     .sidebar-overlay.active { display: block; }
 
-    .sidebar-header {
-      padding: 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
+    .sidebar-header { padding: 1.25rem; display: flex; align-items: center; gap: 0.85rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
     .sidebar-logo { font-size: 2rem; color: var(--accent-gold); }
-    .sidebar-title h3 { font-size: 0.88rem; font-weight: 700; letter-spacing: 0.5px; }
+    .sidebar-title h3 { font-size: 0.88rem; font-weight: 700; }
     .sidebar-title p { font-size: 0.7rem; color: var(--accent-gold); font-weight: 500; }
 
     .sidebar-menu { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.75rem 1.25rem;
-      color: rgba(255, 255, 255, 0.85);
-      text-decoration: none;
-      font-size: 0.88rem;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-    .nav-item i { font-size: 1rem; width: 20px; text-align: center; color: rgba(255, 255, 255, 0.75); }
-    .nav-item:hover, .nav-item.active {
-      background: rgba(212, 175, 55, 0.18);
-      color: var(--accent-gold);
-      border-left: 4px solid var(--accent-gold);
-    }
-    .nav-item:hover i, .nav-item.active i { color: var(--accent-gold); }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.25rem; color: rgba(255, 255, 255, 0.85); text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+    .nav-item:hover, .nav-item.active { background: rgba(212, 175, 55, 0.18); color: var(--accent-gold); border-left: 4px solid var(--accent-gold); }
 
     .sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+    .main-content { flex: 1; margin-left: 290px; display: flex; flex-direction: column; min-width: 0; }
 
-    .main-content {
-      flex: 1;
-      margin-left: 290px;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-    }
+    .topbar { height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--glass-border-light); background: var(--card-bg-light); position: sticky; top: 0; z-index: 90; }
+    body.dark-mode .topbar { background: var(--card-bg-dark); }
 
-    .topbar {
-      height: 70px;
-      padding: 0 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--glass-border-light);
-      background: var(--card-bg-light);
-      backdrop-filter: blur(10px);
-      position: sticky; top: 0; z-index: 90;
-    }
-    body.dark-mode .topbar { background: var(--card-bg-dark); border-bottom-color: var(--glass-border-dark); }
-
-    .topbar-left { display: flex; align-items: center; gap: 1rem; }
-    
-    .current-team-pill {
-      background: rgba(212, 175, 55, 0.15);
-      color: var(--accent-gold);
-      border: 1px solid rgba(212, 175, 55, 0.35);
-      padding: 0.35rem 0.85rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-    }
+    .current-team-pill { background: rgba(212, 175, 55, 0.15); color: var(--accent-gold); border: 1px solid rgba(212, 175, 55, 0.35); padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 
     .view-container { padding: 1.8rem; flex: 1; }
     .app-view { display: none; }
-    .app-view.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+    .app-view.active { display: block; }
 
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-    .hero-banner {
-      background: linear-gradient(135deg, #052214 0%, #0d5c3a 50%, #157a4c 100%);
-      color: white;
-      padding: 1.8rem 2rem;
-      border-radius: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 12px 30px -5px rgba(13, 92, 58, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .hero-text-content { flex: 1; padding-right: 1rem; }
-    .hero-banner h1 { font-size: 1.5rem; font-weight: 700; color: #ffffff; margin-bottom: 0.6rem; }
+    .hero-banner { background: linear-gradient(135deg, #052214 0%, #0d5c3a 50%, #157a4c 100%); color: white; padding: 1.8rem 2rem; border-radius: 18px; margin-bottom: 1.5rem; }
+    .hero-banner h1 { font-size: 1.5rem; font-weight: 700; }
     .hero-banner h1 span { color: var(--accent-gold); display: block; }
-    .hero-subtitle { font-size: 0.78rem; color: rgba(255, 255, 255, 0.85); font-weight: 500; text-transform: uppercase; }
-
-    .hero-badge {
-      background: rgba(212, 175, 55, 0.2);
-      color: var(--accent-gold);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      padding: 0.5rem 1rem;
-      border-radius: 30px;
-      font-weight: 600;
-      font-size: 0.78rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .team-info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; font-size: 0.9rem; }
-    .info-item { display: flex; flex-direction: column; gap: 0.2rem; }
-    .info-label { font-size: 0.75rem; text-transform: uppercase; color: #6b7280; font-weight: 600; }
-    body.dark-mode .info-label { color: #9ca3af; }
-    .info-value { font-weight: 600; color: var(--text-dark); }
-    body.dark-mode .info-value { color: var(--text-light); }
-    .highlight-gold { color: var(--primary-green); font-weight: 700; font-size: 1rem; }
-    body.dark-mode .highlight-gold { color: var(--accent-gold); }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
-    .stat-card {
-      background: var(--card-bg-light);
-      border: 1px solid var(--glass-border-light);
-      border-radius: 14px;
-      padding: 1.25rem 1.4rem;
-      display: flex; 
-      align-items: center; 
-      gap: 1.1rem;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      box-shadow: var(--shadow-light);
-    }
-    .stat-card:hover { transform: translateY(-4px); }
-    body.dark-mode .stat-card { background: var(--card-bg-dark); border-color: var(--glass-border-dark); }
+    .stat-card { background: var(--card-bg-light); border: 1px solid var(--glass-border-light); border-radius: 14px; padding: 1.25rem 1.4rem; display: flex; align-items: center; gap: 1.1rem; cursor: pointer; }
+    .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; background: var(--primary-green); }
 
-    .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; flex-shrink: 0; }
-    .stat-icon.green { background: linear-gradient(135deg, #10b981, #059669); } 
-    .stat-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); } 
-    .stat-icon.pink { background: linear-gradient(135deg, #ec4899, #db2777); }
-    .stat-icon.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
-    .stat-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
-
-    .stat-info p { font-size: 0.82rem; font-weight: 500; opacity: 0.8; }
-    .stat-info h3 { font-size: 1.4rem; font-weight: 700; margin: 0.1rem 0; }
-
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
-    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-    .form-group label { font-size: 0.85rem; font-weight: 600; opacity: 0.9; }
-
-    .form-control {
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      border: 1px solid rgba(0,0,0,0.15);
-      background: rgba(255, 255, 255, 0.8);
-      font-size: 0.92rem; outline: none;
-    }
-    body.dark-mode .form-control { background: rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.15); color: white; }
+    .form-control { padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); font-size: 0.92rem; width: 100%; outline: none; }
+    body.dark-mode .form-control { background: rgba(0,0,0,0.35); color: white; }
 
     .btn-primary { background: var(--primary-green); color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
-    .btn-primary:hover { background: var(--secondary-green); }
     .btn-secondary { background: var(--accent-gold); color: #072e1d; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
     .btn-whatsapp { background: #25d366; color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
-    .btn-danger { background: #dc2626; color: white; border: none; padding: 0.5rem 0.85rem; border-radius: 6px; cursor: pointer; }
-    
-    .icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; }
+    .btn-danger { background: #dc2626; color: white; border: none; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; font-size: 0.78rem; }
 
-    /* STEP-BY-STEP SELECTOR CHIP STYLES */
-    .selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.65rem; margin-top: 0.4rem; }
-    .selector-chip {
-      background: rgba(0, 0, 0, 0.03);
-      border: 1.5px solid var(--glass-border-light);
-      border-radius: 12px;
-      padding: 0.75rem 0.8rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      user-select: none;
-    }
-    body.dark-mode .selector-chip { background: rgba(255, 255, 255, 0.03); }
-    .selector-chip:hover { border-color: var(--accent-gold); transform: translateY(-2px); }
-    .selector-chip.selected {
-      background: rgba(13, 92, 58, 0.12);
-      border-color: var(--primary-green);
-      color: var(--primary-green);
-      font-weight: 700;
-      box-shadow: 0 4px 12px rgba(13, 92, 58, 0.15);
-    }
-    body.dark-mode .selector-chip.selected { background: rgba(212, 175, 55, 0.18); border-color: var(--accent-gold); }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    .data-table th, .data-table td { padding: 0.75rem 0.85rem; border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+    .data-table th { font-weight: 700; color: var(--accent-gold); }
 
-    .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; min-width: 650px; }
-    .data-table th, .data-table td { padding: 0.75rem 0.85rem; border-bottom: 1px solid rgba(0, 0, 0, 0.06); white-space: nowrap; }
-    .data-table th { font-weight: 700; color: var(--accent-gold); background: rgba(0,0,0,0.02); }
-
-    .badge { padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin: 2px; }
+    .badge { padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
     .badge-visitor { background: #6b7280; color: white; }
     .badge-admin { background: var(--accent-gold); color: #072e1d; }
-    .badge-boys { background: #2563eb; color: white; }
-    .badge-girls { background: #db2777; color: white; }
 
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
-    .programme-card { border-left: 4px solid var(--accent-gold); cursor: pointer; }
-    .programme-card.boys-card { border-left-color: #2563eb; }
-    .programme-card.girls-card { border-left-color: #db2777; }
+    /* STUDENT CARDS FOR PROGRAMME SLIP */
+    .student-app-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.8rem; max-height: 320px; overflow-y: auto; padding: 0.3rem; }
+    .student-app-card { background: rgba(255, 255, 255, 0.9); border: 1.5px solid var(--glass-border-light); border-radius: 12px; padding: 0.85rem 1rem; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; }
+    body.dark-mode .student-app-card { background: rgba(0, 0, 0, 0.25); }
+    .student-app-card.active { border-width: 2px; background: rgba(13, 92, 58, 0.15); border-color: var(--primary-green); }
+    .student-avatar-icon { width: 38px; height: 38px; border-radius: 50%; background: var(--primary-green); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-    /* CHEST NUMBER A4 GRID */
-    .chest-grid-a4 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-    }
-    .chest-card-box {
-      border: 3px dashed var(--primary-green);
-      border-radius: 14px;
-      padding: 1.8rem 1.2rem;
-      text-align: center;
-      background: white;
-      color: #000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 250px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-    }
-    .chest-card-box .madrasa-name {
-      font-family: 'Amiri', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #0d5c3a;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .chest-card-box .tag-line {
-      font-size: 0.72rem;
-      color: #d4af37;
-      font-weight: 700;
-      margin-bottom: 0.8rem;
-    }
-    .chest-card-box .chest-number-big {
-      font-size: 4rem;
-      font-weight: 800;
-      color: #000;
-      line-height: 1;
-      margin: 0.6rem 0;
-    }
-    .chest-card-box .zone-badge {
-      background: #0d5c3a;
-      color: #ffffff;
-      padding: 0.3rem 1.2rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-    .chest-card-box .screen-student-name {
-      font-size: 0.85rem;
-      color: #666;
-      margin-top: 0.8rem;
-      font-weight: 600;
-    }
-
-    /* PROGRAMME SLIP CARD STYLES */
     .parent-slip-card { border: 2px dashed var(--accent-gold); padding: 1.5rem; border-radius: 12px; background: white; color: #111; margin-top: 1rem; }
     .slip-header { text-align: center; border-bottom: 2px solid #0d5c3a; padding-bottom: 0.8rem; margin-bottom: 1rem; }
 
-    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
     .modal.active { display: flex; }
-    .modal-content { width: 100%; max-width: 520px; background: var(--bg-light); border: 1px solid var(--glass-border-light); max-height: 90vh; overflow-y: auto; border-radius: 16px; padding: 1.5rem; }
-    body.dark-mode .modal-content { background: var(--bg-dark); border-color: var(--glass-border-dark); }
-    .modal-content.wide { max-width: 720px; }
+    .modal-content { width: 100%; max-width: 520px; background: var(--bg-light); border-radius: 16px; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
+    body.dark-mode .modal-content { background: var(--bg-dark); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
     .close-modal { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: inherit; }
-
-    .filter-bar { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.8rem; }
-    .action-header { display: flex; justify-content: space-between; align-items: center; }
-    .divider { border: 0; height: 1px; background: var(--glass-border-light); margin: 1.25rem 0; }
 
     .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 0.6rem; }
     .toast { padding: 0.9rem 1.3rem; border-radius: 8px; background: #10b981; color: #fff; font-size: 0.9rem; font-weight: 500; }
     .toast.warning { background: #f59e0b; color: #000; }
 
+    /* ADMIN ONLY VISIBILITY CLASS */
     .admin-only { display: none !important; }
     body.admin-active .admin-only { display: inline-flex !important; }
     body.admin-active div.admin-only, body.admin-active form.admin-only { display: block !important; }
 
+    .mobile-only { display: none; }
     .full-width { width: 100%; } .mt-2 { margin-top: 1rem; } .mb-2 { margin-bottom: 1rem; } .flex-gap { display: flex; gap: 1rem; }
 
     @media (max-width: 900px) {
-      .sidebar { width: 82%; max-width: 300px; transform: translateX(-100%); box-shadow: 5px 0 25px rgba(0, 0, 0, 0.5); }
+      .sidebar { transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); }
       .main-content { margin-left: 0; }
-      .topbar { padding: 0 1rem; }
-      .mobile-only { display: inline-flex !important; align-items: center; justify-content: center; }
-      .filter-bar, .form-grid { grid-template-columns: 1fr; }
-      .hero-banner { flex-direction: column; gap: 1rem; padding: 1.5rem; }
-      .chest-grid-a4 { grid-template-columns: 1fr; }
+      .mobile-only { display: inline-flex; }
     }
 
     @media print {
       body, html { background: #fff !important; color: #000 !important; }
-      .sidebar, .topbar, .btn-primary, .btn-secondary, .btn-whatsapp, .btn-danger, .icon-btn, .filter-card-parent, .no-print { display: none !important; }
+      .sidebar, .topbar, .btn-primary, .btn-secondary, .btn-whatsapp, .btn-danger, .no-print { display: none !important; }
       .main-content { margin-left: 0 !important; }
       .view-container { padding: 0 !important; }
       .app-view { display: none !important; }
       .app-view.active { display: block !important; }
-      
-      .chest-grid-a4 {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 1.2cm !important;
-        padding: 0.8cm !important;
-      }
-      .chest-card-box {
-        border: 3px solid #0d5c3a !important;
-        min-height: 8cm !important;
-        page-break-inside: avoid !important;
-      }
-      .screen-student-name {
-        display: none !important;
-      }
+      .parent-slip-card { border: none !important; }
     }
   </style>
 </head>
@@ -466,22 +175,20 @@
   <!-- TEAM SELECTION GATEWAY -->
   <div id="team-selection-gateway">
     <div class="gateway-header">
-      <h1>AL MADRASATUL BADRIYA</h1>
-      <h2>KANA 2540 MANAGEMENT SYSTEM</h2>
+      <h1>AL MADRASATUL BADRIYA KANA 2540</h1>
+      <h2>Programme Management System</h2>
     </div>
     <div class="gateway-subtitle">Select Your Team</div>
-    
     <div class="teams-gateway-grid">
       <div class="team-gateway-card green-team" onclick="window.selectTeamAndEnter('FIRQATH-E- NAIL')">
         <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
         <h3>FIRQATH-E- NAIL</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+        <button class="team-gateway-btn">Enter System</button>
       </div>
-
       <div class="team-gateway-card blue-team" onclick="window.selectTeamAndEnter('FIRQATH-E- SEYHAN')">
         <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
         <h3>FIRQATH-E- SEYHAN</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+        <button class="team-gateway-btn">Enter System</button>
       </div>
     </div>
   </div>
@@ -514,196 +221,65 @@
       </nav>
 
       <div class="sidebar-footer">
-        <div id="auth-status" class="auth-status mb-2">
-          <span class="badge badge-visitor" id="role-badge">View Only</span>
-        </div>
+        <div class="mb-2"><span class="badge badge-visitor" id="role-badge">View Only</span></div>
         <button id="btn-auth-action" class="btn-primary full-width mb-2"><i class="fa-solid fa-right-to-bracket"></i> Admin Login</button>
-
-        <a href="https://wa.me/919113695271" target="_blank" class="btn-whatsapp full-width" style="text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 0.5rem;">
+        <a href="https://wa.me/919113695271" target="_blank" class="btn-whatsapp full-width" style="text-decoration:none; text-align:center; display:flex; align-items:center; justify-content:center; gap:0.5rem; margin-top:0.5rem;">
           <i class="fa-brands fa-whatsapp"></i> Helpline Support
         </a>
-
-        <div style="text-align: center; margin-top: 1rem; font-size: 0.75rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.8rem;">
-          <span style="opacity: 0.7; color: #fff;">Designed & Developed by</span><br>
-          <strong style="color: var(--accent-gold); font-size: 0.82rem;">ABDUL KAREEM FAZILY AL-JALALI</strong>
-        </div>
       </div>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
-        <div class="topbar-left">
-          <button id="toggle-sidebar" class="icon-btn mobile-only"><i class="fa-solid fa-bars"></i></button>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <button id="toggle-sidebar" class="btn-primary" style="padding:0.5rem 0.8rem;"><i class="fa-solid fa-bars"></i></button>
           <h2 id="page-title">Dashboard</h2>
         </div>
-        <div class="topbar-right" style="display:flex; align-items:center; gap: 1rem;">
-          <div id="current-team-pill-display" class="current-team-pill" onclick="window.openGateway()"><i class="fa-solid fa-shield-halved"></i> <span id="topbar-team-name">FIRQATH-E- NAIL</span></div>
-          <button id="theme-toggle" class="icon-btn" title="Toggle Theme"><i class="fa-solid fa-moon"></i></button>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <div class="current-team-pill" onclick="window.openGateway()"><i class="fa-solid fa-shield-halved"></i> <span id="topbar-team-name">FIRQATH-E- NAIL</span></div>
+          <button id="theme-toggle" class="btn-secondary"><i class="fa-solid fa-moon"></i></button>
         </div>
       </header>
 
       <div id="view-container" class="view-container">
 
-        <!-- DASHBOARD VIEW -->
+        <!-- DASHBOARD -->
         <section id="view-dashboard" class="app-view active">
           <div class="hero-banner">
-            <div class="hero-text-content">
+            <div>
               <h1>AL MADRASATUL BADRIYA <span>KANA 2540</span></h1>
-              <div class="hero-subtitle">Programme Management System</div>
-            </div>
-            <div class="hero-badge"><i class="fa-solid fa-shield-halved"></i> Team Isolated Data</div>
-          </div>
-
-          <div class="glass-card mb-2">
-            <div class="team-info-grid">
-              <div class="info-item">
-                <span class="info-label">Active Team Name</span>
-                <span id="dash-team-name" class="highlight-gold">FIRQATH-E- NAIL</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Boys Leader</span>
-                <span id="dash-boys-leader" class="info-value">N/A</span>
-              </div>
-              <div class="info-item">
-                <span class="info-label">Girls Leader</span>
-                <span id="dash-girls-leader" class="info-value">N/A</span>
-              </div>
+              <p style="font-size:0.85rem; opacity:0.9;">Programme Management System</p>
             </div>
           </div>
-
           <div class="stats-grid">
-            <div class="stat-card" onclick="window.showDashboardDetails('total-students')">
-              <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
-              <div class="stat-info"><p>Total Students</p><h3 id="stat-total-students">0</h3><small style="color:var(--primary-green); font-weight:600;">Click for details ➔</small></div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+              <div><p>Total Students</p><h3 id="stat-total">0</h3></div>
             </div>
-            <div class="stat-card" onclick="window.showDashboardDetails('total-boys')">
-              <div class="stat-icon blue"><i class="fa-solid fa-mars"></i></div>
-              <div class="stat-info"><p>Boys Section</p><h3 id="stat-total-boys">0</h3><small style="color:#2563eb; font-weight:600;">Click for details ➔</small></div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-mars"></i></div>
+              <div><p>Boys Section</p><h3 id="stat-boys">0</h3></div>
             </div>
-            <div class="stat-card" onclick="window.showDashboardDetails('total-girls')">
-              <div class="stat-icon pink"><i class="fa-solid fa-venus"></i></div>
-              <div class="stat-info"><p>Girls Section</p><h3 id="stat-total-girls">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('boys-stage')">
-              <div class="stat-icon blue"><i class="fa-solid fa-microphone"></i></div>
-              <div class="stat-info"><p>👦 Boys Stage Programmes</p><h3 id="stat-boys-stage-progs">0</h3><small style="color:#2563eb; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('girls-stage')">
-              <div class="stat-icon pink"><i class="fa-solid fa-microphone-lines"></i></div>
-              <div class="stat-info"><p>👧 Girls Stage Programmes</p><h3 id="stat-girls-stage-progs">0</h3><small style="color:#db2777; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('boys-non-stage')">
-              <div class="stat-icon indigo"><i class="fa-solid fa-pen-ruler"></i></div>
-              <div class="stat-info"><p>👦 Boys Non-Stage Programmes</p><h3 id="stat-boys-non-stage-progs">0</h3><small style="color:#4f46e5; font-weight:600;">Click for details ➔</small></div>
-            </div>
-
-            <div class="stat-card" onclick="window.showDashboardDetails('girls-non-stage')">
-              <div class="stat-icon purple"><i class="fa-solid fa-palette"></i></div>
-              <div class="stat-info"><p>👧 Girls Non-Stage Programmes</p><h3 id="stat-girls-non-stage-progs">0</h3><small style="color:#7c3aed; font-weight:600;">Click for details ➔</small></div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-venus"></i></div>
+              <div><p>Girls Section</p><h3 id="stat-girls">0</h3></div>
             </div>
           </div>
         </section>
 
-        <!-- STUDENT PROGRAMME SLIP VIEW -->
-        <section id="view-student-slip" class="app-view">
-          <div class="glass-card mb-2 no-print">
-            <h2><i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Individual Student Programme Participation Slip</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">കുട്ടികളുടെ വിവരങ്ങൾ തിരഞ്ഞെടുത്ത ശേഷം പരിപാടികളുടെ ലിസ്റ്റ് സ്ലിപ്പായി പ്രിന്റ് ചെയ്യാം / വാട്ട്‌സാപ്പിൽ അയക്കാം.</p>
-            <hr class="divider">
-            <div class="form-group">
-              <label style="font-weight:700; color:var(--primary-green);">Select Student Name</label>
-              <select id="slip-student-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;"></select>
-            </div>
-          </div>
-
-          <div id="student-slip-preview-container" class="glass-card" style="display:none;">
-            <div id="printable-slip-area" class="parent-slip-card">
-              <div class="slip-header">
-                <h2 style="color:#0d5c3a; font-family:'Amiri', serif; font-size:1.8rem;">AL MADRASATUL BADRIYA - KANA 2540</h2>
-                <p style="font-weight:600; font-size:0.9rem; color:#d4af37;">PROGRAMME PARTICIPATION SLIP</p>
-              </div>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; font-size:0.95rem;">
-                <div><strong>Student Name:</strong> <span id="slip-out-name" style="color:#0d5c3a; font-weight:700;">-</span></div>
-                <div><strong>Chest No:</strong> <span id="slip-out-chest" style="font-weight:700;">-</span></div>
-                <div><strong>Class:</strong> <span id="slip-out-class">-</span></div>
-                <div><strong>Category:</strong> <span id="slip-out-category">-</span></div>
-                <div><strong>Team:</strong> <span id="slip-out-team" style="color:#d4af37; font-weight:700;">-</span></div>
-                <div><strong>Gender Section:</strong> <span id="slip-out-gender">-</span></div>
-              </div>
-              <h4 style="border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-bottom:0.5rem; color:#0d5c3a;">Assigned Programmes List:</h4>
-              <table class="data-table" style="width:100%; margin-bottom:1rem;">
-                <thead>
-                  <tr style="background:#f4f7f5; color:#0d5c3a;">
-                    <th>#</th>
-                    <th>Programme Item Name</th>
-                    <th>Category / Type</th>
-                  </tr>
-                </thead>
-                <tbody id="slip-out-table-body">
-                  <tr><td colspan="3" class="text-center">Select a student above.</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="flex-gap mt-2 no-print">
-              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Slip / Save PDF</button>
-              <button id="btn-share-whatsapp-slip" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Send to WhatsApp</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- CHEST NUMBER A4 PRINT VIEW -->
-        <section id="view-chest-numbers" class="app-view">
-          <div class="glass-card mb-2 no-print">
-            <div class="action-header">
-              <div>
-                <h2><i class="fa-solid fa-id-badge" style="color:var(--accent-gold);"></i> Printable Chest Numbers (6 Cards per A4 Sheet)</h2>
-                <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">A4 പേപ്പറിൽ കൃത്യമായി 6 ബോക്സുകൾ വീതം ക്രമീകരിച്ചിരിക്കുന്നു. പ്രിന്റ് എടുക്കുമ്പോൾ കുട്ടിയുടെ പേര് താനേ ഒഴിവാകുന്നതാണ്.</p>
-              </div>
-              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Download / Print Chest Numbers</button>
-            </div>
-          </div>
-
-          <div class="chest-grid-a4" id="chest-numbers-output-area"></div>
-        </section>
-
-        <!-- STUDENTS VIEW -->
+        <!-- STUDENTS DIRECTORY -->
         <section id="view-students" class="app-view">
           <div class="glass-card mb-2">
-            <div class="action-header">
-              <h2><i class="fa-solid fa-user-graduate" style="color:var(--accent-gold);"></i> Student Directory & Management</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2>Student Directory</h2>
               <button id="btn-add-student" class="btn-primary admin-only"><i class="fa-solid fa-plus"></i> Add Student</button>
             </div>
-            <hr class="divider">
-            <div class="filter-bar">
-              <input type="text" id="filter-search-student" class="form-control" placeholder="Search student name or Chest No...">
-              <select id="filter-student-class" class="form-control">
-                <option value="">All Classes</option>
-              </select>
-              <select id="filter-student-category" class="form-control">
-                <option value="">All Categories</option>
-                <option value="HIGH ZONE">HIGH ZONE</option>
-                <option value="MID ZONE">MID ZONE</option>
-                <option value="GROUND ZONE">GROUND ZONE</option>
-              </select>
-            </div>
           </div>
-
           <div class="glass-card">
-            <div class="table-responsive">
+            <div style="overflow-x:auto;">
               <table class="data-table">
                 <thead>
-                  <tr>
-                    <th>Chest No</th>
-                    <th>Student Name</th>
-                    <th>Gender Section</th>
-                    <th>Class</th>
-                    <th>Category</th>
-                    <th>Team</th>
-                    <th class="admin-only">Actions</th>
-                  </tr>
+                  <tr><th>Chest No</th><th>Name</th><th>Gender</th><th>Class</th><th>Category</th><th>Team</th><th class="admin-only">Actions</th></tr>
                 </thead>
                 <tbody id="tbody-students"></tbody>
               </table>
@@ -711,171 +287,167 @@
           </div>
         </section>
 
-        <!-- PROGRAMMES VIEW -->
+        <!-- PROGRAMMES MANAGEMENT -->
         <section id="view-programmes" class="app-view">
           <div class="glass-card mb-2">
-            <div class="action-header mb-2">
-              <h2><i class="fa-solid fa-microphone" style="color:var(--accent-gold);"></i> Programmes Management</h2>
-              <div class="flex-gap admin-only">
-                <button id="btn-add-stage-prog" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Stage Programme</button>
-                <button id="btn-add-non-stage-prog" class="btn-secondary" style="background:#4f46e5; color:white;"><i class="fa-solid fa-plus"></i> Add Non-Stage Programme</button>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2>Programmes Management</h2>
+              <div class="admin-only" style="display:flex; gap:0.5rem;">
+                <button id="btn-add-stage" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Stage</button>
+                <button id="btn-add-non-stage" class="btn-secondary"><i class="fa-solid fa-plus"></i> Add Non-Stage</button>
               </div>
             </div>
           </div>
-          <div id="programmes-list-container" class="cards-grid"></div>
+          <div class="glass-card">
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th><th class="admin-only">Actions</th></tr>
+                </thead>
+                <tbody id="tbody-programmes"></tbody>
+              </table>
+            </div>
+          </div>
         </section>
 
-        <!-- BULK ASSIGNMENT VIEW -->
+        <!-- STUDENT PROGRAMME SLIP VIEW -->
+        <section id="view-student-slip" class="app-view">
+          <div class="glass-card mb-2 no-print">
+            <h2><i class="fa-solid fa-receipt" style="color:var(--accent-gold);"></i> Student Programme Slip</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">ക്ലാസ് അല്ലെങ്കിൽ കാറ്റഗറി തിരഞ്ഞെടുത്ത ശേഷം കുട്ടിയുടെ പേരിൽ അമർത്തി സ്ലിപ്പ് എടുക്കാം.</p>
+            <hr class="divider">
+            <div class="form-grid mb-2">
+              <div class="form-group">
+                <label>1. Select Class</label>
+                <select id="slip-class-filter" class="form-control" onchange="filterSlipStudents()">
+                  <option value="">All Classes</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>2. Select Category</label>
+                <select id="slip-cat-filter" class="form-control" onchange="filterSlipStudents()">
+                  <option value="">All Categories</option>
+                  <option value="HIGH ZONE">HIGH ZONE</option>
+                  <option value="MID ZONE">MID ZONE</option>
+                  <option value="GROUND ZONE">GROUND ZONE</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>3. Choose Student:</label>
+              <input type="hidden" id="slip-selected-student-id">
+              <div id="slip-student-cards-grid" class="student-app-card-grid mt-1"></div>
+            </div>
+          </div>
+
+          <div id="student-slip-preview-container" class="glass-card" style="display:none;">
+            <div id="printable-slip-area" class="parent-slip-card">
+              <div class="slip-header">
+                <h2 style="color:#0d5c3a; font-family:'Amiri', serif; font-size:1.6rem;">AL MADRASATUL BADRIYA - KANA 2540</h2>
+                <p style="font-weight:600; font-size:0.85rem; color:#d4af37;">STUDENT PROGRAMME PARTICIPATION SLIP</p>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; font-size:0.9rem;">
+                <div><strong>Student Name:</strong> <span id="slip-out-name" style="color:#0d5c3a; font-weight:700;">-</span></div>
+                <div><strong>Chest No:</strong> <span id="slip-out-chest" style="font-weight:700;">-</span></div>
+                <div><strong>Class:</strong> <span id="slip-out-class">-</span></div>
+                <div><strong>Category:</strong> <span id="slip-out-category">-</span></div>
+                <div><strong>Team:</strong> <span id="slip-out-team" style="color:#d4af37; font-weight:700;">-</span></div>
+              </div>
+              <h4 style="border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-bottom:0.5rem; color:#0d5c3a;">Assigned Programmes:</h4>
+              <table class="data-table" style="width:100%; margin-bottom:1rem;">
+                <thead>
+                  <tr style="background:#f4f7f5; color:#0d5c3a;"><th>#</th><th>Programme Name</th><th>Type</th></tr>
+                </thead>
+                <tbody id="slip-out-table-body">
+                  <tr><td colspan="3" class="text-center">No programmes found.</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="flex-gap mt-2 no-print">
+              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Slip</button>
+              <button id="btn-whatsapp-slip" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- CHEST NUMBER A4 VIEW -->
+        <section id="view-chest-numbers" class="app-view">
+          <div class="glass-card mb-2 no-print">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2>Printable Chest Numbers (6 Cards / A4 Sheet)</h2>
+              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Cards</button>
+            </div>
+          </div>
+          <div class="chest-grid-a4" id="chest-numbers-output-area"></div>
+        </section>
+
+        <!-- BULK ASSIGNMENT -->
         <section id="view-item-bulk-assign" class="app-view">
           <div class="glass-card mb-2">
-            <h2><i class="fa-solid fa-list-check" style="color:var(--accent-gold);"></i> Bulk Programme Assignment</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">സെലക്ഷൻ ക്രമം: Category ➔ Section ➔ Type ➔ Programme ➔ Select Students</p>
-            <hr class="divider">
-
-            <div style="display:flex; flex-direction:column; gap:1.2rem;">
-              <div class="form-group">
-                <label style="font-weight:700; color:var(--primary-green);">1. Select Category</label>
-                <div class="selector-grid" id="grid-bulk-cat">
-                  <div class="selector-chip" data-val="HIGH ZONE"><i class="fa-solid fa-layer-group"></i> HIGH ZONE</div>
-                  <div class="selector-chip" data-val="MID ZONE"><i class="fa-solid fa-layer-group"></i> MID ZONE</div>
-                  <div class="selector-chip" data-val="GROUND ZONE"><i class="fa-solid fa-layer-group"></i> GROUND ZONE</div>
-                </div>
-              </div>
-
-              <div class="form-group" id="group-bulk-gender" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">2. Select Section</label>
-                <div class="selector-grid" id="grid-bulk-gender">
-                  <div class="selector-chip" data-val="Male"><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section</div>
-                  <div class="selector-chip" data-val="Female"><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section</div>
-                </div>
-              </div>
-
-              <div class="form-group" id="group-bulk-type" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">3. Select Programme Type</label>
-                <div class="selector-grid" id="grid-bulk-type">
-                  <div class="selector-chip" data-val="Stage"><i class="fa-solid fa-microphone" style="color:#d97706;"></i> Stage Item</div>
-                  <div class="selector-chip" data-val="Non-Stage"><i class="fa-solid fa-pen-ruler" style="color:#4f46e5;"></i> Non-Stage Item</div>
-                </div>
-              </div>
-
-              <div class="form-group" id="group-bulk-prog" style="display:none;">
-                <label style="font-weight:700; color:var(--primary-green);">4. Select Programme Name</label>
-                <select id="bulk-item-name-select" class="form-control" style="border: 1.5px solid var(--primary-green); font-weight:600;"></select>
-              </div>
+            <h2>Bulk Programme Assignment</h2>
+            <div class="form-group mt-2">
+              <label>Select Programme</label>
+              <select id="bulk-prog-select" class="form-control" onchange="renderBulkChecklist()"></select>
             </div>
           </div>
-
           <div id="bulk-students-container" class="glass-card" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-              <div>
-                <h3 id="bulk-selected-item-title" style="color:var(--primary-green);">Select Students</h3>
-                <p id="bulk-selected-item-subtitle" style="font-size:0.82rem; color:var(--accent-gold); font-weight:600;"></p>
-              </div>
-              <button id="btn-save-item-bulk" class="btn-primary admin-only"><i class="fa-solid fa-circle-check"></i> Save Assignments</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3 id="bulk-prog-title-out">Select Students</h3>
+              <button class="btn-primary admin-only" onclick="saveBulkAssignments()"><i class="fa-solid fa-check"></i> Save Assignments</button>
             </div>
-            <hr class="divider">
-            <div id="bulk-students-checklist" style="max-height: 420px; overflow-y: auto;"></div>
+            <div id="bulk-students-checklist" style="max-height: 400px; overflow-y: auto;"></div>
           </div>
         </section>
 
-        <!-- PDF EXPORT VIEW -->
+        <!-- PDF EXPORT -->
         <section id="view-category-pdf" class="app-view">
-          <div class="glass-card mb-2 no-print">
-            <h2><i class="fa-solid fa-file-pdf" style="color:var(--accent-gold);"></i> Category-wise PDF Export Manager</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും കാറ്റഗറി തിരിച്ചുള്ള മുഴുവൻ പരിപാടികളും ഡൗൺലോഡ് ചെയ്യാം.</p>
-            <hr class="divider">
-
-            <div class="form-grid">
-              <div class="glass-card" style="background:rgba(37,99,235,0.05); border: 1.5px solid #2563eb;">
-                <h3><i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Section PDF Export</h3>
-                <div class="form-group mt-2">
-                  <label style="font-weight:700; color:#2563eb;">Select Category</label>
-                  <select id="cat-pdf-boys-select" class="form-control" style="font-weight:600; border: 1.5px solid #2563eb;">
-                    <option value="HIGH ZONE">HIGH ZONE</option>
-                    <option value="MID ZONE">MID ZONE</option>
-                    <option value="GROUND ZONE">GROUND ZONE</option>
-                  </select>
-                </div>
-                <button id="btn-generate-boys-pdf" class="btn-primary full-width mt-2" style="background:#2563eb;"><i class="fa-solid fa-layer-group"></i> Generate Boys PDF</button>
+          <div class="glass-card mb-2">
+            <h2>Category-wise PDF Export</h2>
+            <div class="form-grid mt-2">
+              <div class="form-group">
+                <label>Select Category</label>
+                <select id="pdf-cat-select" class="form-control">
+                  <option value="HIGH ZONE">HIGH ZONE</option>
+                  <option value="MID ZONE">MID ZONE</option>
+                  <option value="GROUND ZONE">GROUND ZONE</option>
+                </select>
               </div>
-
-              <div class="glass-card" style="background:rgba(219,39,119,0.05); border: 1.5px solid #db2777;">
-                <h3><i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Section PDF Export</h3>
-                <div class="form-group mt-2">
-                  <label style="font-weight:700; color:#db2777;">Select Category</label>
-                  <select id="cat-pdf-girls-select" class="form-control" style="font-weight:600; border: 1.5px solid #db2777;">
-                    <option value="HIGH ZONE">HIGH ZONE</option>
-                    <option value="MID ZONE">MID ZONE</option>
-                    <option value="GROUND ZONE">GROUND ZONE</option>
-                  </select>
-                </div>
-                <button id="btn-generate-girls-pdf" class="btn-primary full-width mt-2" style="background:#db2777;"><i class="fa-solid fa-layer-group"></i> Generate Girls PDF</button>
+              <div class="form-group" style="justify-content:flex-end;">
+                <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print / Download PDF</button>
               </div>
             </div>
-          </div>
-
-          <div id="category-pdf-preview-card" class="glass-card" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;" class="no-print">
-              <div>
-                <h3 id="category-pdf-title-out" style="color:var(--primary-green);">Programmes List</h3>
-                <p id="category-pdf-subtitle-out" style="font-size:0.85rem; opacity:0.8;"></p>
-              </div>
-              <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Download / Print PDF</button>
-            </div>
-            <hr class="divider no-print">
-            <div id="category-pdf-output-area"></div>
           </div>
         </section>
 
-        <!-- REPORTS VIEW -->
+        <!-- REPORTS -->
         <section id="view-reports" class="app-view">
           <div class="glass-card mb-2">
-            <h2><i class="fa-solid fa-file-invoice" style="color:var(--accent-gold);"></i> Reports & Export Manager</h2>
-            <hr class="divider">
-            <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Full Master Report</button>
+            <h2>Master Reports</h2>
+            <button onclick="window.print()" class="btn-secondary mt-2"><i class="fa-solid fa-print"></i> Print Report</button>
           </div>
-          <div class="glass-card"><div id="report-output-table" class="table-responsive"></div></div>
         </section>
 
-        <!-- SETTINGS VIEW -->
+        <!-- SETTINGS -->
         <section id="view-settings" class="app-view">
-          <div class="glass-card mb-2">
-            <h2><i class="fa-solid fa-gear" style="color:var(--accent-gold);"></i> Team Leadership Settings</h2>
-            <p style="font-size:0.85rem; opacity:0.8;">ആൺകുട്ടികളുടെയും പെൺകുട്ടികളുടെയും ലീഡർമാരുടെ വിവരങ്ങൾ അപ്ഡേറ്റ് ചെയ്യുക.</p>
-            <hr class="divider">
-            <form id="form-team-settings" class="admin-only">
+          <div class="glass-card mb-2 admin-only">
+            <h2>Team Leadership Settings</h2>
+            <form id="form-team-settings" class="mt-2">
               <div class="form-grid">
-                <div class="form-group">
-                  <label>Active Team Name</label>
-                  <input type="text" id="team-name-input" class="form-control" required readonly>
-                </div>
-                <div class="form-group">
-                  <label>Boys Leader (ആൺകുട്ടികളുടെ ലീഡർ)</label>
-                  <input type="text" id="team-boys-leader-input" class="form-control" placeholder="Boys leader name">
-                </div>
-                <div class="form-group">
-                  <label>Girls Leader (പെൺകുട്ടികളുടെ ലീഡർ)</label>
-                  <input type="text" id="team-girls-leader-input" class="form-control" placeholder="Girls leader name">
-                </div>
+                <div class="form-group"><label>Active Team</label><input type="text" id="team-name-input" class="form-control" readonly></div>
+                <div class="form-group"><label>Boys Leader</label><input type="text" id="team-boys-leader" class="form-control"></div>
+                <div class="form-group"><label>Girls Leader</label><input type="text" id="team-girls-leader" class="form-control"></div>
               </div>
-              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Team Leaders</button>
+              <button type="submit" class="btn-primary mt-2">Save Leaders</button>
             </form>
           </div>
-
           <div class="glass-card admin-only">
-            <h2>Change Admin Password</h2>
+            <h2>Change Password</h2>
             <form id="form-password-change" class="mt-2">
               <div class="form-grid">
-                <div class="form-group">
-                  <label>Old Password</label>
-                  <input type="password" id="old-pass-val" class="form-control" required placeholder="Current Password">
-                </div>
-                <div class="form-group">
-                  <label>New Password</label>
-                  <input type="password" id="new-pass-val" class="form-control" required placeholder="New Password">
-                </div>
+                <div class="form-group"><label>Old Password</label><input type="password" id="old-pass" class="form-control" required></div>
+                <div class="form-group"><label>New Password</label><input type="password" id="new-pass" class="form-control" required></div>
               </div>
-              <button type="submit" class="btn-secondary mt-2"><i class="fa-solid fa-key"></i> Update Password</button>
+              <button type="submit" class="btn-secondary mt-2">Update Password</button>
             </form>
           </div>
         </section>
@@ -884,110 +456,49 @@
     </main>
   </div>
 
-  <!-- POPUP DETAILS MODAL -->
-  <div id="modal-dashboard-details" class="modal">
-    <div class="modal-content glass-card wide">
-      <div class="modal-header">
-        <h3 id="dash-details-title">Details View</h3>
-        <button class="close-modal">×</button>
-      </div>
-      <div id="dash-details-content" class="table-responsive"></div>
-    </div>
-  </div>
-
   <!-- MODALS -->
   <div id="modal-auth" class="modal">
-    <div class="modal-content glass-card">
-      <div class="modal-header">
-        <h3><i class="fa-solid fa-shield-halved"></i> Admin Login</h3>
-        <button class="close-modal">×</button>
-      </div>
+    <div class="modal-content">
+      <div class="modal-header"><h3>Admin Login</h3><button class="close-modal">×</button></div>
       <form id="form-login">
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" id="login-password" class="form-control" required placeholder="Default: admin">
-        </div>
+        <div class="form-group"><label>Password</label><input type="password" id="login-password" class="form-control" required></div>
         <button type="submit" class="btn-primary full-width mt-2">Sign In</button>
       </form>
     </div>
   </div>
 
   <div id="modal-student" class="modal">
-    <div class="modal-content glass-card wide">
-      <div class="modal-header">
-        <h3 id="modal-student-title">Add Student</h3>
-        <button class="close-modal">×</button>
-      </div>
+    <div class="modal-content">
+      <div class="modal-header"><h3 id="modal-student-title">Add Student</h3><button class="close-modal">×</button></div>
       <form id="form-student">
         <input type="hidden" id="student-doc-id">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Chest Number</label>
-            <input type="text" id="student-chest-input" class="form-control" required placeholder="e.g. 101">
-          </div>
-          <div class="form-group">
-            <label>Student Name</label>
-            <input type="text" id="student-name-input" class="form-control" required>
-          </div>
-          <div class="form-group">
-            <label>Gender Section</label>
-            <select id="student-gender-input" class="form-control" required>
-              <option value="Male">Male (Boy)</option>
-              <option value="Female">Female (Girl)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Class</label>
-            <input type="text" id="student-class-input" class="form-control" required placeholder="e.g. 1">
-          </div>
-          <div class="form-group">
-            <label>Category</label>
-            <select id="student-category-input" class="form-control" required>
-              <option value="HIGH ZONE">HIGH ZONE</option>
-              <option value="MID ZONE">MID ZONE</option>
-              <option value="GROUND ZONE">GROUND ZONE</option>
-            </select>
-          </div>
+        <div class="form-group"><label>Chest Number</label><input type="text" id="student-chest" class="form-control" required></div>
+        <div class="form-group mt-2"><label>Student Name</label><input type="text" id="student-name" class="form-control" required></div>
+        <div class="form-grid mt-2">
+          <div class="form-group"><label>Gender</label><select id="student-gender" class="form-control"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+          <div class="form-group"><label>Class</label><input type="text" id="student-class" class="form-control" required></div>
         </div>
-        <button type="submit" class="btn-primary full-width mt-2">Save Student Record</button>
+        <div class="form-group mt-2"><label>Category</label><select id="student-category" class="form-control"><option value="HIGH ZONE">HIGH ZONE</option><option value="MID ZONE">MID ZONE</option><option value="GROUND ZONE">GROUND ZONE</option></select></div>
+        <button type="submit" class="btn-primary full-width mt-2">Save Student</button>
       </form>
     </div>
   </div>
 
   <div id="modal-programme" class="modal">
-    <div class="modal-content glass-card">
-      <div class="modal-header">
-        <h3 id="modal-prog-title">Add Programme</h3>
-        <button class="close-modal">×</button>
-      </div>
+    <div class="modal-content">
+      <div class="modal-header"><h3 id="modal-prog-title">Add Programme</h3><button class="close-modal">×</button></div>
       <form id="form-programme">
         <input type="hidden" id="prog-doc-id">
-        <input type="hidden" id="prog-type-hidden">
-        <div class="form-group">
-          <label>Programme Name</label>
-          <input type="text" id="prog-name-input" class="form-control" required placeholder="e.g. Qaseeda">
-        </div>
-        <div class="form-group mt-1">
-          <label>Gender Section</label>
-          <select id="prog-gender-input" class="form-control" required>
-            <option value="Male">Boys</option>
-            <option value="Female">Girls</option>
-          </select>
-        </div>
-        <div class="form-group mt-1">
-          <label>Category</label>
-          <select id="prog-category-input" class="form-control" required>
-            <option value="HIGH ZONE">HIGH ZONE</option>
-            <option value="MID ZONE">MID ZONE</option>
-            <option value="GROUND ZONE">GROUND ZONE</option>
-          </select>
-        </div>
+        <input type="hidden" id="prog-type">
+        <div class="form-group"><label>Programme Name</label><input type="text" id="prog-name" class="form-control" required></div>
+        <div class="form-group mt-2"><label>Gender</label><select id="prog-gender" class="form-control"><option value="Male">Boys</option><option value="Female">Girls</option></select></div>
+        <div class="form-group mt-2"><label>Category</label><select id="prog-category" class="form-control"><option value="HIGH ZONE">HIGH ZONE</option><option value="MID ZONE">MID ZONE</option><option value="GROUND ZONE">GROUND ZONE</option></select></div>
         <button type="submit" class="btn-primary full-width mt-2">Save Programme</button>
       </form>
     </div>
   </div>
 
-  <!-- FIREBASE API MODULE WITH UNIQUE FILTERING & PERSISTENCE -->
+  <!-- FIREBASE MODULE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { 
@@ -1011,24 +522,18 @@
       students: [],
       programmes: [],
       assignments: [],
-      teamSettings: {},
       adminPass: 'admin',
-      isAdmin: false,
-      bulkSelection: { category: '', gender: '', type: '' }
+      isAdmin: false
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       setupNavigation();
       setupSidebarToggle();
       setupEventListeners();
-      setupCardSelectors();
       setupFirestore();
     });
 
-    window.openGateway = () => {
-      document.getElementById('team-selection-gateway').classList.remove('hidden');
-    };
-
+    window.openGateway = () => { document.getElementById('team-selection-gateway').classList.remove('hidden'); };
     window.selectTeamAndEnter = (teamName) => {
       state.activeTeam = teamName;
       document.getElementById('topbar-team-name').textContent = teamName;
@@ -1043,30 +548,22 @@
       const toggleBtn = document.getElementById('toggle-sidebar');
       const closeBtn = document.getElementById('close-sidebar');
 
-      const openMenu = () => { sidebar.classList.add('open'); overlay.classList.add('active'); };
-      const closeMenu = () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); };
-
-      if (toggleBtn) toggleBtn.addEventListener('click', openMenu);
-      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
-      if (overlay) overlay.addEventListener('click', closeMenu);
+      if (toggleBtn) toggleBtn.addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('active'); });
+      if (closeBtn) closeBtn.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); });
+      if (overlay) overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('active'); });
     }
 
     function setupNavigation() {
-      const navItems = document.querySelectorAll('.nav-item');
-      const views = document.querySelectorAll('.app-view');
-
-      navItems.forEach(item => {
+      document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', (e) => {
           e.preventDefault();
           const target = item.getAttribute('data-view');
-          navItems.forEach(i => i.classList.remove('active'));
+          document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
           item.classList.add('active');
-
-          views.forEach(v => {
+          document.querySelectorAll('.app-view').forEach(v => {
             if (v.id === `view-${target}`) v.classList.add('active');
             else v.classList.remove('active');
           });
-
           document.getElementById('page-title').textContent = item.querySelector('span').textContent;
           document.getElementById('sidebar').classList.remove('open');
           document.getElementById('sidebar-overlay').classList.remove('active');
@@ -1079,41 +576,24 @@
 
       onSnapshot(doc(db, 'teams', state.activeTeam), (s) => {
         if (s.exists()) {
-          state.teamSettings = s.data();
-          document.getElementById('dash-team-name').textContent = state.activeTeam;
-          document.getElementById('dash-boys-leader').textContent = state.teamSettings.boysLeader || 'N/A';
-          document.getElementById('dash-girls-leader').textContent = state.teamSettings.girlsLeader || 'N/A';
-
-          document.getElementById('team-boys-leader-input').value = state.teamSettings.boysLeader || '';
-          document.getElementById('team-girls-leader-input').value = state.teamSettings.girlsLeader || '';
+          const d = s.data();
+          document.getElementById('dash-boys-leader').textContent = d.boysLeader || 'N/A';
+          document.getElementById('dash-girls-leader').textContent = d.girlsLeader || 'N/A';
+          document.getElementById('team-boys-leader').value = d.boysLeader || '';
+          document.getElementById('team-girls-leader').value = d.girlsLeader || '';
         }
       });
 
-      // STUDENTS LISTENER WITH UNIQUE DEDUPLICATION
       onSnapshot(collection(db, 'students'), (s) => {
-        const rawDocs = s.docs.map(d => ({ id: d.id, ...d.data() }));
-        // Remove duplicate records based on chestNo or name
-        const uniqueMap = new Map();
-        rawDocs.forEach(item => {
-          const key = (item.chestNo || item.name).trim().toLowerCase();
-          if (!uniqueMap.has(key)) uniqueMap.set(key, item);
-        });
-        state.students = Array.from(uniqueMap.values());
-        populateStudentSlipDropdown();
+        state.students = s.docs.map(d => ({ id: d.id, ...d.data() }));
         renderApp();
+        populateSlipClasses();
       });
 
-      // PROGRAMMES LISTENER WITH UNIQUE DEDUPLICATION
       onSnapshot(collection(db, 'programmes'), (s) => {
-        const rawProgs = s.docs.map(d => ({ id: d.id, ...d.data() }));
-        const uniqueProgMap = new Map();
-        rawProgs.forEach(item => {
-          const key = `${(item.name || '').trim().toLowerCase()}_${item.gender}_${item.category}_${item.type}`;
-          if (!uniqueProgMap.has(key)) uniqueProgMap.set(key, item);
-        });
-        state.programmes = Array.from(uniqueProgMap.values());
+        state.programmes = s.docs.map(d => ({ id: d.id, ...d.data() }));
         renderApp();
-        updateBulkProgrammeOptions();
+        populateBulkProgSelect();
       });
 
       onSnapshot(collection(db, 'assignments'), (s) => {
@@ -1136,7 +616,7 @@
           document.getElementById('role-badge').textContent = "View Only";
           document.getElementById('role-badge').className = "badge badge-visitor";
           document.getElementById('btn-auth-action').innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Admin Login`;
-          showToast('Signed Out');
+          showToast('Logged Out');
           renderApp();
         } else openModal('modal-auth');
       });
@@ -1159,27 +639,23 @@
       document.getElementById('form-team-settings').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'warning');
-        const data = {
-          boysLeader: document.getElementById('team-boys-leader-input').value,
-          girlsLeader: document.getElementById('team-girls-leader-input').value
-        };
-        await setDoc(doc(db, 'teams', state.activeTeam), data, { merge: true });
-        showToast('Team Leaders Saved');
+        await setDoc(doc(db, 'teams', state.activeTeam), {
+          boysLeader: document.getElementById('team-boys-leader').value,
+          girlsLeader: document.getElementById('team-girls-leader').value
+        }, { merge: true });
+        showToast('Leaders Saved');
       });
 
       document.getElementById('form-password-change').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin access required', 'warning');
-        const oldP = document.getElementById('old-pass-val').value;
-        const newP = document.getElementById('new-pass-val').value;
-
-        if (oldP !== state.adminPass && oldP !== '2540' && oldP !== 'admin') {
-          return alert('Old password incorrect');
-        }
+        const oldP = document.getElementById('old-pass').value;
+        const newP = document.getElementById('new-pass').value;
+        if (oldP !== state.adminPass && oldP !== '2540') return alert('Old password incorrect');
 
         await setDoc(doc(db, "system", "settings"), { adminPass: newP }, { merge: true });
         state.adminPass = newP;
-        showToast('Admin Password Changed!');
+        showToast('Password Updated');
       });
 
       document.getElementById('btn-add-student').addEventListener('click', () => {
@@ -1194,31 +670,31 @@
         if (!state.isAdmin) return showToast('Admin access required', 'warning');
 
         const docId = document.getElementById('student-doc-id').value;
-        const chestInput = document.getElementById('student-chest-input').value.trim();
-        const nameInput = document.getElementById('student-name-input').value.trim();
+        const chest = document.getElementById('student-chest').value.trim();
+        const name = document.getElementById('student-name').value.trim();
+
+        if (state.students.some(s => s.id !== docId && s.chestNo === chest)) {
+          return showToast('Chest Number already exists!', 'warning');
+        }
 
         const studentObj = {
-          chestNo: chestInput,
-          name: nameInput,
-          gender: document.getElementById('student-gender-input').value,
-          class: document.getElementById('student-class-input').value,
-          category: document.getElementById('student-category-input').value,
+          chestNo: chest,
+          name: name,
+          gender: document.getElementById('student-gender').value,
+          class: document.getElementById('student-class').value.trim(),
+          category: document.getElementById('student-category').value,
           team: state.activeTeam
         };
 
-        if (docId) {
-          await updateDoc(doc(db, 'students', docId), studentObj);
-          showToast('Student Record Updated');
-        } else {
-          await addDoc(collection(db, 'students'), studentObj);
-          showToast('Student Added Successfully');
-        }
+        if (docId) await updateDoc(doc(db, 'students', docId), studentObj);
+        else await addDoc(collection(db, 'students'), studentObj);
 
         closeModal('modal-student');
+        showToast('Student Saved');
       });
 
-      document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgModal('Stage'));
-      document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgModal('Non-Stage'));
+      document.getElementById('btn-add-stage').addEventListener('click', () => openProgModal('Stage'));
+      document.getElementById('btn-add-non-stage').addEventListener('click', () => openProgModal('Non-Stage'));
 
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -1226,10 +702,11 @@
 
         const docId = document.getElementById('prog-doc-id').value;
         const progObj = {
-          name: document.getElementById('prog-name-input').value.trim(),
-          gender: document.getElementById('prog-gender-input').value,
-          category: document.getElementById('prog-category-input').value,
-          type: document.getElementById('prog-type-hidden').value
+          name: document.getElementById('prog-name').value.trim(),
+          gender: document.getElementById('prog-gender').value,
+          category: document.getElementById('prog-category').value,
+          type: document.getElementById('prog-type').value,
+          team: state.activeTeam
         };
 
         if (docId) await updateDoc(doc(db, 'programmes', docId), progObj);
@@ -1239,33 +716,64 @@
         showToast('Programme Saved');
       });
 
-      document.getElementById('bulk-item-name-select').addEventListener('change', renderBulkStudentChecklist);
-      document.getElementById('slip-student-select').addEventListener('change', renderStudentSlip);
-      document.getElementById('btn-share-whatsapp-slip').addEventListener('click', shareWhatsAppSlip);
-
+      document.getElementById('bulk-prog-select').addEventListener('change', renderBulkChecklist);
+      document.getElementById('btn-whatsapp-slip').addEventListener('click', sendWhatsAppSlip);
       document.querySelectorAll('.close-modal').forEach(b => b.addEventListener('click', () => closeModal(b.closest('.modal').id)));
     }
 
-    function populateStudentSlipDropdown() {
-      const select = document.getElementById('slip-student-select');
-      if (!select) return;
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-      select.innerHTML = '<option value="">-- Select Student --</option>' + activeStudents.map(s => `
-        <option value="${s.id}">${s.name} (Chest: ${s.chestNo || '-'}, Class ${s.class})</option>
-      `).join('');
+    function openProgModal(type) {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
+      document.getElementById('form-programme').reset();
+      document.getElementById('prog-doc-id').value = '';
+      document.getElementById('prog-type').value = type;
+      openModal('modal-programme');
     }
 
-    function renderStudentSlip() {
-      const studentId = document.getElementById('slip-student-select')?.value;
-      const container = document.getElementById('student-slip-preview-container');
-      if (!container) return;
+    function populateSlipClasses() {
+      const clsSel = document.getElementById('slip-class-filter');
+      if (!clsSel) return;
+      const classes = [...new Set(state.students.map(s => s.class))];
+      clsSel.innerHTML = '<option value="">All Classes</option>' + classes.map(c => `<option value="${c}">Class ${c}</option>`).join('');
+      filterSlipStudents();
+    }
 
-      if (!studentId) {
-        container.style.display = 'none';
+    window.filterSlipStudents = () => {
+      const cFilter = document.getElementById('slip-class-filter').value;
+      const catFilter = document.getElementById('slip-cat-filter').value;
+      const grid = document.getElementById('slip-student-cards-grid');
+
+      const filtered = state.students.filter(s => s.team === state.activeTeam && (!cFilter || s.class === cFilter) && (!catFilter || s.category === catFilter));
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '<p style="grid-column:1/-1; color:#ef4444;">No students found.</p>';
         return;
       }
 
-      const s = state.students.find(x => x.id === studentId);
+      grid.innerHTML = filtered.map(s => `
+        <div class="student-app-card" onclick="window.selectSlipStudent('${s.id}')" id="slip-card-${s.id}">
+          <div class="student-avatar-icon"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <h4 style="font-size:0.9rem;">${s.name}</h4>
+            <small style="color:var(--accent-gold); font-weight:bold;">Chest No: ${s.chestNo || '-'}</small>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.selectSlipStudent = (id) => {
+      document.querySelectorAll('.student-app-card').forEach(c => c.classList.remove('active'));
+      const card = document.getElementById(`slip-card-${id}`);
+      if (card) card.classList.add('active');
+      document.getElementById('slip-selected-student-id').value = id;
+      renderStudentSlip();
+    };
+
+    function renderStudentSlip() {
+      const id = document.getElementById('slip-selected-student-id')?.value;
+      const container = document.getElementById('student-slip-preview-container');
+      if (!container || !id) return;
+
+      const s = state.students.find(x => x.id === id);
       if (!s) return;
 
       container.style.display = 'block';
@@ -1274,190 +782,92 @@
       document.getElementById('slip-out-class').textContent = `Class ${s.class}`;
       document.getElementById('slip-out-category').textContent = s.category;
       document.getElementById('slip-out-team').textContent = s.team;
-      document.getElementById('slip-out-gender').textContent = s.gender === 'Male' ? 'Boys Section' : 'Girls Section';
 
-      const studentAssignments = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
+      const assigned = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
       const tbody = document.getElementById('slip-out-table-body');
 
-      if (studentAssignments.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" class="text-center">No programmes assigned yet.</td></tr>';
+      if (assigned.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" class="text-center">No programmes assigned.</td></tr>';
       } else {
-        tbody.innerHTML = studentAssignments.map((a, idx) => `
-          <tr>
-            <td>${idx + 1}</td>
-            <td><strong>${a.progName}</strong></td>
-            <td>${a.progType || 'Stage'}</td>
-          </tr>
+        tbody.innerHTML = assigned.map((a, i) => `
+          <tr><td>${i+1}</td><td><strong>${a.progName}</strong></td><td>${a.progType || 'Stage'}</td></tr>
         `).join('');
       }
     }
 
-    function shareWhatsAppSlip() {
-      const studentId = document.getElementById('slip-student-select')?.value;
-      const s = state.students.find(x => x.id === studentId);
-      if (!s) return showToast('Select a student first', 'warning');
-
-      const studentAssignments = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
-      let progsText = studentAssignments.map((a, i) => `${i+1}. *${a.progName}*`).join('\n') || 'No programmes assigned.';
-
-      const text = `*AL MADRASATUL BADRIYA - KANA 2540*\n` +
-                   `*Programme Participation Slip*\n\n` +
-                   `👤 *Name:* ${s.name}\n` +
-                   `🆔 *Chest No:* ${s.chestNo || '-'}\n` +
-                   `📚 *Class:* ${s.class}\n` +
-                   `🏷️ *Category:* ${s.category}\n` +
-                   `🚩 *Team:* ${s.team}\n\n` +
-                   `*Assigned Programmes List:*\n${progsText}\n`;
-
+    function sendWhatsAppSlip() {
+      const id = document.getElementById('slip-selected-student-id').value;
+      const s = state.students.find(x => x.id === id);
+      if (!s) return;
+      const assigned = state.assignments.filter(a => a.studentId === s.id || a.studentName === s.name);
+      let text = `*AL MADRASATUL BADRIYA KANA 2540*\n*Programme Slip*\n\nName: ${s.name}\nChest No: ${s.chestNo}\nClass: ${s.class}\n\nProgrammes:\n` + assigned.map((a, i) => `${i+1}. ${a.progName}`).join('\n');
       window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
     }
 
-    function setupCardSelectors() {
-      const bindGroup = (gridId, stateField, nextGroupId) => {
-        const chips = document.querySelectorAll(`#${gridId} .selector-chip`);
-        chips.forEach(chip => {
-          chip.addEventListener('click', () => {
-            chips.forEach(c => c.classList.remove('selected'));
-            chip.classList.add('selected');
-            state.bulkSelection[stateField] = chip.getAttribute('data-val');
+    function populateBulkProgSelect() {
+      const sel = document.getElementById('bulk-prog-select');
+      if (!sel) return;
+      sel.innerHTML = '<option value="">-- Choose Programme --</option>' + state.programmes.map(p => `<option value="${p.id}">${p.name} (${p.category} - ${p.gender})</option>`).join('');
+    }
 
-            if (nextGroupId) {
-              const nextEl = document.getElementById(nextGroupId);
-              if (nextEl) nextEl.style.display = 'block';
-            }
-            updateBulkProgrammeOptions();
-          });
-        });
+    function renderBulkChecklist() {
+      const progId = document.getElementById('bulk-prog-select').value;
+      const container = document.getElementById('bulk-students-container');
+      const checklist = document.getElementById('bulk-students-checklist');
+      if (!progId) { container.style.display = 'none'; return; }
+
+      const prog = state.programmes.find(p => p.id === progId);
+      container.style.display = 'block';
+      document.getElementById('bulk-prog-title-out').textContent = `Assign: ${prog.name}`;
+
+      const eligible = state.students.filter(s => s.team === state.activeTeam && s.category === prog.category && s.gender === prog.gender);
+      const assigned = state.assignments.find(a => a.progId === progId)?.studentIds || [];
+
+      checklist.innerHTML = eligible.length ? eligible.map(s => `
+        <div style="display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0;">
+          <input type="checkbox" class="bulk-cb" value="${s.id}" ${assigned.includes(s.id)?'checked':''} style="width:18px; height:18px;">
+          <label><strong>[Chest No: ${s.chestNo}]</strong> ${s.name} (Class ${s.class})</label>
+        </div>
+      `).join('') : '<p>No eligible students found in this team for this category/section.</p>';
+    }
+
+    window.saveBulkAssignments = async () => {
+      if (!state.isAdmin) return showToast('Admin access required', 'warning');
+      const progId = document.getElementById('bulk-prog-select').value;
+      const selectedIds = Array.from(document.querySelectorAll('.bulk-cb:checked')).map(cb => cb.value);
+
+      const existing = state.assignments.find(a => a.progId === progId);
+      const prog = state.programmes.find(p => p.id === progId);
+
+      const payload = {
+        progId,
+        progName: prog.name,
+        progType: prog.type,
+        studentIds: selectedIds
       };
 
-      bindGroup('grid-bulk-cat', 'category', 'group-bulk-gender');
-      bindGroup('grid-bulk-gender', 'gender', 'group-bulk-type');
-      bindGroup('grid-bulk-type', 'type', 'group-bulk-prog');
-    }
-
-    function updateBulkProgrammeOptions() {
-      const cat = state.bulkSelection.category;
-      const gender = state.bulkSelection.gender;
-      const type = state.bulkSelection.type;
-      const nameSelect = document.getElementById('bulk-item-name-select');
-      const container = document.getElementById('bulk-students-container');
-
-      if (!nameSelect) return;
-      nameSelect.value = "";
-      if (container) container.style.display = 'none';
-
-      if (!cat || !gender || !type) {
-        nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>';
-        return;
+      if (existing) {
+        await updateDoc(doc(db, 'assignments', existing.id), payload);
+      } else {
+        await addDoc(collection(db, 'assignments'), payload);
       }
-
-      const filteredProgs = state.programmes.filter(p => p.category === cat && p.gender === gender && p.type === type);
-
-      nameSelect.innerHTML = '<option value="">-- Choose Programme --</option>' + filteredProgs.map(p => `
-        <option value="${p.id}">${p.name}</option>
-      `).join('');
-    }
-
-    function renderBulkStudentChecklist() {
-      const cat = state.bulkSelection.category;
-      const gender = state.bulkSelection.gender;
-      const progId = document.getElementById('bulk-item-name-select').value;
-
-      const container = document.getElementById('bulk-students-container');
-      const checklistEl = document.getElementById('bulk-students-checklist');
-      const titleEl = document.getElementById('bulk-selected-item-title');
-      const subtitleEl = document.getElementById('bulk-selected-item-subtitle');
-
-      if (!container || !checklistEl) return;
-      if (!progId) {
-        container.style.display = 'none';
-        return;
-      }
-
-      const selectedProg = state.programmes.find(p => p.id === progId);
-      if (!selectedProg) return;
-
-      container.style.display = 'block';
-      titleEl.textContent = `Assign Item: "${selectedProg.name}"`;
-      subtitleEl.textContent = `${cat} | ${gender === 'Male' ? 'Boys Section' : 'Girls Section'} | ${selectedProg.type} Item`;
-
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-      let targetStudents = activeStudents.filter(s => s.category === cat && s.gender === gender);
-
-      if (targetStudents.length === 0) {
-        checklistEl.innerHTML = '<p class="text-center" style="padding:1rem;">No students found matching this Category & Section in active team.</p>';
-        return;
-      }
-
-      checklistEl.innerHTML = targetStudents.map(s => `
-        <div style="display:flex; align-items:center; justify-content:space-between; padding: 0.6rem; border-bottom: 1px solid rgba(0,0,0,0.05);">
-          <div style="display:flex; align-items:center; gap:0.8rem; flex:1;">
-            <input type="checkbox" value="${s.id}" class="bulk-std-cb" id="bulk-std-${s.id}" style="width:18px; height:18px; cursor:pointer;">
-            <label for="bulk-std-${s.id}" style="cursor:pointer; font-size:0.92rem;">
-              <strong>[Chest No: ${s.chestNo || '-'}]</strong> Class ${s.class} - ${s.name} 
-            </label>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openProgModal(type) {
-      if (!state.isAdmin) return showToast('Admin access required', 'warning');
-      document.getElementById('form-programme').reset();
-      document.getElementById('prog-doc-id').value = '';
-      document.getElementById('prog-type-hidden').value = type;
-      openModal('modal-programme');
-    }
+      showToast('Assignments Saved!');
+    };
 
     function renderApp() {
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-      document.getElementById('stat-total-students').textContent = activeStudents.length;
-      document.getElementById('stat-total-boys').textContent = activeStudents.filter(s => s.gender === 'Male').length;
-      document.getElementById('stat-total-girls').textContent = activeStudents.filter(s => s.gender === 'Female').length;
+      const activeStds = state.students.filter(s => s.team === state.activeTeam);
+      document.getElementById('stat-total').textContent = activeStds.length;
+      document.getElementById('stat-boys').textContent = activeStds.filter(s => s.gender === 'Male').length;
+      document.getElementById('stat-girls').textContent = activeStds.filter(s => s.gender === 'Female').length;
 
-      document.getElementById('stat-boys-stage-progs').textContent = state.programmes.filter(p => p.type === 'Stage' && p.gender === 'Male').length;
-      document.getElementById('stat-girls-stage-progs').textContent = state.programmes.filter(p => p.type === 'Stage' && p.gender === 'Female').length;
-      document.getElementById('stat-boys-non-stage-progs').textContent = state.programmes.filter(p => p.type === 'Non-Stage' && p.gender === 'Male').length;
-      document.getElementById('stat-girls-non-stage-progs').textContent = state.programmes.filter(p => p.type === 'Non-Stage' && p.gender === 'Female').length;
-
-      renderStudentsTable();
-      renderProgrammeCards();
-      renderChestNumbersA4();
+      renderStudentsTable(activeStds);
+      renderProgrammesTable();
+      renderChestNumbers();
     }
 
-    function renderChestNumbersA4() {
-      const container = document.getElementById('chest-numbers-output-area');
-      if (!container) return;
-
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam || !s.team);
-
-      if (activeStudents.length === 0) {
-        container.innerHTML = '<p class="no-print" style="grid-column: 1/-1; text-align:center;">No students available for chest numbers.</p>';
-        return;
-      }
-
-      container.innerHTML = activeStudents.map(s => `
-        <div class="chest-card-box">
-          <div class="madrasa-name">AL MADRASATUL BADRIYA</div>
-          <div class="tag-line">KANA 2540 - PROGRAMME SYSTEM</div>
-          <div class="chest-number-big">${s.chestNo || '000'}</div>
-          <div><span class="zone-badge">${s.category || 'GENERAL'}</span></div>
-          <div class="screen-student-name">${s.name} (Class ${s.class})</div>
-        </div>
-      `).join('');
-    }
-
-    function renderStudentsTable() {
-      const tbody = document.getElementById('tbody-students');
-      if (!tbody) return;
-
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-      if (activeStudents.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
-        return;
-      }
-
-      tbody.innerHTML = activeStudents.map(s => `
+    function renderStudentsTable(list) {
+      const tb = document.getElementById('tbody-students');
+      tb.innerHTML = list.length ? list.map(s => `
         <tr>
           <td><strong>${s.chestNo || '-'}</strong></td>
           <td>${s.name}</td>
@@ -1466,49 +876,40 @@
           <td><span class="badge badge-visitor">${s.category}</span></td>
           <td>${s.team}</td>
           <td class="admin-only">
-            <button class="icon-btn" onclick="window.editStudent('${s.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-            <button class="icon-btn" onclick="window.deleteStudent('${s.id}')"><i class="fa-solid fa-trash" style="color:#ef4444;"></i></button>
+            <button class="btn-danger" onclick="window.deleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
           </td>
         </tr>
-      `).join('');
+      `).join('') : '<tr><td colspan="7" class="text-center">No students found.</td></tr>';
     }
 
-    function renderProgrammeCards() {
-      const container = document.getElementById('programmes-list-container');
-      if (!container) return;
-
-      if (state.programmes.length === 0) {
-        container.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No programmes added yet.</p>';
-        return;
-      }
-
-      container.innerHTML = state.programmes.map(p => `
-        <div class="glass-card programme-card ${p.gender === 'Male' ? 'boys-card' : 'girls-card'}">
-          <h3>${p.name}</h3>
-          <p style="margin-top:0.3rem;">
-            <span class="badge ${p.gender === 'Male' ? 'badge-boys' : 'badge-girls'}">${p.gender === 'Male' ? '👦 Boys Section' : '👧 Girls Section'}</span> 
-            <span class="badge badge-visitor">${p.category}</span>
-          </p>
-          <p style="font-size:0.85rem; margin-top:0.5rem;">Type: <strong>${p.type}</strong></p>
-          <div class="admin-only" style="margin-top:0.8rem; text-align:right;">
+    function renderProgrammesTable() {
+      const tb = document.getElementById('tbody-programmes');
+      tb.innerHTML = state.programmes.length ? state.programmes.map(p => `
+        <tr>
+          <td><strong>${p.name}</strong></td>
+          <td>${p.type}</td>
+          <td><span class="badge badge-visitor">${p.category}</span></td>
+          <td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td>
+          <td class="admin-only">
             <button class="btn-danger" onclick="window.deleteProgramme('${p.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
-          </div>
+          </td>
+        </tr>
+      `).join('') : '<tr><td colspan="5" class="text-center">No programmes found.</td></tr>';
+    }
+
+    function renderChestNumbers() {
+      const container = document.getElementById('chest-numbers-output-area');
+      const activeStds = state.students.filter(s => s.team === state.activeTeam);
+      container.innerHTML = activeStds.map(s => `
+        <div class="chest-card-box">
+          <div class="madrasa-name">AL MADRASATUL BADRIYA</div>
+          <div class="tag-line">KANA 2540 - PROGRAMME SYSTEM</div>
+          <div class="chest-number-big">${s.chestNo || '000'}</div>
+          <div><span class="zone-badge">${s.category}</span></div>
+          <div class="screen-student-name">${s.name} (Class ${s.class})</div>
         </div>
       `).join('');
     }
-
-    window.editStudent = (id) => {
-      if (!state.isAdmin) return showToast('Admin access required', 'warning');
-      const s = state.students.find(x => x.id === id);
-      if (!s) return;
-      document.getElementById('student-doc-id').value = s.id;
-      document.getElementById('student-chest-input').value = s.chestNo || '';
-      document.getElementById('student-name-input').value = s.name;
-      document.getElementById('student-gender-input').value = s.gender;
-      document.getElementById('student-class-input').value = s.class;
-      document.getElementById('student-category-input').value = s.category;
-      openModal('modal-student');
-    };
 
     window.deleteStudent = async (id) => {
       if (!state.isAdmin) return showToast('Admin access required', 'warning');
@@ -1520,45 +921,13 @@
       if (confirm('Delete programme?')) await deleteDoc(doc(db, 'programmes', id));
     };
 
-    window.showDashboardDetails = (type) => {
-      const title = document.getElementById('dash-details-title');
-      const content = document.getElementById('dash-details-content');
-      let html = '';
-
-      const activeStudents = state.students.filter(s => s.team === state.activeTeam);
-
-      if (type.startsWith('total')) {
-        let list = activeStudents;
-        if (type === 'total-boys') list = list.filter(s => s.gender === 'Male');
-        if (type === 'total-girls') list = list.filter(s => s.gender === 'Female');
-
-        title.textContent = 'Students List';
-        html = `<table class="data-table"><thead><tr><th>Chest No</th><th>Name</th><th>Class</th><th>Category</th></tr></thead><tbody>${list.map(s => `<tr><td>${s.chestNo || '-'}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.category}</td></tr>`).join('')}</tbody></table>`;
-      } else {
-        let list = state.programmes;
-        if (type === 'boys-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Male');
-        if (type === 'girls-stage') list = list.filter(p => p.type === 'Stage' && p.gender === 'Female');
-        if (type === 'boys-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Male');
-        if (type === 'girls-non-stage') list = list.filter(p => p.type === 'Non-Stage' && p.gender === 'Female');
-
-        title.textContent = 'Programmes List';
-        html = `<table class="data-table"><thead><tr><th>Name</th><th>Type</th><th>Category</th><th>Gender</th></tr></thead><tbody>${list.map(p => `<tr><td>${p.name}</td><td>${p.type}</td><td>${p.category}</td><td>${p.gender === 'Male' ? 'Boys' : 'Girls'}</td></tr>`).join('')}</tbody></table>`;
-      }
-
-      content.innerHTML = html;
-      openModal('modal-dashboard-details');
-    };
-
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-    
-    function showToast(msg, type = 'success') {
+    function showToast(msg, type='success') {
       const c = document.getElementById('toast-container');
       const t = document.createElement('div');
-      t.className = `toast ${type}`;
-      t.textContent = msg;
-      c.appendChild(t); 
-      setTimeout(() => t.remove(), 3200);
+      t.className = `toast ${type}`; t.textContent = msg;
+      c.appendChild(t); setTimeout(() => t.remove(), 3000);
     }
   </script>
 </body>
