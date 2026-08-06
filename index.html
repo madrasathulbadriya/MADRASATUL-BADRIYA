@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AL MADRASATUL BADRIYA KANA 2540 - Programme Management System">
+  <title>AL MADRASATUL BADRIYA KANA 2540 - Programme Management System</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary-green: #0d5c3a;
+      --secondary-green: #1b8a5a;
+      --accent-gold: #d4af37;
+      --bg-light: #f8faf9;
+      --text-dark: #111827;
+      --card-bg-light: #ffffff;
+      --glass-border-light: rgba(13, 92, 58, 0.12);
+      --shadow-light: 0 10px 25px -3px rgba(0, 0, 0, 0.05);
+
+      --bg-dark: #0a110e;
+      --text-light: #f3f4f6;
+      --card-bg-dark: rgba(18, 30, 25, 0.95);
+      --glass-border-dark: rgba(212, 175, 55, 0.2);
+      --shadow-dark: 0 10px 25px -3px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.light-mode { background-color: var(--bg-light); color: var(--text-dark); }
+    body.dark-mode { background-color: var(--bg-dark); color: var(--text-light); }
+
+    .app-container { display: flex; min-height: 100vh; position: relative; }
+
+    /* TEAM SELECTION GATEWAY FIXED */
+    #team-selection-gateway {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, #052214 0%, #0d5c3a 50%, #061a10 100%);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+      color: #ffffff;
+    }
+    #team-selection-gateway.hidden { display: none !important; }
+
+    .gateway-header h1 { font-family: 'Amiri', serif; font-size: 2rem; color: #ffffff; margin-bottom: 0.3rem; }
+    .gateway-header h2 { font-size: 1rem; color: var(--accent-gold); font-weight: 600; margin-bottom: 2rem; text-transform: uppercase; }
+
+    .teams-gateway-grid { display: flex; gap: 1.5rem; max-width: 800px; width: 100%; justify-content: center; flex-wrap: wrap; }
+    
+    .team-gateway-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid rgba(212, 175, 55, 0.3);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      flex: 1; min-width: 250px; max-width: 350px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .team-gateway-card:hover { transform: translateY(-6px); border-color: var(--accent-gold); background: rgba(212, 175, 55, 0.12); }
+
+    .team-gateway-icon { width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: var(--primary-green); color: white; }
+    .team-gateway-btn { padding: 0.65rem 1.5rem; border-radius: 30px; font-weight: 700; border: none; cursor: pointer; background: var(--accent-gold); color: #000; }
+
+    /* LAYOUT COMPONENTS */
+    .glass-card {
+      background: var(--card-bg-light);
+      border: 1px solid var(--glass-border-light);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-light);
+    }
+    body.dark-mode .glass-card {
+      background: var(--card-bg-dark);
+      border-color: var(--glass-border-dark);
+      box-shadow: var(--shadow-dark);
+    }
+
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(180deg, #052214 0%, #0d5c3a 100%);
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header { padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+    .sidebar-brand { display: flex; align-items: center; gap: 0.85rem; }
+    .sidebar-logo { font-size: 2rem; color: var(--accent-gold); }
+    .sidebar-title h3 { font-size: 0.85rem; font-weight: 700; }
+    .sidebar-title p { font-size: 0.65rem; color: var(--accent-gold); font-weight: 500; }
+
+    .sidebar-menu { flex: 1; overflow-y: auto; padding: 0.5rem 0; }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1.25rem;
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+    }
+    .nav-item i { width: 20px; text-align: center; }
+    .nav-item:hover, .nav-item.active { background: rgba(212, 175, 55, 0.18); color: var(--accent-gold); border-left: 4px solid var(--accent-gold); }
+
+    .sidebar-footer { padding: 1rem 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-size: 0.85rem;
+    }
+
+    .main-content { flex: 1; margin-left: 280px; display: flex; flex-direction: column; min-width: 0; }
+
+    .topbar {
+      height: 70px;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--glass-border-light);
+      background: var(--card-bg-light);
+      position: sticky; top: 0; z-index: 90;
+    }
+    body.dark-mode .topbar { background: var(--card-bg-dark); border-bottom-color: var(--glass-border-dark); }
+
+    .view-container { padding: 1.8rem; flex: 1; }
+    .app-view { display: none; }
+    .app-view.active { display: block; }
+
+    .hero-banner {
+      background: linear-gradient(135deg, #052214 0%, #0d5c3a 100%);
+      color: white;
+      padding: 1.8rem 2rem;
+      border-radius: 18px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-banner h1 { font-size: 1.5rem; }
+    .hero-banner h1 span { color: var(--accent-gold); }
+
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; }
+    .stat-card {
+      background: var(--card-bg-light);
+      border: 1px solid var(--glass-border-light);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex; 
+      align-items: center; 
+      gap: 1.1rem;
+    }
+    body.dark-mode .stat-card { background: var(--card-bg-dark); border-color: var(--glass-border-dark); }
+
+    .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: white; background: var(--primary-green); }
+
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; }
+
+    .form-control {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(0,0,0,0.15);
+      background: rgba(255, 255, 255, 0.8);
+      font-size: 0.92rem; outline: none;
+    }
+    body.dark-mode .form-control { background: rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.15); color: white; }
+
+    .btn-primary { background: var(--primary-green); color: white; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-secondary { background: var(--accent-gold); color: #072e1d; border: none; padding: 0.75rem 1.25rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-danger { background: #dc2626; color: white; border: none; padding: 0.5rem 0.85rem; border-radius: 6px; cursor: pointer; }
+
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.88rem; }
+    .data-table th, .data-table td { padding: 0.75rem 0.85rem; border-bottom: 1px solid rgba(0, 0, 0, 0.06); }
+    .data-table th { font-weight: 700; color: var(--accent-gold); }
+
+    .badge { padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
+    .badge-admin { background: var(--accent-gold); color: #072e1d; }
+    .badge-visitor { background: #6b7280; color: white; }
+
+    .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.65); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+    .modal.active { display: flex; }
+    .modal-content { width: 100%; max-width: 550px; background: var(--bg-light); border-radius: 16px; padding: 1.5rem; max-height: 90vh; overflow-y: auto; }
+    body.dark-mode .modal-content { background: var(--bg-dark); }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+    .close-modal { background: none; border: none; font-size: 1.6rem; cursor: pointer; color: inherit; }
+
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 2000; display: flex; flex-direction: column; gap: 0.6rem; }
+    .toast { padding: 0.9rem 1.3rem; border-radius: 8px; background: #10b981; color: #fff; font-size: 0.9rem; font-weight: 500; }
+
+    .mobile-only { display: none; }
+    .full-width { width: 100%; } .mt-2 { margin-top: 1rem; } .mb-2 { margin-bottom: 1rem; }
+
+    @media (max-width: 900px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .mobile-only { display: inline-flex; }
+    }
+
+    @media print {
+      body, html { background: #fff !important; color: #000 !important; }
+      .sidebar, .topbar, .btn-primary, .btn-secondary, .btn-danger, .no-print, #team-selection-gateway { display: none !important; }
+      .main-content { margin-left: 0 !important; }
+      .view-container { padding: 0 !important; }
+      .app-view { display: none !important; }
+      .app-view.active { display: block !important; }
+    }
+  </style>
+</head>
+<body class="light-mode">
+
+  <!-- TEAM SELECTION GATEWAY -->
+  <div id="team-selection-gateway">
+    <div class="gateway-header">
+      <h1 id="gateway-madrasa-title">AL MADRASATUL BADRIYA KANA 2540</h1>
+      <h2>Programme Management System</h2>
+    </div>
+    <p style="margin-bottom: 1.5rem; opacity: 0.8;">Select Team to Access Gateway</p>
+    <div class="teams-gateway-grid" id="teams-gateway-container"></div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <div class="app-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <i class="fa-solid fa-mosque sidebar-logo"></i>
+          <div class="sidebar-title">
+            <h3 id="side-madrasa-name">AL MADRASATUL BADRIYA</h3>
+            <p id="side-prog-name">KANA 2540</p>
+          </div>
+        </div>
+        <button id="close-sidebar" class="mobile-only btn-danger" style="padding:0.2rem 0.5rem;"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <nav class="sidebar-menu">
+        <a href="#" class="nav-item active" data-view="dashboard"><i class="fa-solid fa-chart-line"></i> <span>Dashboard</span></a>
+        <a href="#" class="nav-item" data-view="students"><i class="fa-solid fa-user-graduate"></i> <span>Students</span></a>
+        <a href="#" class="nav-item" data-view="programmes"><i class="fa-solid fa-microphone"></i> <span>Programmes</span></a>
+        <a href="#" class="nav-item" data-view="bulk-assign"><i class="fa-solid fa-list-check"></i> <span>Bulk Assignment</span></a>
+        <a href="#" class="nav-item" data-view="pdf-export"><i class="fa-solid fa-file-pdf"></i> <span>PDF Export</span></a>
+        <a href="#" class="nav-item" data-view="reports"><i class="fa-solid fa-file-invoice"></i> <span>Reports</span></a>
+        <a href="#" class="nav-item" data-view="settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="mb-2">
+          <span class="badge badge-visitor" id="role-badge">View Only Mode</span>
+        </div>
+        <button id="btn-auth-action" class="btn-primary full-width mb-2"><i class="fa-solid fa-right-to-bracket"></i> Admin Login</button>
+
+        <a href="https://wa.me/919113695271" target="_blank" class="btn-whatsapp full-width">
+          <i class="fa-brands fa-whatsapp"></i> Helpline Support
+        </a>
+
+        <div style="text-align: center; margin-top: 0.8rem; font-size: 0.7rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 0.6rem;">
+          <span style="opacity: 0.7; color: #fff;">Designed & Developed by</span><br>
+          <strong style="color: var(--accent-gold);">ABDUL KAREEM FAZILY AL-JALALI</strong>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      <header class="topbar">
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <button id="toggle-sidebar" class="mobile-only btn-primary"><i class="fa-solid fa-bars"></i></button>
+          <h2 id="page-title">Dashboard</h2>
+        </div>
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <span id="active-team-pill" class="badge badge-admin" style="display:none;"></span>
+          <button id="theme-toggle" class="btn-secondary"><i class="fa-solid fa-moon"></i></button>
+        </div>
+      </header>
+
+      <div id="view-container" class="view-container">
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="app-view active">
+          <div class="hero-banner">
+            <h1 id="dash-madrasa-title">AL MADRASATUL BADRIYA <span>KANA 2540</span></h1>
+            <p style="font-size:0.85rem; opacity:0.9; margin-top:0.4rem;">Madrasa Programme Management System</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+              <div><p style="font-size:0.8rem; opacity:0.8;">Total Students</p><h3 id="stat-total-students">0</h3></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-mars"></i></div>
+              <div><p style="font-size:0.8rem; opacity:0.8;">Boys</p><h3 id="stat-boys">0</h3></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-venus"></i></div>
+              <div><p style="font-size:0.8rem; opacity:0.8;">Girls</p><h3 id="stat-girls">0</h3></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-microphone"></i></div>
+              <div><p style="font-size:0.8rem; opacity:0.8;">Stage Programmes</p><h3 id="stat-stage-progs">0</h3></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+              <div><p style="font-size:0.8rem; opacity:0.8;">Non-Stage Programmes</p><h3 id="stat-non-stage-progs">0</h3></div>
+            </div>
+          </div>
+
+          <div class="glass-card mt-2">
+            <h3>System Activity Log</h3>
+            <ul id="activity-log-list" style="list-style:none; padding-top:0.8rem; font-size:0.85rem;">
+              <li style="opacity:0.6;">No activity recorded yet.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- STUDENTS VIEW -->
+        <section id="view-students" class="app-view">
+          <div class="glass-card mb-2">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2>Student Directory</h2>
+              <button id="btn-add-student" class="btn-primary admin-only"><i class="fa-solid fa-plus"></i> Add Student</button>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Chest No</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Class</th>
+                    <th>Category</th>
+                    <th>Team</th>
+                    <th class="admin-only">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-students"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROGRAMMES VIEW -->
+        <section id="view-programmes" class="app-view">
+          <div class="glass-card mb-2">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+              <h2>Programme Management</h2>
+              <div class="admin-only" style="display:flex; gap:0.5rem;">
+                <button id="btn-add-stage-prog" class="btn-primary"><i class="fa-solid fa-plus"></i> Add Stage</button>
+                <button id="btn-add-non-stage-prog" class="btn-secondary"><i class="fa-solid fa-plus"></i> Add Non-Stage</button>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Programme Name</th>
+                    <th>Type</th>
+                    <th>Category</th>
+                    <th>Assigned Count</th>
+                    <th class="admin-only">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="tbody-programmes"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- BULK ASSIGNMENT VIEW -->
+        <section id="view-bulk-assign" class="app-view">
+          <div class="glass-card mb-2">
+            <h2>Bulk Programme Assignment</h2>
+            <p style="font-size:0.85rem; opacity:0.8;">പ്രോഗ്രാമുകൾ തിരഞ്ഞെടുത്ത് കുട്ടികളെ കൂട്ടമായി അസൈൻ ചെയ്യാം.</p>
+            <hr style="margin:1rem 0; opacity:0.2;">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Select Programme</label>
+                <select id="bulk-prog-select" class="form-control" onchange="renderBulkChecklist()"></select>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div id="bulk-students-checklist" style="max-height: 400px; overflow-y: auto;"></div>
+            <button id="btn-save-bulk" class="btn-primary mt-2 admin-only" onclick="saveBulkAssignments()"><i class="fa-solid fa-check"></i> Save Bulk Assignments</button>
+          </div>
+        </section>
+
+        <!-- PDF EXPORT VIEW -->
+        <section id="view-pdf-export" class="app-view">
+          <div class="glass-card mb-2 no-print">
+            <h2>Category-wise PDF Export</h2>
+            <p style="font-size:0.85rem; opacity:0.8;">കാറ്റഗറി തിരിച്ചുള്ള ഡാറ്റ റിപ്പോർട്ടുകൾ പിഡിഎഫ് ആയി എക്സ്പോർട്ട് ചെയ്യാം.</p>
+            <hr style="margin:1rem 0; opacity:0.2;">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Select Category</label>
+                <select id="pdf-category-select" class="form-control" onchange="renderCategoryPDFPreview()">
+                  <option value="HIGH ZONE">HIGH ZONE</option>
+                  <option value="MID ZONE">MID ZONE</option>
+                  <option value="GROUND ZONE">GROUND ZONE</option>
+                </select>
+              </div>
+              <div class="form-group" style="justify-content: flex-end;">
+                <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Download PDF / Print</button>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div id="pdf-preview-output"></div>
+          </div>
+        </section>
+
+        <!-- REPORTS VIEW -->
+        <section id="view-reports" class="app-view">
+          <div class="glass-card mb-2 no-print">
+            <h2>Printable Reports</h2>
+            <div class="form-grid mt-2">
+              <div class="form-group">
+                <label>Select Report View</label>
+                <select id="report-type-select" class="form-control" onchange="renderReports()">
+                  <option value="student-list">Full Student List</option>
+                  <option value="category-list">Category-wise Report</option>
+                  <option value="team-list">Team-wise Report</option>
+                  <option value="programme-list">Programme-wise List</option>
+                </select>
+              </div>
+              <div class="form-group" style="justify-content: flex-end;">
+                <button onclick="window.print()" class="btn-secondary"><i class="fa-solid fa-print"></i> Print Report</button>
+              </div>
+            </div>
+          </div>
+          <div class="glass-card">
+            <div id="report-output-container"></div>
+          </div>
+        </section>
+
+        <!-- SETTINGS VIEW -->
+        <section id="view-settings" class="app-view">
+          <div class="glass-card mb-2">
+            <h2>System Customization Settings</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">Configure system preferences dynamically.</p>
+            <hr style="margin: 1rem 0; opacity: 0.2;">
+            <form id="form-settings" class="admin-only">
+              <div class="form-grid">
+                <div class="form-group">
+                  <label>Madrasa Name</label>
+                  <input type="text" id="setting-madrasa-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Programme Name</label>
+                  <input type="text" id="setting-prog-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Categories (Comma Separated)</label>
+                  <input type="text" id="setting-categories" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label>Classes (Comma Separated)</label>
+                  <input type="text" id="setting-classes" class="form-control" required>
+                </div>
+              </div>
+              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Settings</button>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <div id="modal-auth" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Admin Authentication</h3>
+        <button class="close-modal">×</button>
+      </div>
+      <form id="form-login">
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="Default: admin" required>
+        </div>
+        <button type="submit" class="btn-primary full-width mt-2">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-student" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-student-title">Add Student</h3>
+        <button class="close-modal">×</button>
+      </div>
+      <form id="form-student">
+        <input type="hidden" id="student-doc-id">
+        <div class="form-group">
+          <label>Chest Number</label>
+          <input type="text" id="student-chest-input" class="form-control" required>
+        </div>
+        <div class="form-group mt-2">
+          <label>Student Name</label>
+          <input type="text" id="student-name-input" class="form-control" required>
+        </div>
+        <div class="form-grid mt-2">
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="student-gender-input" class="form-control" required>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Class</label>
+            <select id="student-class-input" class="form-control" required></select>
+          </div>
+        </div>
+        <div class="form-grid mt-2">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="student-category-input" class="form-control" required></select>
+          </div>
+          <div class="form-group">
+            <label>Team</label>
+            <select id="student-team-input" class="form-control"></select>
+          </div>
+        </div>
+        <button type="submit" class="btn-primary full-width mt-2">Save Record</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-programme" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-prog-title">Add Programme</h3>
+        <button class="close-modal">×</button>
+      </div>
+      <form id="form-programme">
+        <input type="hidden" id="prog-doc-id">
+        <input type="hidden" id="prog-type-input">
+        <div class="form-group">
+          <label>Programme Name</label>
+          <input type="text" id="prog-name-input" class="form-control" required>
+        </div>
+        <div class="form-group mt-2">
+          <label>Category</label>
+          <select id="prog-category-input" class="form-control" required></select>
+        </div>
+        <button type="submit" class="btn-primary full-width mt-2">Save Programme</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FIREBASE INTEGRATION MODULE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-analytics.js";
+    import { 
+      getFirestore, collection, addDoc, doc, setDoc, updateDoc, deleteDoc, onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-firestore.js";
+
+    // Your Web App's Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpJIuZ6QydDVdWyyF3rUzOTJKYVXOB9F0",
+      authDomain: "madrasatul-badriya.firebaseapp.com",
+      projectId: "madrasatul-badriya",
+      storageBucket: "madrasatul-badriya.firebasestorage.app",
+      messagingSenderId: "116617898354",
+      appId: "1:116617898354:web:8f690c74d274bdc08a55eb",
+      measurementId: "G-F0ZPDZQ8P4"
+    };
+
+    // Initialize Firebase Services
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    // SYSTEM LOCAL STATE
+    let state = {
+      settings: {
+        madrasaName: "AL MADRASATUL BADRIYA KANA 2540",
+        programmeName: "Programme Management System",
+        categories: ["HIGH ZONE", "MID ZONE", "GROUND ZONE"],
+        classes: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+      },
+      teams: [
+        { id: "team_nail", name: "FIRQATH-E- NAIL" },
+        { id: "team_seyhan", name: "FIRQATH-E- SEYHAN" }
+      ],
+      students: [],
+      programmes: [],
+      assignments: {},
+      logs: []
+    };
+
+    let isAdmin = false;
+    let selectedTeamFilter = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setupNavigation();
+      setupEventListeners();
+      setupFirestoreListeners();
+    });
+
+    function setupFirestoreListeners() {
+      // Listen to Students Collection Realtime Updates
+      onSnapshot(collection(db, "students"), (snapshot) => {
+        state.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderApp();
+      });
+
+      // Listen to Programmes Collection Realtime Updates
+      onSnapshot(collection(db, "programmes"), (snapshot) => {
+        state.programmes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        renderApp();
+      });
+
+      // Listen to Assignments Collection Realtime Updates
+      onSnapshot(collection(db, "assignments"), (snapshot) => {
+        state.assignments = {};
+        snapshot.docs.forEach(doc => {
+          const data = doc.data();
+          state.assignments[data.progId] = data.studentIds || [];
+        });
+        renderApp();
+      });
+    }
+
+    function setupNavigation() {
+      const navItems = document.querySelectorAll('.nav-item');
+      const views = document.querySelectorAll('.app-view');
+
+      navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = item.getAttribute('data-view');
+          navItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+
+          views.forEach(v => {
+            if (v.id === `view-${target}`) v.classList.add('active');
+            else v.classList.remove('active');
+          });
+
+          document.getElementById('page-title').textContent = item.querySelector('span').textContent;
+          document.getElementById('sidebar').classList.remove('open');
+        });
+      });
+
+      document.getElementById('toggle-sidebar').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.add('open');
+      });
+
+      document.getElementById('close-sidebar').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.remove('open');
+      });
+
+      document.getElementById('theme-toggle').addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        document.body.classList.toggle('light-mode');
+      });
+    }
+
+    function setupEventListeners() {
+      document.getElementById('btn-auth-action').addEventListener('click', () => {
+        if (isAdmin) {
+          isAdmin = false;
+          showToast('Signed out of Admin Mode');
+          renderApp();
+        } else {
+          openModal('modal-auth');
+        }
+      });
+
+      document.getElementById('form-login').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pwd = document.getElementById('login-password').value;
+        if (pwd === 'admin' || pwd === '2540') {
+          isAdmin = true;
+          closeModal('modal-auth');
+          showToast('Admin Mode Granted');
+          renderApp();
+        } else {
+          alert('Incorrect password');
+        }
+      });
+
+      document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+          btn.closest('.modal').classList.remove('active');
+        });
+      });
+
+      document.getElementById('btn-add-student').addEventListener('click', () => {
+        document.getElementById('form-student').reset();
+        document.getElementById('student-doc-id').value = '';
+        document.getElementById('modal-student-title').textContent = 'Add Student';
+        openModal('modal-student');
+      });
+
+      document.getElementById('form-student').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const docId = document.getElementById('student-doc-id').value;
+        const studentObj = {
+          chestNo: document.getElementById('student-chest-input').value,
+          name: document.getElementById('student-name-input').value,
+          gender: document.getElementById('student-gender-input').value,
+          class: document.getElementById('student-class-input').value,
+          category: document.getElementById('student-category-input').value,
+          team: document.getElementById('student-team-input').value || null
+        };
+
+        try {
+          if (docId) {
+            await updateDoc(doc(db, "students", docId), studentObj);
+            showToast('Student updated successfully');
+          } else {
+            await addDoc(collection(db, "students"), studentObj);
+            showToast('Student added successfully');
+          }
+          closeModal('modal-student');
+        } catch (err) {
+          console.error(err);
+          showToast('Error saving student');
+        }
+      });
+
+      document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgModal('Stage'));
+      document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgModal('Non-Stage'));
+
+      document.getElementById('form-programme').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const docId = document.getElementById('prog-doc-id').value;
+        const progObj = {
+          name: document.getElementById('prog-name-input').value,
+          type: document.getElementById('prog-type-input').value,
+          category: document.getElementById('prog-category-input').value
+        };
+
+        try {
+          if (docId) {
+            await updateDoc(doc(db, "programmes", docId), progObj);
+            showToast('Programme updated successfully');
+          } else {
+            await addDoc(collection(db, "programmes"), progObj);
+            showToast('Programme saved successfully');
+          }
+          closeModal('modal-programme');
+        } catch (err) {
+          console.error(err);
+          showToast('Error saving programme');
+        }
+      });
+    }
+
+    function renderApp() {
+      document.getElementById('side-madrasa-name').textContent = state.settings.madrasaName;
+      document.getElementById('side-prog-name').textContent = state.settings.programmeName;
+      document.getElementById('dash-madrasa-title').innerHTML = `${state.settings.madrasaName} <span>${state.settings.programmeName}</span>`;
+      document.getElementById('gateway-madrasa-title').textContent = state.settings.madrasaName;
+
+      const roleBadge = document.getElementById('role-badge');
+      const authBtn = document.getElementById('btn-auth-action');
+      if (isAdmin) {
+        roleBadge.textContent = 'Admin Mode';
+        roleBadge.className = 'badge badge-admin';
+        authBtn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Sign Out';
+        document.querySelectorAll('.admin-only').forEach(el => el.style.display = '');
+      } else {
+        roleBadge.textContent = 'View Only Mode';
+        roleBadge.className = 'badge badge-visitor';
+        authBtn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Admin Login';
+        document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+      }
+
+      const gateway = document.getElementById('team-selection-gateway');
+      const teamPill = document.getElementById('active-team-pill');
+
+      // TEAM GATEWAY FIX
+      if (state.teams.length > 0 && selectedTeamFilter === null) {
+        gateway.classList.remove('hidden');
+        renderGatewayTeams();
+      } else {
+        gateway.classList.add('hidden');
+        if (selectedTeamFilter) {
+          const t = state.teams.find(x => x.id === selectedTeamFilter);
+          teamPill.style.display = 'inline-block';
+          teamPill.textContent = `Team: ${t ? t.name : 'All'}`;
+        } else {
+          teamPill.style.display = 'none';
+        }
+      }
+
+      let visibleStudents = state.students;
+      if (selectedTeamFilter) {
+        visibleStudents = state.students.filter(s => s.team === selectedTeamFilter);
+      }
+
+      document.getElementById('stat-total-students').textContent = visibleStudents.length;
+      document.getElementById('stat-boys').textContent = visibleStudents.filter(s => s.gender === 'Male').length;
+      document.getElementById('stat-girls').textContent = visibleStudents.filter(s => s.gender === 'Female').length;
+      document.getElementById('stat-stage-progs').textContent = state.programmes.filter(p => p.type === 'Stage').length;
+      document.getElementById('stat-non-stage-progs').textContent = state.programmes.filter(p => p.type === 'Non-Stage').length;
+
+      populateDropdowns();
+
+      renderStudentsTable(visibleStudents);
+      renderProgrammesTable();
+      renderBulkProgrammeOptions();
+      renderBulkChecklist();
+      renderCategoryPDFPreview();
+      renderReports();
+    }
+
+    function renderGatewayTeams() {
+      const container = document.getElementById('teams-gateway-container');
+      container.innerHTML = state.teams.map(t => `
+        <div class="team-gateway-card" onclick="selectTeamGateway('${t.id}')">
+          <div class="team-gateway-icon"><i class="fa-solid fa-users"></i></div>
+          <h3>${t.name}</h3>
+          <button class="team-gateway-btn">Enter Gateway</button>
+        </div>
+      `).join('') + `
+        <div class="team-gateway-card" onclick="selectTeamGateway(null)">
+          <div class="team-gateway-icon" style="background:#6b7280;"><i class="fa-solid fa-globe"></i></div>
+          <h3>All Teams / Main View</h3>
+          <button class="team-gateway-btn" style="background:#6b7280; color:#fff;">View All</button>
+        </div>
+      `;
+    }
+
+    window.selectTeamGateway = function(teamId) {
+      selectedTeamFilter = teamId;
+      renderApp();
+    };
+
+    function populateDropdowns() {
+      const catSelects = [document.getElementById('student-category-input'), document.getElementById('prog-category-input')];
+      catSelects.forEach(sel => {
+        if (!sel) return;
+        sel.innerHTML = state.settings.categories.map(c => `<option value="${c}">${c}</option>`).join('');
+      });
+
+      const classSelect = document.getElementById('student-class-input');
+      if (classSelect) {
+        classSelect.innerHTML = state.settings.classes.map(c => `<option value="${c}">Class ${c}</option>`).join('');
+      }
+
+      const teamSelect = document.getElementById('student-team-input');
+      if (teamSelect) {
+        teamSelect.innerHTML = '<option value="">-- No Team --</option>' + state.teams.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+      }
+    }
+
+    function renderStudentsTable(students) {
+      const tbody = document.getElementById('tbody-students');
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No students found.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = students.map(s => {
+        const teamObj = state.teams.find(t => t.id === s.team);
+        return `
+          <tr>
+            <td><strong>${s.chestNo}</strong></td>
+            <td>${s.name}</td>
+            <td>${s.gender}</td>
+            <td>Class ${s.class}</td>
+            <td><span class="badge badge-visitor">${s.category}</span></td>
+            <td>${teamObj ? teamObj.name : '-'}</td>
+            <td class="admin-only">
+              <button class="btn-primary" style="padding:0.3rem 0.6rem;" onclick="editStudent('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn-danger" style="padding:0.3rem 0.6rem;" onclick="deleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.editStudent = function(id) {
+      const s = state.students.find(x => x.id === id);
+      if (!s) return;
+
+      document.getElementById('student-doc-id').value = s.id;
+      document.getElementById('student-chest-input').value = s.chestNo;
+      document.getElementById('student-name-input').value = s.name;
+      document.getElementById('student-gender-input').value = s.gender;
+      document.getElementById('student-class-input').value = s.class;
+      document.getElementById('student-category-input').value = s.category;
+      document.getElementById('student-team-input').value = s.team || '';
+
+      document.getElementById('modal-student-title').textContent = 'Edit Student';
+      openModal('modal-student');
+    };
+
+    window.deleteStudent = async function(id) {
+      if (!confirm('Are you sure you want to delete this student record?')) return;
+      try {
+        await deleteDoc(doc(db, "students", id));
+        showToast('Student deleted');
+      } catch (err) {
+        console.error(err);
+        showToast('Error deleting student');
+      }
+    };
+
+    function openProgModal(type) {
+      document.getElementById('form-programme').reset();
+      document.getElementById('prog-doc-id').value = '';
+      document.getElementById('prog-type-input').value = type;
+      document.getElementById('modal-prog-title').textContent = `Add ${type} Programme`;
+      openModal('modal-programme');
+    }
+
+    function renderProgrammesTable() {
+      const tbody = document.getElementById('tbody-programmes');
+      if (state.programmes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No programmes created.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = state.programmes.map(p => {
+        const assigned = state.assignments[p.id] || [];
+        return `
+          <tr>
+            <td><strong>${p.name}</strong></td>
+            <td>${p.type}</td>
+            <td><span class="badge badge-visitor">${p.category}</span></td>
+            <td>${assigned.length} Student(s)</td>
+            <td class="admin-only">
+              <button class="btn-danger" style="padding:0.3rem 0.6rem;" onclick="deleteProgramme('${p.id}')"><i class="fa-solid fa-trash"></i></button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    window.deleteProgramme = async function(id) {
+      if (!confirm('Delete this programme?')) return;
+      try {
+        await deleteDoc(doc(db, "programmes", id));
+        await deleteDoc(doc(db, "assignments", id));
+        showToast('Programme deleted');
+      } catch (err) {
+        console.error(err);
+        showToast('Error deleting programme');
+      }
+    };
+
+    function renderBulkProgrammeOptions() {
+      const select = document.getElementById('bulk-prog-select');
+      if (!select) return;
+      select.innerHTML = '<option value="">-- Select Programme --</option>' + state.programmes.map(p => `
+        <option value="${p.id}">${p.name} (${p.category})</option>
+      `).join('');
+    }
+
+    window.renderBulkChecklist = function() {
+      const progId = document.getElementById('bulk-prog-select')?.value;
+      const container = document.getElementById('bulk-students-checklist');
+      if (!container) return;
+
+      if (!progId) {
+        container.innerHTML = '<p style="opacity:0.6;">പ്രോഗ്രാം തിരഞ്ഞെടുത്ത ശേഷം കുട്ടികളെ കാണാം.</p>';
+        return;
+      }
+
+      const prog = state.programmes.find(p => p.id === progId);
+      const eligible = state.students.filter(s => s.category === prog.category);
+      const currentlyAssigned = state.assignments[progId] || [];
+
+      if (eligible.length === 0) {
+        container.innerHTML = '<p>ഈ കാറ്റഗറിയിൽ കുട്ടികൾ ലഭ്യമല്ല.</p>';
+        return;
+      }
+
+      container.innerHTML = eligible.map(s => `
+        <div style="display:flex; align-items:center; gap:0.8rem; padding:0.5rem 0; border-bottom:1px solid rgba(0,0,0,0.05);">
+          <input type="checkbox" class="bulk-std-cb" value="${s.id}" id="bulk_cb_${s.id}" ${currentlyAssigned.includes(s.id) ? 'checked' : ''} style="width:18px; height:18px;">
+          <label for="bulk_cb_${s.id}"><strong>[Chest No: ${s.chestNo}]</strong> ${s.name} (Class ${s.class})</label>
+        </div>
+      `).join('');
+    };
+
+    window.saveBulkAssignments = async function() {
+      const progId = document.getElementById('bulk-prog-select')?.value;
+      if (!progId) return alert('Select a programme first');
+
+      const selected = Array.from(document.querySelectorAll('.bulk-std-cb:checked')).map(cb => cb.value);
+
+      try {
+        await setDoc(doc(db, "assignments", progId), {
+          progId,
+          studentIds: selected
+        });
+        showToast('Bulk assignments saved!');
+      } catch (err) {
+        console.error(err);
+        showToast('Error saving bulk assignments');
+      }
+    };
+
+    window.renderCategoryPDFPreview = function() {
+      const cat = document.getElementById('pdf-category-select')?.value;
+      const output = document.getElementById('pdf-preview-output');
+      if (!output) return;
+
+      const catProgs = state.programmes.filter(p => p.category === cat);
+      if (catProgs.length === 0) {
+        output.innerHTML = `<p style="color:#ef4444;">${cat} കാറ്റഗറിയിൽ പ്രോഗ്രാമുകൾ ലഭ്യമല്ല.</p>`;
+        return;
+      }
+
+      let html = `<div style="text-align:center; margin-bottom:1.5rem; border-bottom:2px solid var(--primary-green); padding-bottom:1rem;">
+        <h2 style="color:var(--primary-green);">${state.settings.madrasaName}</h2>
+        <h3>Category-wise Programme Sheet: ${cat}</h3>
+      </div>`;
+
+      catProgs.forEach(p => {
+        const assignedIds = state.assignments[p.id] || [];
+        const students = state.students.filter(s => assignedIds.includes(s.id));
+
+        html += `
+          <div style="margin-bottom:1.5rem;">
+            <h4 style="background:var(--primary-green); color:white; padding:0.4rem 0.8rem; border-radius:6px;">${p.name} (${p.type})</h4>
+            <table class="data-table" style="margin-top:0.5rem;">
+              <thead><tr><th>Chest No</th><th>Student Name</th><th>Class</th></tr></thead>
+              <tbody>
+                ${students.length > 0 ? students.map(s => `<tr><td>${s.chestNo}</td><td>${s.name}</td><td>Class ${s.class}</td></tr>`).join('') : '<tr><td colspan="3">No participants assigned.</td></tr>'}
+              </tbody>
+            </table>
+          </div>
+        `;
+      });
+
+      output.innerHTML = html;
+    };
+
+    window.renderReports = function() {
+      const type = document.getElementById('report-type-select').value;
+      const container = document.getElementById('report-output-container');
+
+      let html = `<div style="text-align:center; margin-bottom:1.5rem;">
+        <h2 style="color:var(--primary-green);">${state.settings.madrasaName}</h2>
+        <h4>${state.settings.programmeName} - Printable Report</h4>
+      </div>`;
+
+      if (type === 'student-list') {
+        html += `
+          <table class="data-table">
+            <thead>
+              <tr><th>Chest No</th><th>Student Name</th><th>Gender</th><th>Class</th><th>Category</th></tr>
+            </thead>
+            <tbody>
+              ${state.students.map(s => `<tr><td>${s.chestNo}</td><td>${s.name}</td><td>${s.gender}</td><td>Class ${s.class}</td><td>${s.category}</td></tr>`).join('')}
+            </tbody>
+          </table>
+        `;
+      } else if (type === 'category-list') {
+        state.settings.categories.forEach(cat => {
+          const list = state.students.filter(s => s.category === cat);
+          html += `<h3 style="margin:1rem 0 0.5rem 0; color:var(--primary-green);">${cat} (${list.length})</h3>`;
+          html += `
+            <table class="data-table">
+              <thead><tr><th>Chest No</th><th>Name</th><th>Class</th></tr></thead>
+              <tbody>
+                ${list.map(s => `<tr><td>${s.chestNo}</td><td>${s.name}</td><td>Class ${s.class}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          `;
+        });
+      } else if (type === 'team-list') {
+        state.teams.forEach(team => {
+          const list = state.students.filter(s => s.team === team.id);
+          html += `<h3 style="margin:1rem 0 0.5rem 0; color:var(--primary-green);">${team.name} (${list.length})</h3>`;
+          html += `
+            <table class="data-table">
+              <thead><tr><th>Chest No</th><th>Name</th><th>Category</th></tr></thead>
+              <tbody>
+                ${list.map(s => `<tr><td>${s.chestNo}</td><td>${s.name}</td><td>${s.category}</td></tr>`).join('')}
+              </tbody>
+            </table>
+          `;
+        });
+      } else if (type === 'programme-list') {
+        state.programmes.forEach(prog => {
+          const assignedIds = state.assignments[prog.id] || [];
+          const list = state.students.filter(s => assignedIds.includes(s.id));
+          html += `<h3 style="margin:1rem 0 0.5rem 0; color:var(--primary-green);">${prog.name} [${prog.type} - ${prog.category}] (${list.length})</h3>`;
+          html += `
+            <table class="data-table">
+              <thead><tr><th>Chest No</th><th>Name</th><th>Class</th></tr></thead>
+              <tbody>
+                ${list.length > 0 ? list.map(s => `<tr><td>${s.chestNo}</td><td>${s.name}</td><td>Class ${s.class}</td></tr>`).join('') : '<tr><td colspan="3">No students assigned.</td></tr>'}
+              </tbody>
+            </table>
+          `;
+        });
+      }
+
+      container.innerHTML = html;
+    };
+
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+  </script>
+</body>
+</html>
