@@ -616,38 +616,56 @@
 </head>
 <body class="light-mode">
 
-  <!-- TEAM SELECTION GATEWAY WITH 4 TEAMS -->
+  <!-- TEAM SELECTION GATEWAY WITH GIRLS & BOYS GROUPS -->
   <div id="team-selection-gateway">
     <div class="gateway-header">
       <h1>AL MADRASATUL BADRIYA</h1>
       <h2>KANA 2540 MANAGEMENT SYSTEM</h2>
     </div>
-    <div class="gateway-subtitle">Select Your Team</div>
+    <div class="gateway-subtitle">Select Your Group</div>
     
-    <div class="teams-gateway-grid">
-      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- NAIL')">
-        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
-        <h3>FIRQATH-E- NAIL</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+    <div style="width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 2rem;">
+      
+      <!-- Girls Group Section -->
+      <div>
+        <h3 style="color: var(--accent-gold); margin-bottom: 1rem; text-align: left; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.4rem;">
+          <i class="fa-solid fa-venus" style="color:#db2777;"></i> Girls Group
+        </h3>
+        <div class="teams-gateway-grid">
+          <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- NAIL')">
+            <div class="team-gateway-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-flag"></i></div>
+            <h3>FIRQATH-E- NAIL</h3>
+            <button class="team-gateway-btn" style="background: #db2777;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+          </div>
+
+          <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- SEYHAN')">
+            <div class="team-gateway-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);"><i class="fa-solid fa-flag"></i></div>
+            <h3>FIRQATH-E- SEYHAN</h3>
+            <button class="team-gateway-btn" style="background: #db2777;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+          </div>
+        </div>
       </div>
 
-      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- SEYHAN')">
-        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
-        <h3>FIRQATH-E- SEYHAN</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+      <!-- Boys Group Section -->
+      <div>
+        <h3 style="color: var(--accent-gold); margin-bottom: 1rem; text-align: left; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 0.4rem;">
+          <i class="fa-solid fa-mars" style="color:#2563eb;"></i> Boys Group
+        </h3>
+        <div class="teams-gateway-grid">
+          <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- FURAATH')">
+            <div class="team-gateway-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fa-solid fa-flag"></i></div>
+            <h3>FIRQATH-E- FURAATH</h3>
+            <button class="team-gateway-btn" style="background: #2563eb;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+          </div>
+
+          <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E-JAIHOON')">
+            <div class="team-gateway-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fa-solid fa-flag"></i></div>
+            <h3>FIRQATH-E-JAIHOON</h3>
+            <button class="team-gateway-btn" style="background: #2563eb;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
+          </div>
+        </div>
       </div>
 
-      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E- FURAATH')">
-        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
-        <h3>FIRQATH-E- FURAATH</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
-      </div>
-
-      <div class="team-gateway-card" onclick="window.selectTeamAndEnter('FIRQATH-E-JAIHOON')">
-        <div class="team-gateway-icon"><i class="fa-solid fa-flag"></i></div>
-        <h3>FIRQATH-E-JAIHOON</h3>
-        <button class="team-gateway-btn"><i class="fa-solid fa-arrow-right-to-bracket"></i> Enter System</button>
-      </div>
     </div>
   </div>
 
@@ -736,7 +754,7 @@
           <div class="glass-card mb-2">
             <div class="team-info-grid">
               <div class="info-item">
-                <span class="info-label">Active Team Name</span>
+                <span class="info-label">Active Group Name</span>
                 <span id="dash-team-name" class="highlight-gold">Loading...</span>
               </div>
               <div class="info-item">
@@ -754,7 +772,7 @@
           <div class="glass-card mb-2" style="background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(13,92,58,0.1)); border: 1.5px solid var(--accent-gold);">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
               <div>
-                <h3><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Team Versus Comparison Portal</h3>
+                <h3><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Group Versus Comparison Portal</h3>
                 <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
               </div>
               <button onclick="window.openTeamVersusView()" class="btn-secondary"><i class="fa-solid fa-arrow-right"></i> Open Comparison View</button>
@@ -896,7 +914,7 @@
                     <th>Gender Section</th>
                     <th>Class</th>
                     <th>Category</th>
-                    <th>Team</th>
+                    <th>Group</th>
                     <th class="admin-only">Actions</th>
                   </tr>
                 </thead>
@@ -1069,13 +1087,13 @@
         <!-- SETTINGS VIEW -->
         <section id="view-settings" class="app-view">
           <div class="glass-card mb-2">
-            <h2><i class="fa-solid fa-gear" style="color:var(--accent-gold);"></i> Team Leadership Settings</h2>
-            <p style="font-size:0.85rem; opacity:0.8;">Updates apply exclusively to the currently active team.</p>
+            <h2><i class="fa-solid fa-gear" style="color:var(--accent-gold);"></i> Group Leadership Settings</h2>
+            <p style="font-size:0.85rem; opacity:0.8;">Updates apply exclusively to the currently active group.</p>
             <hr class="divider">
             <form id="form-team-settings" class="admin-only">
               <div class="form-grid">
                 <div class="form-group">
-                  <label>Active Team Name</label>
+                  <label>Active Group Name</label>
                   <input type="text" id="team-name-input" class="form-control" required readonly>
                 </div>
                 <div class="form-group">
@@ -1087,7 +1105,7 @@
                   <input type="text" id="team-girls-leaders-input" class="form-control" placeholder="Girls leader name">
                 </div>
               </div>
-              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Team Settings</button>
+              <button type="submit" class="btn-primary mt-2"><i class="fa-solid fa-floppy-disk"></i> Save Group Settings</button>
             </form>
           </div>
 
@@ -1127,10 +1145,10 @@
 
           <div class="glass-card">
             <h3><i class="fa-solid fa-database" style="color:var(--accent-gold);"></i> System Settings & Navigation</h3>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.3rem;">Switch between teams seamlessly.</p>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.3rem;">Switch between groups seamlessly.</p>
             <hr class="divider">
             <div class="flex-gap" style="flex-wrap:wrap;">
-              <button onclick="window.openTeamSwitchGateway()" class="btn-secondary" style="padding:0.6rem 1.2rem;"><i class="fa-solid fa-people-roof"></i> Switch Team Gateway</button>
+              <button onclick="window.openTeamSwitchGateway()" class="btn-secondary" style="padding:0.6rem 1.2rem;"><i class="fa-solid fa-people-roof"></i> Switch Group Gateway</button>
             </div>
           </div>
         </section>
@@ -1175,7 +1193,7 @@
                 <div><strong>Chest No:</strong> <span id="slip-out-id" style="font-weight:700;">-</span></div>
                 <div><strong>Class:</strong> <span id="slip-out-class">-</span></div>
                 <div><strong>Category:</strong> <span id="slip-out-category">-</span></div>
-                <div><strong>Team:</strong> <span id="slip-out-team" style="color:#d4af37; font-weight:700;">-</span></div>
+                <div><strong>Group:</strong> <span id="slip-out-team" style="color:#d4af37; font-weight:700;">-</span></div>
                 <div><strong>Gender Section:</strong> <span id="slip-out-gender">-</span></div>
               </div>
               <h4 style="border-bottom:1px solid #ccc; padding-bottom:0.3rem; margin-bottom:0.5rem; color:#0d5c3a;">Assigned Programmes List:</h4>
@@ -1220,8 +1238,8 @@
         <!-- TEAM VERSUS VIEW -->
         <section id="view-team-versus" class="app-view">
           <div class="glass-card mb-2 no-print">
-            <h2><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Team vs Team Head-to-Head Comparison</h2>
-            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് എല്ലാ ടീമുകളിലെയും മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
+            <h2><i class="fa-solid fa-code-compare" style="color:var(--accent-gold);"></i> Group vs Group Head-to-Head Comparison</h2>
+            <p style="font-size:0.85rem; opacity:0.8; margin-top:0.2rem;">മത്സരങ്ങൾ തിരഞ്ഞെടുത്ത് എല്ലാ ഗ്രൂപ്പുകളിലെയും മത്സരാർത്ഥികളെ ഒരേ പേജിൽ നേർക്കുനേർ കാണാം.</p>
             <hr class="divider">
             <div style="display:flex; flex-direction:column; gap:1.2rem;">
               <div class="form-group">
@@ -1753,8 +1771,8 @@
         };
         try {
           await robustSetDoc('teams', data, { merge: true }, state.activeTeam);
-          showToast('✓ Team settings updated successfully.', 'success');
-          logActivity(`Updated team leadership settings for ${state.activeTeam}`);
+          showToast('✓ Group settings updated successfully.', 'success');
+          logActivity(`Updated group leadership settings for ${state.activeTeam}`);
         } catch (err) {
           showToast('Error saving settings: ' + err.message, 'error');
         }
@@ -2031,7 +2049,7 @@
       if (!listEl) return;
 
       if (state.auditLogs.length === 0) {
-        listEl.innerHTML = `<li class="empty-state">No recent activities for this team.</li>`;
+        listEl.innerHTML = `<li class="empty-state">No recent activities for this group.</li>`;
         return;
       }
 
@@ -2143,7 +2161,7 @@
       subtitleEl.textContent = `All Programmes List | Category: ${selectedCategory} | Section: ${gender === 'Male' ? 'Boys Section' : 'Girls Section'}`;
 
       let fullHtml = '';
-      // Read all assignments globally from localDB/Firestore to extract participants for this team
+      // Read all assignments globally from localDB/Firestore to extract participants for this group
       const allAssigns = localDB.assignments || [];
       const activeAssignments = allAssigns.filter(a => a.team === state.activeTeam);
 
@@ -3239,7 +3257,7 @@
                    `🆔 *Chest No:* ${cleanRoll}\n` +
                    `📚 *Class:* ${s.class}\n` +
                    `🏷️ *Category:* ${s.category}\n` +
-                   `🚩 *Team:* ${s.team}\n` +
+                   `🚩 *Group:* ${s.team}\n` +
                    `_______________________________\n` +
                    `*Assigned Programmes List:* \n${progsText}\n` +
                    `_Al Madrasatul Badriya Kana 2540 Committee_\n` +
