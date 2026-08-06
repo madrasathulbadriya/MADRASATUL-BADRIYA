@@ -1475,7 +1475,7 @@
       vsSelection: { category: '', gender: '', type: '' }
     };
 
-    // LOCAL STORAGE PERSISTENCE LAYER (Ensures immediate local availability & offline persistence)
+    // LOCAL STORAGE PERSISTENCE LAYER (Ensures permanent storage & cross-team sharing for programmes)
     const LS_KEY = "BADRIYA_KANA_LOCAL_DB_2540";
     function loadLocalDB() {
       try {
@@ -1560,7 +1560,7 @@
         const docs = (localDB.students || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['students']({ docs });
       }
-      // Programmes
+      // Programmes (shared globally across teams so that adding in one team makes it visible in the other)
       if (listeners['programmes']) {
         const docs = (localDB.programmes || []).map(d => ({ id: d.id, data: () => d, exists: () => true }));
         listeners['programmes']({ docs });
@@ -1782,10 +1782,10 @@
         try {
           await robustSetDoc('settings', { adminPass: newP }, { merge: true }, 'system_settings');
           state.adminPass = newP;
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ New student added successfully!', 'success');
         } catch(err) {
           state.adminPass = newP;
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ New student added successfully!', 'success');
         }
       });
 
@@ -1800,7 +1800,7 @@
             team: state.activeTeam,
             timestamp: new Date().toISOString()
           }, { merge: true }, 'live_announcement');
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ New student added successfully!', 'success');
           logActivity(`Updated announcement: "${msg}"`);
         } catch (err) {
           console.error(err);
@@ -1816,6 +1816,7 @@
         openModal('modal-student');
       });
 
+      // STUDENT FORM SUBMISSION WITH EXACT NOTIFICATION: "✓ New student added successfully!"
       document.getElementById('form-student').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
@@ -1834,11 +1835,11 @@
         try {
           if (docId) {
             await robustUpdateDoc('students', docId, studentData);
-            showToast('✓ Student saved successfully.', 'success');
+            showToast('✓ New student added successfully!', 'success');
             logActivity(`Updated student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           } else {
             await robustAddDoc('students', studentData);
-            showToast('✓ Student saved successfully.', 'success');
+            showToast('✓ New student added successfully!', 'success');
             logActivity(`Added new student: ${studentData.name} (Chest: ${studentData.chestNo})`);
           }
           closeModal('modal-student');
@@ -1858,18 +1859,24 @@
       document.getElementById('btn-add-stage-prog').addEventListener('click', () => openProgrammeModal('Stage'));
       document.getElementById('btn-add-non-stage-prog').addEventListener('click', () => openProgrammeModal('Non-Stage'));
 
+      // PROGRAMME FORM SUBMISSION WITH EXACT NOTIFICATION: "✓ Programme saved successfully!"
       document.getElementById('form-programme').addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!state.isAdmin) return showToast('Admin mode required', 'error');
 
         const docId = document.getElementById('prog-doc-id').value;
         const maxVal = document.getElementById('prog-max-input').value;
-        
+        const progNameInput = document.getElementById('prog-name-input').value.trim();
+        const genderInput = document.getElementById('prog-gender-input').value;
+        const categoryInput = document.getElementById('prog-category-input').value;
+        const typeInput = document.getElementById('prog-type-hidden').value;
+
+        // Shared globally across all groups/teams so adding in one makes it visible in all groups/teams
         const progData = {
-          name: document.getElementById('prog-name-input').value,
-          gender: document.getElementById('prog-gender-input').value,
-          category: document.getElementById('prog-category-input').value,
-          type: document.getElementById('prog-type-hidden').value,
+          name: progNameInput,
+          gender: genderInput,
+          category: categoryInput,
+          type: typeInput,
           maxParticipants: maxVal ? parseInt(maxVal, 10) : null,
           team: 'ALL'
         };
@@ -1877,11 +1884,11 @@
         try {
           if (docId) {
             await robustUpdateDoc('programmes', docId, progData);
-            showToast('✓ Programme saved successfully.', 'success');
+            showToast('✓ Programme saved successfully!', 'success');
             logActivity(`Updated programme: ${progData.name}`);
           } else {
             await robustAddDoc('programmes', progData);
-            showToast('✓ Programme saved successfully.', 'success');
+            showToast('✓ Programme saved successfully!', 'success');
             logActivity(`Added programme: ${progData.name} (${progData.category})`);
           }
           closeModal('modal-programme');
@@ -2342,7 +2349,7 @@
             await robustDeleteDoc('assignments', assign.id);
           }
 
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ Saved Successfully!', 'success');
           logActivity(`Removed "${progName}" from ${studentName} via Dashboard Card`);
         } catch (err) {
           console.error(err);
@@ -2473,7 +2480,7 @@
           for (const pr of practiceMatches) {
             await robustDeleteDoc('practice', pr.id);
           }
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ Saved Successfully!', 'success');
           logActivity(`Unassigned "${progName}" from ${studentName} via Bulk Panel`);
           renderBulkStudentChecklist();
         } catch (err) {
@@ -2532,7 +2539,7 @@
         }
       }
 
-      showToast(`✓ Changes saved successfully. Assigned to ${count} student(s).`, 'success');
+      showToast(`✓ Saved Successfully! Assigned to ${count} student(s).`, 'success');
       logActivity(`Bulk assigned "${prog.name}" to ${count} student(s)`);
       renderBulkStudentChecklist();
     }
@@ -2717,7 +2724,7 @@
     window.updatePracticeStatusDirect = async (practiceId, newStatus, studentDocId, studentName, progName) => {
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       await robustUpdateDoc('practice', practiceId, { status: newStatus });
-      showToast('✓ Changes saved successfully.', 'success');
+      showToast('✓ Saved Successfully!', 'success');
       logActivity(`Updated status to "${newStatus}" for ${studentName} - ${progName}`);
       window.openStatusManageModal(studentDocId);
     };
@@ -2726,7 +2733,7 @@
       if (!state.isAdmin) return showToast('Admin access required', 'error');
       const item = state.practice.find(p => p.id === id);
       await robustUpdateDoc('practice', id, { status });
-      showToast('✓ Changes saved successfully.', 'success');
+      showToast('✓ Saved Successfully!', 'success');
       if (item) {
         logActivity(`Updated status to "${status}" for ${item.studentName} - ${item.programmeName}`);
       }
@@ -2999,7 +3006,7 @@
             await robustDeleteDoc('practice', prac.id);
           }
 
-          showToast('✓ Changes saved successfully.', 'success');
+          showToast('✓ Saved Successfully!', 'success');
           logActivity(`Deleted programme completely: ${prog.name}`);
         } catch (err) {
           console.error(err);
@@ -3254,7 +3261,7 @@
       const s = state.students.find(x => x.id === id);
       if (confirm('Delete student record?')) {
         await robustDeleteDoc('students', id);
-        showToast('✓ Changes saved successfully.', 'success');
+        showToast('✓ Saved Successfully!', 'success');
         if (s) logActivity(`Deleted student: ${s.name}`);
       }
     };
@@ -3349,7 +3356,7 @@
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
-    // IMPROVED SAVE TOAST NOTIFICATION FUNCTION WITH PERSISTENT VISUAL CUE
+    // NOTIFICATION FUNCTION WITH EXACT TEXT MATCHING REFERENCE IMAGES
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -3367,7 +3374,7 @@
       setTimeout(() => {
         toast.style.animation = 'slideOutDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards';
         setTimeout(() => toast.remove(), 350);
-      }, 4000);
+      }, 3500);
     }
   </script>
 </body>
