@@ -13,7 +13,7 @@
       --primary: #064e3b;
       --primary-light: #065f46;
       --accent: #d97706;
-      --bg: #f8fafc;
+      --bg: #f8faf9;
       --card-bg: #ffffff;
       --text: #1e293b;
       --border: #e2e8f0;
@@ -23,7 +23,6 @@
     body { background-color: var(--bg); color: var(--text); padding: 0.8rem; }
     .app-container { max-width: 600px; margin: 0 auto; }
 
-    /* App Bar / Header */
     .app-header {
       background: var(--primary);
       color: white;
@@ -35,7 +34,7 @@
       margin-bottom: 1rem;
       box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
     }
-    .header-title h2 { font-size: 1.1rem; font-weight: 700; letter-spacing: 0.5px; color: #fef08a; word-break: break-word; }
+    .header-title h2 { font-size: 1.1rem; font-weight: 700; color: #fef08a; word-break: break-word; }
     .header-title p { font-size: 0.7rem; opacity: 0.9; text-transform: uppercase; }
 
     .admin-btn {
@@ -52,21 +51,19 @@
       white-space: nowrap;
     }
 
-    /* Notice Card */
-    .notice-card {
-      background: #fff1f2;
-      border: 1px solid #fda4af;
-      border-left: 4px solid #e11d48;
-      border-radius: 8px;
-      padding: 0.9rem;
+    /* Notice Board Styling */
+    .notice-board {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-left: 5px solid var(--accent);
+      border-radius: 10px;
+      padding: 1rem;
       margin-bottom: 1rem;
-      font-size: 0.82rem;
-      color: #881337;
-      line-height: 1.4;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
-    .notice-card h4 { font-size: 0.88rem; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.3rem; }
+    .notice-board h3 { font-size: 0.95rem; color: #b45309; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem; }
+    .notice-text { font-size: 0.82rem; color: #78350f; line-height: 1.5; white-space: pre-wrap; }
 
-    /* Card Box */
     .card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -87,13 +84,12 @@
 
     .btn { width: 100%; padding: 0.6rem; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
     .btn-primary { background: var(--primary); color: white; }
+    .btn-warning { background: var(--accent); color: white; margin-top: 0.5rem; }
     .btn-danger { background: #ef4444; color: white; padding: 0.25rem 0.5rem; font-size: 0.7rem; border-radius: 4px; width: auto; }
 
-    /* Controls */
     .controls { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
     .controls input { flex: 1; }
 
-    /* Student List Styling */
     .section-title { font-size: 1.05rem; color: var(--primary); margin: 1.2rem 0 0.6rem 0; font-weight: 700; display: flex; align-items: center; gap: 0.4rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.2rem; }
     .class-heading { font-size: 0.88rem; color: var(--accent); margin: 0.8rem 0 0.4rem 0; font-weight: 700; text-transform: uppercase; }
 
@@ -135,14 +131,23 @@
       </button>
     </header>
 
-    <!-- Notice Card -->
-    <div class="notice-card">
-      <h4><i class="fa-solid fa-circle-exclamation"></i> Parent Notice / ಪೋಷಕರಿಗೆ ಸೂಚನೆ</h4>
-      <p><strong>English:</strong> Students with Story Telling & Speech must prepare daily.</p>
-      <p><strong>ಕನ್ನಡ:</strong> ಕಥೆ ಮತ್ತು ಭಾಷಣ ಸ್ಪರ್ಧೆಯ ಮಕ್ಕಳು ಪ್ರತಿದಿನ ಅಭ್ಯಾಸ ಮಾಡುವುದು ಕಡ್ಡಾಯ.</p>
+    <!-- Notice Board Section (Kannada) -->
+    <div class="notice-board">
+      <h3><i class="fa-solid fa-bullhorn"></i> ಅಧಿಕೃತ ಸೂಚನಾ ಫಲಕ (Notice Board)</h3>
+      <div id="notice-display-text" class="notice-text">Loading notice...</div>
     </div>
 
-    <!-- Admin Form -->
+    <!-- Admin Notice Edit Panel -->
+    <div id="admin-notice-panel" class="card hidden">
+      <h3><i class="fa-solid fa-pen-to-square"></i> Edit Notice Board (Kannada)</h3>
+      <div class="form-group">
+        <label>Type Notice Message</label>
+        <textarea id="notice-input" class="form-control" rows="5" placeholder="Enter notice here..."></textarea>
+      </div>
+      <button onclick="saveNotice()" class="btn btn-warning"><i class="fa-solid fa-floppy-disk"></i> Update Notice Board</button>
+    </div>
+
+    <!-- Admin Student Add Panel -->
     <div id="admin-panel" class="card hidden">
       <h3><i class="fa-solid fa-user-plus"></i> Add Student (Admin)</h3>
       <form id="student-form">
@@ -203,7 +208,7 @@
   <!-- Firebase Script -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDpJIuZ6QydDVdWyyF3rUzOTJKYVXOB9F0",
@@ -226,6 +231,7 @@
         if (confirm("Logout from Admin?")) {
           isAdminLoggedIn = false;
           document.getElementById('admin-panel').classList.add('hidden');
+          document.getElementById('admin-notice-panel').classList.add('hidden');
           document.getElementById('auth-btn').innerHTML = '<i class="fa-solid fa-lock"></i> Login';
           renderPortal();
         }
@@ -234,11 +240,36 @@
         if (password === "admin123") {
           isAdminLoggedIn = true;
           document.getElementById('admin-panel').classList.remove('hidden');
+          document.getElementById('admin-notice-panel').classList.remove('hidden');
           document.getElementById('auth-btn').innerHTML = '<i class="fa-solid fa-lock-open"></i> Logout';
           renderPortal();
         } else if (password !== null) {
           alert("Incorrect password!");
         }
+      }
+    }
+
+    // Real-time Notice Board Listener
+    onSnapshot(doc(db, "settings", "notice_board"), (docSnap) => {
+      if (docSnap.exists()) {
+        const noticeMsg = docSnap.data().message || "ಸೂಚನೆ ಲಭ್ಯವಿಲ್ಲ.";
+        document.getElementById('notice-display-text').textContent = noticeMsg;
+        document.getElementById('notice-input').value = noticeMsg;
+      } else {
+        const defaultMsg = "ಮದ್ರಸತುಸ್ಸಲಾಮ್ - ಅಧಿಕೃತ ಸೂಚನಾ ಫಲಕ\n\nವಿಷಯ: ಸ್ಪರ್ಧಾತ್ಮಕ ಪಠ್ಯೇತರ ಚಟುವಟಿಕೆಗಳ ಕುರಿತು ಪ್ರಮುಖ ಸೂಚನೆ.\n\nಎಲ್ಲಾ ಪೋಷಕರಿಗೆ ಮತ್ತು ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ನಮಸ್ಕಾರ. ಮುಂಬರುವ ಮದ್ರಸಾ ಕಲೋತ್ಸವದ ಸ್ಪರ್ಧೆಗಳಿಗೆ (ಭಾಷಣ ಮತ್ತು ಕಥೆ ಹೇಳುವುದು) ಆಯ್ಕೆಯಾದ ವಿದ್ಯಾರ್ಥಿಗಳು ಪ್ರತಿದಿನ ಮನೆಯಲ್ಲಿ ಅಭ್ಯಾಸ ಮಾಡುವುದು ಕಡ್ಡಾಯವಾಗಿದೆ. ಮಕ್ಕಳು ಅತ್ಯಂತ ಸುಲಭವಾಗಿ ಮತ್ತು ಪರಿಣಾಮಕಾರಿಯಾಗಿ ಕಲಿಯಲು ಈ ಕೆಳಗಿನ ಸರಳ ವಿಧಾನಗಳನ್ನು ಅನುಸರಿಸಿ:\n\n೧. ಕಥೆ ಹೇಳುವುದು (Story Telling) ಸುಲಭವಾಗಿ ಕಲಿಯುವ ವಿಧಾನ:\n* ಕಥೆಯನ್ನು ಮೂರು ಭಾಗಗಳಾಗಿ (ಆರಂಭ, ತಿರುವು, ಅಂತ್ಯ) ವಿಭಜಿಸಿ ಪ್ರತಿದಿನ ಒಂದೊಂದು ಭಾಗದಂತೆ ಕಲಿಸಿ.\n* ಧ್ವನಿ ಬದಲಾವಣೆ ಮತ್ತು ಮುಖದ ಹಾವಭಾವಗಳೊಂದಿಗೆ ಅಭ್ಯಾಸ ಮಾಡಿಸಿ.\n\n೨. ಭಾಷಣ (Speech) ಸುಲಭವಾಗಿ ಕಲಿಯುವ ವಿಧಾನ:\n* ಪ್ರತಿದಿನ ಒಂದೇ ಒಂದು ವಾಕ್ಯವನ್ನು ಸ್ಪಷ್ಟವಾಗಿ ಮತ್ತು ಗಟ್ಟಿಯಾಗಿ ಉಚ್ಚರಿಸಲು ಹೇಳಿಕೊಡಿ.\n* ಕನ್ನಡಿಯ ಮುಂದೆ ನಿಂತು ಅಥವಾ ಪೋಷಕರ ಮುಂದೆ ಭಾಷಣ ಮಾಡುವ ಮೂಲಕ ಮಕ್ಕಳಲ್ಲಿರುವ ಭಯವನ್ನು ದೂರಮಾಡಿ.\n\nಪೋಷಕರು ದಯವಿಟ್ಟು ಗಮನಹರಿಸಿ, ತಮ್ಮ ಮಕ್ಕಳ ಪ್ರಗತಿಯನ್ನು ಈ ಪೋರ್ಟಲ್‌ನಲ್ಲಿ ಪ್ರತಿದಿನ ಅಪ್ಡೇಟ್ ಮಾಡಿ.";
+        document.getElementById('notice-display-text').textContent = defaultMsg;
+        document.getElementById('notice-input').value = defaultMsg;
+      }
+    });
+
+    window.saveNotice = async function() {
+      if (!isAdminLoggedIn) return;
+      const newMsg = document.getElementById('notice-input').value.trim();
+      try {
+        await setDoc(doc(db, "settings", "notice_board"), { message: newMsg });
+        alert("Notice Board updated successfully!");
+      } catch (err) {
+        alert("Failed to update notice board.");
       }
     }
 
