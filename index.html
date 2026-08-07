@@ -56,9 +56,10 @@
     .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
     .form-group label { font-size: 0.85rem; font-weight: 600; }
     .form-control { padding: 0.65rem 0.9rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem; outline: none; background: #fff; }
-    
-    .checkbox-group { display: flex; gap: 1.5rem; align-items: center; margin-top: 0.5rem; }
-    .checkbox-group label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 500; font-size: 0.9rem; }
+
+    .checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.8rem; margin-top: 0.5rem; }
+    .checkbox-grid label { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 500; font-size: 0.9rem; background: #f1f5f9; padding: 0.5rem 0.8rem; border-radius: 6px; border: 1px solid #e2e8f0; }
+    .checkbox-grid input { width: 18px; height: 18px; accent-color: var(--primary-green); cursor: pointer; }
 
     .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 0.5rem; }
     .btn-primary { background: var(--primary-green); color: white; }
@@ -91,7 +92,7 @@
     }
     .student-name { font-size: 1rem; font-weight: 700; color: var(--primary-green); margin-bottom: 0.2rem; }
     .student-info { font-size: 0.8rem; color: #4b5563; margin-bottom: 0.4rem; }
-    .badge { display: inline-block; background: rgba(13, 92, 58, 0.1); color: var(--primary-green); font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.2rem; }
+    .badge { display: inline-block; background: rgba(13, 92, 58, 0.1); color: var(--primary-green); font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.2rem; margin-bottom: 0.2rem; }
     
     .status-box {
       margin-top: 0.8rem;
@@ -125,13 +126,13 @@
     <!-- Red Warning Card -->
     <div class="warning-card">
       <h2><i class="fa-solid fa-bullhorn"></i> IMPORTANT NOTICE TO PARENTS / ಪೋಷಕರಿಗೆ ಪ್ರಮುಖ ಸೂಚನೆ</h2>
-      <p><strong>English:</strong> The following students have been assigned both Speech and Story Telling competitions. Parents are requested to ensure that children begin preparing immediately. Daily practice is essential.</p>
-      <p><strong>ಕನ್ನಡ:</strong> ಕೆಳಗಿನ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಭಾಷಣ ಮತ್ತು ಕಥೆ ಹೇಳುವ ಸ್ಪರ್ಧೆಗಳನ್ನು ನೀಡಲಾಗಿದೆ. ಪೋಷಕರು ತಮ್ಮ ಮಕ್ಕಳು ತಕ್ಷಣವೇ ತಯಾರಿ ಪ್ರಾರಂಭಿಸುವಂತೆ ನೋಡಿಕೊಳ್ಳಬೇಕಾಗಿ ವಿನಂತಿ. ದೈನಂದಿನ ಅಭ್ಯಾಸ ಅತ್ಯಶ್ಯಕ.</p>
+      <p><strong>English:</strong> Students assigned with competitions are listed below. Parents can update their practice status directly.</p>
+      <p><strong>ಕನ್ನಡ:</strong> ಸ್ಪರ್ಧೆಗಳನ್ನು ಹೊಂದಿರುವ ವಿದ್ಯಾರ್ಥಿಗಳು ಕೆಳಗಿದ್ದಾರೆ. ಪೋಷಕರು ತಮ್ಮ ಮಕ್ಕಳ ಅಭ್ಯಾಸದ ಸ್ಥಿತಿಯನ್ನು ನೇರವಾಗಿ ನವೀಕರಿಸಬಹುದು.</p>
     </div>
 
     <!-- Student Entry Form Card (Admin Only) -->
     <div id="admin-panel" class="card hidden">
-      <h3><i class="fa-solid fa-user-plus"></i> Add New Student & Select Programmes (Admin Mode)</h3>
+      <h3><i class="fa-solid fa-user-plus"></i> Add Student & Programmes (Admin Mode)</h3>
       <form id="student-form">
         <div class="form-grid">
           <div class="form-group">
@@ -161,10 +162,14 @@
         </div>
 
         <div class="form-group">
-          <label>Select Programmes Assigned (Must check both to appear in alert list):</label>
-          <div class="checkbox-group">
-            <label><input type="checkbox" id="prog-speech" checked> Speech (ಭಾಷಣ)</label>
-            <label><input type="checkbox" id="prog-story" checked> Story Telling (ಕಥೆ ಹೇಳುವುದು)</label>
+          <label>Select Programmes Assigned:</label>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" name="prog" value="Story Telling"> Story Telling</label>
+            <label><input type="checkbox" name="prog" value="Speech"> Speech</label>
+            <label><input type="checkbox" name="prog" value="Malayalam speech"> Malayalam speech</label>
+            <label><input type="checkbox" name="prog" value="Kannada speech"> Kannada speech</label>
+            <label><input type="checkbox" name="prog" value="English speech"> English speech</label>
+            <label><input type="checkbox" name="prog" value="Byari speech"> Byari speech</label>
           </div>
         </div>
 
@@ -178,7 +183,7 @@
       <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Download PDF</button>
     </div>
 
-    <!-- Display Qualified Students Section -->
+    <!-- Display Students Section -->
     <div id="portal-content">
       <div class="loading-text">Loading real-time data from Firebase...</div>
     </div>
@@ -246,35 +251,38 @@
       const gender = document.getElementById('gender').value;
       const category = document.getElementById('category').value;
       
-      const programmes = [];
-      if (document.getElementById('prog-speech').checked) programmes.push("Speech");
-      if (document.getElementById('prog-story').checked) programmes.push("Story Telling");
+      const checkboxes = document.querySelectorAll('input[name="prog"]:checked');
+      const programmes = Array.from(checkboxes).map(cb => cb.value);
+
+      if (programmes.length === 0) {
+        return alert("Please select at least one programme!");
+      }
 
       try {
         await addDoc(collection(db, "madeenathu_students"), {
-          name,
-          sclass,
-          gender,
-          category,
-          programmes,
-          speechStatus: "Not Started",
-          storyStatus: "Not Started",
+          name: name,
+          sclass: sclass,
+          gender: gender,
+          category: category,
+          programmes: programmes,
+          statuses: {},
           createdAt: new Date()
         });
         alert("Student saved to Firebase successfully!");
         this.reset();
-        document.getElementById('prog-speech').checked = true;
-        document.getElementById('prog-story').checked = true;
       } catch (err) {
         console.error("Error adding document: ", err);
         alert("Failed to save student. Check Firestore Rules!");
       }
     });
 
-    window.updateStatus = async function(id, field, value) {
+    window.updateProgStatus = async function(id, progName, value) {
       try {
         const studentRef = doc(db, "madeenathu_students", id);
-        await updateDoc(studentRef, { [field]: value });
+        const student = students.find(s => s.id === id);
+        let statuses = student.statuses || {};
+        statuses[progName] = value;
+        await updateDoc(studentRef, { statuses: statuses });
       } catch (err) {
         console.error("Error updating status: ", err);
         alert("Failed to update status.");
@@ -299,15 +307,13 @@
       const contentEl = document.getElementById('portal-content');
 
       const qualified = students.filter(s => {
-        if (!s.programmes || !Array.isArray(s.programmes)) return false;
-        const hasSpeech = s.programmes.some(p => p.toLowerCase().includes("speech"));
-        const hasStory = s.programmes.some(p => p.toLowerCase().includes("story"));
+        if (!s.programmes || !Array.isArray(s.programmes) || s.programmes.length === 0) return false;
         const matchesSearch = s.name && s.name.toLowerCase().includes(searchTerm);
-        return hasSpeech && hasStory && matchesSearch;
+        return matchesSearch;
       });
 
       if (qualified.length === 0) {
-        contentEl.innerHTML = `<div style="text-align: center; padding: 2rem; color: #6b7280;">No students found with both Speech and Story Telling programmes.</div>`;
+        contentEl.innerHTML = `<div style="text-align: center; padding: 2rem; color: #6b7280;">No students found in database.</div>`;
         return;
       }
 
@@ -328,36 +334,30 @@
           html += `<div class="class-title">${cls}</div>`;
           html += `<div class="students-grid">`;
           classStudents.forEach(s => {
-            const speechSt = s.speechStatus || "Not Started";
-            const storySt = s.storyStatus || "Not Started";
+            const statuses = s.statuses || {};
 
             html += `
               <div class="student-card">
                 <div class="student-name">${s.name}</div>
                 <div class="student-info">Category: ${s.category}</div>
                 <div>
-                  <span class="badge">Speech</span>
-                  <span class="badge">Story Telling</span>
+                  ${s.programmes.map(p => `<span class="badge">${p}</span>`).join('')}
                 </div>
                 
                 <div class="status-box">
-                  <div class="prog-status-row">
-                    <span>Speech (ಭಾಷಣ):</span>
-                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'speechStatus', this.value)">
-                      <option value="Not Started" ${speechSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
-                      <option value="Learning" ${speechSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
-                      <option value="Completed" ${speechSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
-                    </select>
-                  </div>
-
-                  <div class="prog-status-row">
-                    <span>Story Telling (ಕಥೆ ಹೇಳುವುದು):</span>
-                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'storyStatus', this.value)">
-                      <option value="Not Started" ${storySt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
-                      <option value="Learning" ${storySt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
-                      <option value="Completed" ${storySt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
-                    </select>
-                  </div>
+                  ${s.programmes.map(p => {
+                    const currentSt = statuses[p] || "Not Started";
+                    return `
+                      <div class="prog-status-row">
+                        <span>${p}:</span>
+                        <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateProgStatus('${s.id}', '${p}', this.value)">
+                          <option value="Not Started" ${currentSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                          <option value="Learning" ${currentSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                          <option value="Completed" ${currentSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                        </select>
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
 
                 ${isAdminLoggedIn ? `
@@ -384,36 +384,30 @@
           html += `<div class="class-title">${cls}</div>`;
           html += `<div class="students-grid">`;
           classStudents.forEach(s => {
-            const speechSt = s.speechStatus || "Not Started";
-            const storySt = s.storyStatus || "Not Started";
+            const statuses = s.statuses || {};
 
             html += `
               <div class="student-card">
                 <div class="student-name">${s.name}</div>
                 <div class="student-info">Category: ${s.category}</div>
                 <div>
-                  <span class="badge">Speech</span>
-                  <span class="badge">Story Telling</span>
+                  ${s.programmes.map(p => `<span class="badge">${p}</span>`).join('')}
                 </div>
 
                 <div class="status-box">
-                  <div class="prog-status-row">
-                    <span>Speech (ಭಾಷಣ):</span>
-                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'speechStatus', this.value)">
-                      <option value="Not Started" ${speechSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
-                      <option value="Learning" ${speechSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
-                      <option value="Completed" ${speechSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
-                    </select>
-                  </div>
-
-                  <div class="prog-status-row">
-                    <span>Story Telling (ಕಥೆ ಹೇಳುವುದು):</span>
-                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'storyStatus', this.value)">
-                      <option value="Not Started" ${storySt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
-                      <option value="Learning" ${storySt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
-                      <option value="Completed" ${storySt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
-                    </select>
-                  </div>
+                  ${s.programmes.map(p => {
+                    const currentSt = statuses[p] || "Not Started";
+                    return `
+                      <div class="prog-status-row">
+                        <span>${p}:</span>
+                        <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateProgStatus('${s.id}', '${p}', this.value)">
+                          <option value="Not Started" ${currentSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                          <option value="Learning" ${currentSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                          <option value="Completed" ${currentSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                        </select>
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
 
                 ${isAdminLoggedIn ? `
