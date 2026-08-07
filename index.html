@@ -79,7 +79,7 @@
     }
     .class-title { font-size: 1.1rem; color: #b89628; margin: 1rem 0 0.5rem 0; font-weight: 700; }
 
-    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
     .student-card {
       background: #fff;
       border: 1px solid rgba(0,0,0,0.08);
@@ -99,9 +99,9 @@
       border-top: 1px solid #eee;
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
+      gap: 0.5rem;
     }
-    .status-box label { font-size: 0.75rem; font-weight: 600; color: #4b5563; }
+    .prog-status-row { font-size: 0.8rem; font-weight: 600; color: #374151; display: flex; flex-direction: column; gap: 0.2rem; }
 
     .actions-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
     .hidden { display: none !important; }
@@ -124,16 +124,14 @@
 
     <!-- Red Warning Card -->
     <div class="warning-card">
-      <h2><i class="fa-solid fa-bullhorn"></i> IMPORTANT NOTICE TO PARENTS</h2>
-      <p>The following students have been assigned both Speech and Story Telling competitions.</p>
-      <p>Parents are requested to ensure that their children begin preparing immediately. Daily practice is essential.</p>
-      <p><strong>Please support them at home and help them prepare confidently for the stage.</strong></p>
-      <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #991b1b;">* Parents can update their practice status directly below once preparation is completed.</p>
+      <h2><i class="fa-solid fa-bullhorn"></i> IMPORTANT NOTICE TO PARENTS / ಪೋಷಕರಿಗೆ ಪ್ರಮುಖ ಸೂಚನೆ</h2>
+      <p><strong>English:</strong> The following students have been assigned both Speech and Story Telling competitions. Parents are requested to ensure that children begin preparing immediately. Daily practice is essential.</p>
+      <p><strong>ಕನ್ನಡ:</strong> ಕೆಳಗಿನ ವಿದ್ಯಾರ್ಥಿಗಳಿಗೆ ಭಾಷಣ ಮತ್ತು ಕಥೆ ಹೇಳುವ ಸ್ಪರ್ಧೆಗಳನ್ನು ನೀಡಲಾಗಿದೆ. ಪೋಷಕರು ತಮ್ಮ ಮಕ್ಕಳು ತಕ್ಷಣವೇ ತಯಾರಿ ಪ್ರಾರಂಭಿಸುವಂತೆ ನೋಡಿಕೊಳ್ಳಬೇಕಾಗಿ ವಿನಂತಿ. ದೈನಂದಿನ ಅಭ್ಯಾಸ ಅತ್ಯಶ್ಯಕ.</p>
     </div>
 
     <!-- Student Entry Form Card (Admin Only) -->
     <div id="admin-panel" class="card hidden">
-      <h3><i class="fa-solid fa-user-plus"></i> Add New Student & Programmes (Admin Mode)</h3>
+      <h3><i class="fa-solid fa-user-plus"></i> Add New Student & Select Programmes (Admin Mode)</h3>
       <form id="student-form">
         <div class="form-grid">
           <div class="form-group">
@@ -163,10 +161,10 @@
         </div>
 
         <div class="form-group">
-          <label>Select Programmes Assigned:</label>
+          <label>Select Programmes Assigned (Must check both to appear in alert list):</label>
           <div class="checkbox-group">
-            <label><input type="checkbox" id="prog-speech" checked disabled> Speech</label>
-            <label><input type="checkbox" id="prog-story" checked disabled> Story Telling</label>
+            <label><input type="checkbox" id="prog-speech" checked> Speech (ಭಾಷಣ)</label>
+            <label><input type="checkbox" id="prog-story" checked> Story Telling (ಕಥೆ ಹೇಳುವುದು)</label>
           </div>
         </div>
 
@@ -236,7 +234,7 @@
       renderPortal();
     }, (error) => {
       console.error("Error fetching real-time data: ", error);
-      document.getElementById('portal-content').innerHTML = `<div class="loading-text" style="color:red;">Error connecting to Firebase Database.</div>`;
+      document.getElementById('portal-content').innerHTML = `<div class="loading-text" style="color:red;">Error connecting to Firebase Database. Check Console.</div>`;
     });
 
     document.getElementById('student-form').addEventListener('submit', async function(e) {
@@ -247,6 +245,10 @@
       const sclass = document.getElementById('sclass').value.trim();
       const gender = document.getElementById('gender').value;
       const category = document.getElementById('category').value;
+      
+      const programmes = [];
+      if (document.getElementById('prog-speech').checked) programmes.push("Speech");
+      if (document.getElementById('prog-story').checked) programmes.push("Story Telling");
 
       try {
         await addDoc(collection(db, "madeenathu_students"), {
@@ -254,24 +256,25 @@
           sclass,
           gender,
           category,
-          programmes: ["Speech", "Story Telling"],
-          status: "Learning", // Default status
+          programmes,
+          speechStatus: "Not Started",
+          storyStatus: "Not Started",
           createdAt: new Date()
         });
         alert("Student saved to Firebase successfully!");
         this.reset();
+        document.getElementById('prog-speech').checked = true;
+        document.getElementById('prog-story').checked = true;
       } catch (err) {
         console.error("Error adding document: ", err);
-        alert("Failed to save student.");
+        alert("Failed to save student. Check internet or console.");
       }
     });
 
-    // Function for Parents/Users to update preparation status directly
-    window.updateStudentStatus = async function(id, newStatus) {
+    window.updateStatus = async function(id, field, value) {
       try {
         const studentRef = doc(db, "madeenathu_students", id);
-        await updateDoc(studentRef, { status: newStatus });
-        // Real-time listener will instantly reflect this change on all connected devices
+        await updateDoc(studentRef, { [field]: value });
       } catch (err) {
         console.error("Error updating status: ", err);
         alert("Failed to update status.");
@@ -299,12 +302,12 @@
       const qualified = students.filter(s => {
         const hasSpeech = s.programmes && s.programmes.includes("Speech");
         const hasStory = s.programmes && s.programmes.includes("Story Telling");
-        const matchesSearch = s.name.toLowerCase().includes(searchTerm);
+        const matchesSearch = s.name && s.name.toLowerCase().includes(searchTerm);
         return hasSpeech && hasStory && matchesSearch;
       });
 
       if (qualified.length === 0) {
-        contentEl.innerHTML = `<div style="text-align: center; padding: 2rem; color: #6b7280;">No students found with both Speech and Story Telling programmes.</div>`;
+        contentEl.innerHTML = `<div style="text-align: center; padding: 2rem; color: #6b7280;">No students found with both Speech and Story Telling programmes. (Make sure both checkboxes are ticked when adding)</div>`;
         return;
       }
 
@@ -313,7 +316,7 @@
 
       let html = '';
 
-      // BOYS SECTION (Grouped by Class)
+      // BOYS SECTION
       if (boys.length > 0) {
         html += `<div class="section-title"><i class="fa-solid fa-mars"></i> BOYS SECTION</div>`;
         
@@ -325,7 +328,9 @@
           html += `<div class="class-title">${cls}</div>`;
           html += `<div class="students-grid">`;
           classStudents.forEach(s => {
-            const currentStatus = s.status || "Learning";
+            const speechSt = s.speechStatus || "Not Started";
+            const storySt = s.storyStatus || "Not Started";
+
             html += `
               <div class="student-card">
                 <div class="student-name">${s.name}</div>
@@ -336,12 +341,23 @@
                 </div>
                 
                 <div class="status-box">
-                  <label><i class="fa-solid fa-clipboard-check"></i> Practice Status:</label>
-                  <select class="form-control" style="padding: 0.4rem; font-size: 0.8rem;" onchange="updateStudentStatus('${s.id}', this.value)">
-                    <option value="Learning" ${currentStatus === "Learning" ? "selected" : ""}>🟡 Learning (പഠിച്ചുകൊണ്ടിരിക്കുന്നു)</option>
-                    <option value="Completed" ${currentStatus === "Completed" ? "selected" : ""}>✅ Completed (പഠിച്ചുകഴിഞ്ഞു)</option>
-                    <option value="Stage Ready" ${currentStatus === "Stage Ready" ? "selected" : ""}>⭐ Stage Ready (സ്റ്റേജിന് തയ്യാർ)</option>
-                  </select>
+                  <div class="prog-status-row">
+                    <span>Speech (ಭಾಷಣ):</span>
+                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'speechStatus', this.value)">
+                      <option value="Not Started" ${speechSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                      <option value="Learning" ${speechSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                      <option value="Completed" ${speechSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                    </select>
+                  </div>
+
+                  <div class="prog-status-row">
+                    <span>Story Telling (ಕಥೆ ಹೇಳುವುದು):</span>
+                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'storyStatus', this.value)">
+                      <option value="Not Started" ${storySt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                      <option value="Learning" ${storySt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                      <option value="Completed" ${storySt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                    </select>
+                  </div>
                 </div>
 
                 ${isAdminLoggedIn ? `
@@ -356,7 +372,7 @@
         });
       }
 
-      // GIRLS SECTION (Grouped by Class)
+      // GIRLS SECTION
       if (girls.length > 0) {
         html += `<div class="section-title" style="margin-top: 2.5rem;"><i class="fa-solid fa-venus"></i> GIRLS SECTION</div>`;
         
@@ -368,7 +384,9 @@
           html += `<div class="class-title">${cls}</div>`;
           html += `<div class="students-grid">`;
           classStudents.forEach(s => {
-            const currentStatus = s.status || "Learning";
+            const speechSt = s.speechStatus || "Not Started";
+            const storySt = s.storyStatus || "Not Started";
+
             html += `
               <div class="student-card">
                 <div class="student-name">${s.name}</div>
@@ -379,12 +397,23 @@
                 </div>
 
                 <div class="status-box">
-                  <label><i class="fa-solid fa-clipboard-check"></i> Practice Status:</label>
-                  <select class="form-control" style="padding: 0.4rem; font-size: 0.8rem;" onchange="updateStudentStatus('${s.id}', this.value)">
-                    <option value="Learning" ${currentStatus === "Learning" ? "selected" : ""}>🟡 Learning (പഠിച്ചുകൊണ്ടിരിക്കുന്നു)</option>
-                    <option value="Completed" ${currentStatus === "Completed" ? "selected" : ""}>✅ Completed (പഠിച്ചുകഴിഞ്ഞു)</option>
-                    <option value="Stage Ready" ${currentStatus === "Stage Ready" ? "selected" : ""}>⭐ Stage Ready (സ്റ്റേജിന് തയ്യാർ)</option>
-                  </select>
+                  <div class="prog-status-row">
+                    <span>Speech (ಭಾಷಣ):</span>
+                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'speechStatus', this.value)">
+                      <option value="Not Started" ${speechSt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                      <option value="Learning" ${speechSt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                      <option value="Completed" ${speechSt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                    </select>
+                  </div>
+
+                  <div class="prog-status-row">
+                    <span>Story Telling (ಕಥೆ ಹೇಳುವುದು):</span>
+                    <select class="form-control" style="padding: 0.3rem; font-size: 0.8rem;" onchange="updateStatus('${s.id}', 'storyStatus', this.value)">
+                      <option value="Not Started" ${storySt === "Not Started" ? "selected" : ""}>⏳ Not Started (ಇನ್ನೂ ಪ್ರಾರಂಭಿಸಿಲ್ಲ)</option>
+                      <option value="Learning" ${storySt === "Learning" ? "selected" : ""}>🟡 Learning (ಕಲಿಯುತ್ತಿದ್ದಾರೆ)</option>
+                      <option value="Completed" ${storySt === "Completed" ? "selected" : ""}>✅ Completed (ಪೂರ್ಣಗೊಂಡಿದೆ)</option>
+                    </select>
+                  </div>
                 </div>
 
                 ${isAdminLoggedIn ? `
