@@ -3,13 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Al Madrasatul Badriya Kana 2540 - System Temporarily Closed">
-  
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-
-  <title>Al Madrasatul Badriya Kana 2540 | Temporarily Closed</title>
+  <title>MADEENATHU-SSALAM – Speech & Story Telling Alert Portal</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,135 +11,398 @@
   <style>
     :root {
       --primary-green: #0d5c3a;
+      --secondary-green: #1b8a5a;
       --accent-gold: #d4af37;
-      --bg-dark: #0a110e;
-      --text-light: #f3f4f6;
+      --bg-light: #f8faf9;
+      --text-dark: #111827;
+      --card-bg: #ffffff;
+      --alert-bg: #fef2f2;
+      --alert-border: #f87171;
+      --alert-text: #991b1b;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background-color: var(--bg-light); color: var(--text-dark); padding: 1.5rem; }
+    .app-container { max-width: 1100px; margin: 0 auto; }
 
-    body {
-      background: linear-gradient(135deg, #052214 0%, #0d5c3a 50%, #061a10 100%);
-      color: var(--text-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
+    .top-nav { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+
+    .header-banner { text-align: center; margin-bottom: 1.5rem; }
+    .header-banner h1 { font-family: 'Amiri', serif; color: var(--primary-green); font-size: 2rem; }
+    .header-banner p { color: var(--accent-gold); font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
+
+    .warning-card {
+      background: var(--alert-bg);
+      border: 2px solid var(--alert-border);
+      border-radius: 14px;
       padding: 1.5rem;
-      text-align: center;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
+    .warning-card h2 { color: var(--alert-text); font-size: 1.15rem; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem; }
+    .warning-card p { color: #7f1d1d; font-size: 0.9rem; line-height: 1.5; margin-bottom: 0.3rem; }
 
-    .closed-container {
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(212, 175, 55, 0.3);
-      border-radius: 24px;
-      padding: 3rem 2rem;
-      max-width: 550px;
-      width: 100%;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.2rem;
-      animation: fadeIn 0.6s ease-in-out;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid rgba(13, 92, 58, 0.15);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
     }
+    .card h3 { color: var(--primary-green); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.3rem; }
+    .form-group label { font-size: 0.85rem; font-weight: 600; }
+    .form-control { padding: 0.65rem 0.9rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem; outline: none; background: #fff; }
+    
+    .checkbox-group { display: flex; gap: 1.5rem; align-items: center; margin-top: 0.5rem; }
+    .checkbox-group label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; font-weight: 500; font-size: 0.9rem; }
 
-    .closed-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: rgba(212, 175, 55, 0.15);
-      border: 2px solid var(--accent-gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.2rem;
-      color: var(--accent-gold);
-      margin-bottom: 0.5rem;
-    }
+    .btn { padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; border: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary { background: var(--primary-green); color: white; }
+    .btn-primary:hover { background: var(--secondary-green); }
+    .btn-secondary { background: var(--accent-gold); color: #072e1d; }
+    .btn-danger { background: #dc2626; color: white; padding: 0.3rem 0.6rem; font-size: 0.75rem; border-radius: 5px; }
 
-    h1 {
+    .section-title {
       font-family: 'Amiri', serif;
-      font-size: 2.2rem;
-      color: #ffffff;
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-    }
-
-    h2 {
-      font-size: 1.3rem;
-      color: var(--accent-gold);
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-top: -0.5rem;
-    }
-
-    p {
-      font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.8);
-      line-height: 1.6;
-      max-width: 400px;
-    }
-
-    .badge-closed {
-      background: #dc2626;
-      color: #ffffff;
-      padding: 0.5rem 1.5rem;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-top: 0.5rem;
-      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
-      display: inline-flex;
+      font-size: 1.5rem;
+      color: var(--primary-green);
+      margin: 2rem 0 1rem 0;
+      border-bottom: 2px solid var(--accent-gold);
+      padding-bottom: 0.3rem;
+      display: flex;
       align-items: center;
       gap: 0.5rem;
     }
+    .class-title { font-size: 1.1rem; color: #b89628; margin: 1rem 0 0.5rem 0; font-weight: 700; }
 
-    .footer-note {
-      margin-top: 1.5rem;
-      font-size: 0.75rem;
-      opacity: 0.6;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      padding-top: 1rem;
-      width: 100%;
+    .students-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+    .student-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-left: 4px solid var(--accent-gold);
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      position: relative;
     }
+    .student-name { font-size: 1rem; font-weight: 700; color: var(--primary-green); margin-bottom: 0.2rem; }
+    .student-info { font-size: 0.8rem; color: #4b5563; margin-bottom: 0.4rem; }
+    .badge { display: inline-block; background: rgba(13, 92, 58, 0.1); color: var(--primary-green); font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; margin-right: 0.2rem; }
+    
+    .status-box {
+      margin-top: 0.8rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid #eee;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .status-box label { font-size: 0.75rem; font-weight: 600; color: #4b5563; }
+
+    .actions-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .hidden { display: none !important; }
+    .loading-text { text-align: center; padding: 2rem; color: #6b7280; }
   </style>
 </head>
 <body>
 
-  <div class="closed-container">
-    <div class="closed-icon">
-      <i class="fa-solid fa-lock"></i>
+  <div class="app-container">
+    <div class="top-nav">
+      <button id="auth-btn" class="btn btn-secondary" onclick="toggleAuthModal()">
+        <i class="fa-solid fa-lock"></i> Admin Login
+      </button>
     </div>
-    
-    <h1>AL MADRASATUL BADRIYA</h1>
-    <h2>KANA 2540</h2>
-    
-    <div class="badge-closed">
-      <i class="fa-solid fa-triangle-exclamation"></i> Temporarily Closed
+
+    <div class="header-banner">
+      <h1>MADEENATHU-SSALAM</h1>
+      <p>Speech & Story Telling Alert Portal</p>
     </div>
-    
-    <p>ഈ സിസ്റ്റം താൽക്കാലികമായി നിർത്തിവെച്ചിരിക്കുന്നു. കൂടുതൽ വിവരങ്ങൾക്ക് കമ്മിറ്റിയുമായി ബന്ധപ്പെടുക.</p>
-    
-    <div class="footer-note">
-      <span>Al Madrasatul Badriya Kana 2540 Committee</span>
+
+    <!-- Red Warning Card -->
+    <div class="warning-card">
+      <h2><i class="fa-solid fa-bullhorn"></i> IMPORTANT NOTICE TO PARENTS</h2>
+      <p>The following students have been assigned both Speech and Story Telling competitions.</p>
+      <p>Parents are requested to ensure that their children begin preparing immediately. Daily practice is essential.</p>
+      <p><strong>Please support them at home and help them prepare confidently for the stage.</strong></p>
+      <p style="margin-top: 0.5rem; font-size: 0.85rem; color: #991b1b;">* Parents can update their practice status directly below once preparation is completed.</p>
+    </div>
+
+    <!-- Student Entry Form Card (Admin Only) -->
+    <div id="admin-panel" class="card hidden">
+      <h3><i class="fa-solid fa-user-plus"></i> Add New Student & Programmes (Admin Mode)</h3>
+      <form id="student-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Student Name</label>
+            <input type="text" id="name" class="form-control" required placeholder="Enter student name">
+          </div>
+          <div class="form-group">
+            <label>Class Name</label>
+            <input type="text" id="sclass" class="form-control" required placeholder="e.g. Class 6">
+          </div>
+          <div class="form-group">
+            <label>Gender Section</label>
+            <select id="gender" class="form-control" required>
+              <option value="Male">Boys Section</option>
+              <option value="Female">Girls Section</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select id="category" class="form-control" required>
+              <option value="Sub Junior">Sub Junior</option>
+              <option value="Junior">Junior</option>
+              <option value="Senior">Senior</option>
+              <option value="General">General</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Select Programmes Assigned:</label>
+          <div class="checkbox-group">
+            <label><input type="checkbox" id="prog-speech" checked disabled> Speech</label>
+            <label><input type="checkbox" id="prog-story" checked disabled> Story Telling</label>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-top: 1rem;"><i class="fa-solid fa-save"></i> Save Student to Firebase</button>
+      </form>
+    </div>
+
+    <!-- Filter & Export Controls -->
+    <div class="actions-top">
+      <input type="text" id="search-box" class="form-control" placeholder="Search student name..." style="max-width: 300px;">
+      <button class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Download PDF</button>
+    </div>
+
+    <!-- Display Qualified Students Section -->
+    <div id="portal-content">
+      <div class="loading-text">Loading real-time data from Firebase...</div>
     </div>
   </div>
 
+  <!-- Firebase Modular SDK Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDpJIuZ6QydDVdWyyF3rUzOTJKYVXOB9F0",
+      authDomain: "madrasatul-badriya.firebaseapp.com",
+      projectId: "madrasatul-badriya",
+      storageBucket: "madrasatul-badriya.firebasestorage.app",
+      messagingSenderId: "116617898354",
+      appId: "1:116617898354:web:8f690c74d274bdc08a55eb",
+      measurementId: "G-F0ZPDZQ8P4"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let isAdminLoggedIn = false;
+    let students = [];
+
+    window.toggleAuthModal = function() {
+      if (isAdminLoggedIn) {
+        if (confirm("Do you want to log out?")) {
+          isAdminLoggedIn = false;
+          document.getElementById('admin-panel').classList.add('hidden');
+          document.getElementById('auth-btn').innerHTML = '<i class="fa-solid fa-lock"></i> Admin Login';
+          renderPortal();
+          alert("Logged out successfully.");
+        }
+      } else {
+        const password = prompt("Enter Admin Password:");
+        if (password === "admin123") {
+          isAdminLoggedIn = true;
+          document.getElementById('admin-panel').classList.remove('hidden');
+          document.getElementById('auth-btn').innerHTML = '<i class="fa-solid fa-lock-open"></i> Logout (Admin)';
+          renderPortal();
+          alert("Admin login successful!");
+        } else if (password !== null) {
+          alert("Incorrect password!");
+        }
+      }
+    }
+
+    // Real-time listener from Firestore
+    onSnapshot(collection(db, "madeenathu_students"), (snapshot) => {
+      students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      renderPortal();
+    }, (error) => {
+      console.error("Error fetching real-time data: ", error);
+      document.getElementById('portal-content').innerHTML = `<div class="loading-text" style="color:red;">Error connecting to Firebase Database.</div>`;
+    });
+
+    document.getElementById('student-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (!isAdminLoggedIn) return alert("Unauthorized action!");
+      
+      const name = document.getElementById('name').value.trim();
+      const sclass = document.getElementById('sclass').value.trim();
+      const gender = document.getElementById('gender').value;
+      const category = document.getElementById('category').value;
+
+      try {
+        await addDoc(collection(db, "madeenathu_students"), {
+          name,
+          sclass,
+          gender,
+          category,
+          programmes: ["Speech", "Story Telling"],
+          status: "Learning", // Default status
+          createdAt: new Date()
+        });
+        alert("Student saved to Firebase successfully!");
+        this.reset();
+      } catch (err) {
+        console.error("Error adding document: ", err);
+        alert("Failed to save student.");
+      }
+    });
+
+    // Function for Parents/Users to update preparation status directly
+    window.updateStudentStatus = async function(id, newStatus) {
+      try {
+        const studentRef = doc(db, "madeenathu_students", id);
+        await updateDoc(studentRef, { status: newStatus });
+        // Real-time listener will instantly reflect this change on all connected devices
+      } catch (err) {
+        console.error("Error updating status: ", err);
+        alert("Failed to update status.");
+      }
+    }
+
+    window.deleteStudent = async function(id) {
+      if (!isAdminLoggedIn) return alert("Unauthorized action!");
+      if (confirm("Are you sure you want to delete this student from Firebase?")) {
+        try {
+          await deleteDoc(doc(db, "madeenathu_students", id));
+          alert("Student deleted successfully!");
+        } catch (err) {
+          console.error("Error deleting document: ", err);
+          alert("Failed to delete student.");
+        }
+      }
+    }
+
+    function renderPortal() {
+      const searchTerm = document.getElementById('search-box').value.toLowerCase();
+      const contentEl = document.getElementById('portal-content');
+
+      // Filter ONLY students with BOTH Speech & Story Telling
+      const qualified = students.filter(s => {
+        const hasSpeech = s.programmes && s.programmes.includes("Speech");
+        const hasStory = s.programmes && s.programmes.includes("Story Telling");
+        const matchesSearch = s.name.toLowerCase().includes(searchTerm);
+        return hasSpeech && hasStory && matchesSearch;
+      });
+
+      if (qualified.length === 0) {
+        contentEl.innerHTML = `<div style="text-align: center; padding: 2rem; color: #6b7280;">No students found with both Speech and Story Telling programmes.</div>`;
+        return;
+      }
+
+      const boys = qualified.filter(s => s.gender === "Male");
+      const girls = qualified.filter(s => s.gender === "Female");
+
+      let html = '';
+
+      // BOYS SECTION (Grouped by Class)
+      if (boys.length > 0) {
+        html += `<div class="section-title"><i class="fa-solid fa-mars"></i> BOYS SECTION</div>`;
+        
+        const boyClasses = [...new Set(boys.map(s => s.sclass))];
+        boyClasses.sort();
+
+        boyClasses.forEach(cls => {
+          const classStudents = boys.filter(s => s.sclass === cls);
+          html += `<div class="class-title">${cls}</div>`;
+          html += `<div class="students-grid">`;
+          classStudents.forEach(s => {
+            const currentStatus = s.status || "Learning";
+            html += `
+              <div class="student-card">
+                <div class="student-name">${s.name}</div>
+                <div class="student-info">Category: ${s.category}</div>
+                <div>
+                  <span class="badge">Speech</span>
+                  <span class="badge">Story Telling</span>
+                </div>
+                
+                <div class="status-box">
+                  <label><i class="fa-solid fa-clipboard-check"></i> Practice Status:</label>
+                  <select class="form-control" style="padding: 0.4rem; font-size: 0.8rem;" onchange="updateStudentStatus('${s.id}', this.value)">
+                    <option value="Learning" ${currentStatus === "Learning" ? "selected" : ""}>🟡 Learning (പഠിച്ചുകൊണ്ടിരിക്കുന്നു)</option>
+                    <option value="Completed" ${currentStatus === "Completed" ? "selected" : ""}>✅ Completed (പഠിച്ചുകഴിഞ്ഞു)</option>
+                    <option value="Stage Ready" ${currentStatus === "Stage Ready" ? "selected" : ""}>⭐ Stage Ready (സ്റ്റേജിന് തയ്യാർ)</option>
+                  </select>
+                </div>
+
+                ${isAdminLoggedIn ? `
+                  <div style="margin-top: 0.6rem; text-align: right;">
+                    <button class="btn btn-danger" onclick="deleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          });
+          html += `</div>`;
+        });
+      }
+
+      // GIRLS SECTION (Grouped by Class)
+      if (girls.length > 0) {
+        html += `<div class="section-title" style="margin-top: 2.5rem;"><i class="fa-solid fa-venus"></i> GIRLS SECTION</div>`;
+        
+        const girlClasses = [...new Set(girls.map(s => s.sclass))];
+        girlClasses.sort();
+
+        girlClasses.forEach(cls => {
+          const classStudents = girls.filter(s => s.sclass === cls);
+          html += `<div class="class-title">${cls}</div>`;
+          html += `<div class="students-grid">`;
+          classStudents.forEach(s => {
+            const currentStatus = s.status || "Learning";
+            html += `
+              <div class="student-card">
+                <div class="student-name">${s.name}</div>
+                <div class="student-info">Category: ${s.category}</div>
+                <div>
+                  <span class="badge">Speech</span>
+                  <span class="badge">Story Telling</span>
+                </div>
+
+                <div class="status-box">
+                  <label><i class="fa-solid fa-clipboard-check"></i> Practice Status:</label>
+                  <select class="form-control" style="padding: 0.4rem; font-size: 0.8rem;" onchange="updateStudentStatus('${s.id}', this.value)">
+                    <option value="Learning" ${currentStatus === "Learning" ? "selected" : ""}>🟡 Learning (പഠിച്ചുകൊണ്ടിരിക്കുന്നു)</option>
+                    <option value="Completed" ${currentStatus === "Completed" ? "selected" : ""}>✅ Completed (പഠിച്ചുകഴിഞ്ഞു)</option>
+                    <option value="Stage Ready" ${currentStatus === "Stage Ready" ? "selected" : ""}>⭐ Stage Ready (സ്റ്റേജിന് തയ്യാർ)</option>
+                  </select>
+                </div>
+
+                ${isAdminLoggedIn ? `
+                  <div style="margin-top: 0.6rem; text-align: right;">
+                    <button class="btn btn-danger" onclick="deleteStudent('${s.id}')"><i class="fa-solid fa-trash"></i> Delete</button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          });
+          html += `</div>`;
+        });
+      }
+
+      contentEl.innerHTML = html;
+    }
+
+    document.getElementById('search-box').addEventListener('input', renderPortal);
+  </script>
 </body>
 </html>
