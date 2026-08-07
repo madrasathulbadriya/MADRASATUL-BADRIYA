@@ -234,7 +234,7 @@
       renderPortal();
     }, (error) => {
       console.error("Error fetching real-time data: ", error);
-      document.getElementById('portal-content').innerHTML = `<div class="loading-text" style="color:red;">Error connecting to Firebase Database. Check Console.</div>`;
+      document.getElementById('portal-content').innerHTML = `<div class="loading-text" style="color:red;">Error connecting to Firebase Database. Check Firestore Rules.</div>`;
     });
 
     document.getElementById('student-form').addEventListener('submit', async function(e) {
@@ -267,7 +267,7 @@
         document.getElementById('prog-story').checked = true;
       } catch (err) {
         console.error("Error adding document: ", err);
-        alert("Failed to save student. Check internet or console.");
+        alert("Failed to save student. Check Firestore Rules!");
       }
     });
 
@@ -298,7 +298,6 @@
       const searchTerm = document.getElementById('search-box').value.toLowerCase();
       const contentEl = document.getElementById('portal-content');
 
-      // Filter ONLY students with BOTH Speech & Story Telling (case-insensitive check)
       const qualified = students.filter(s => {
         if (!s.programmes || !Array.isArray(s.programmes)) return false;
         const hasSpeech = s.programmes.some(p => p.toLowerCase().includes("speech"));
